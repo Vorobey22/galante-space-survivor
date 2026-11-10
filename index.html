@@ -67,6 +67,26 @@
 .overlay::before{content:'';position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(#a8eaff 1px,transparent 1px),radial-gradient(#ffffff99 1px,transparent 1px);background-size:97px 107px,157px 163px;background-position:14px 23px,54px 70px;opacity:.27;animation:starsDrift 30s linear infinite}
 @keyframes starsDrift{to{background-position:194px 83px,-65px 130px}}
 @media(max-width:600px){#quick-play{font-size:12px;padding:11px}.panel-card{padding-top:10px}}
+</style><style id="galante-responsive-layout-v105">
+/* V10.5: desktop and mobile main menu, no browser zoom needed */
+#panel[data-screen="menu"] .panel-card{width:min(960px,calc(100vw - 32px))!important;max-height:calc(100dvh - 24px);padding:22px clamp(16px,3vw,34px);overflow-y:auto;overflow-x:hidden}
+#panel[data-screen="menu"] .menu-dashboard{margin:12px 0}
+#panel[data-screen="menu"] .menu-pane{max-height:min(42dvh,410px)!important;overflow-y:auto}
+#panel[data-screen="menu"] .menu-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#panel[data-screen="menu"] .menu-nav-btn{min-width:0;white-space:normal}
+#panel[data-screen="menu"] .tabs{display:flex;flex-wrap:wrap;gap:5px}
+#panel[data-screen="menu"] #quick-play{position:sticky;top:0;bottom:auto;display:block;z-index:25;min-height:49px;font-size:15px;margin:12px 0}
+#panel[data-screen="menu"] #start{position:relative;bottom:auto;z-index:1}
+#panel[data-screen="menu"] #galante-chat,#panel[data-screen="menu"] #galante-admin{margin-top:16px}
+#panel[data-screen="menu"] .menu-section-label{margin-top:10px}
+@media(max-width:650px){
+#panel[data-screen="menu"] .panel-card{width:calc(100vw - 12px)!important;max-height:calc(100dvh - 12px);padding:14px 12px}
+#panel[data-screen="menu"] .menu-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+#panel[data-screen="menu"] .menu-pane{max-height:36dvh!important}
+#panel[data-screen="menu"] #quick-play{font-size:12px;min-height:44px}
+#panel[data-screen="menu"] .planet-grid{grid-template-columns:1fr}
+}
+@media(min-width:651px){#panel[data-screen="menu"] .panel-card{scrollbar-gutter:stable}}
 </style></head>
 <body>
   <canvas id="game" aria-label="Игровое поле, космический корабль и враги"></canvas>
@@ -1847,5 +1867,14 @@ $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode===
 const btn=document.getElementById('mod-send');btn.addEventListener('click',async()=>{const target=document.getElementById('mod-target').value.trim(),action=document.getElementById('mod-action').value,minutes=Number(document.getElementById('mod-minutes').value),reason=document.getElementById('mod-reason').value.trim(),status=document.getElementById('mod-status');if(!/^[0-9a-f-]{36}$/i.test(target)){status.textContent='⚠️ Укажи UUID игрока';return}if(!confirm('Применить '+action+' к '+target+'?'))return;try{const c=window.supabaseClientForGalante;if(!c)throw Error('Войди в аккаунт');const {error}=await c.rpc('galante_moderate_chat',{p_target:target,p_action:action,p_minutes:Math.max(1,Math.min(10080,minutes||60)),p_reason:reason});if(error)throw error;status.textContent='✅ Действие выполнено. Для чата ограничение вступает в силу на сервере.'}catch(e){status.textContent='⚠️ '+String(e.message||e).slice(0,180)}});
 })();
 </script>
-</body>
+<script id="galante-menu-reorder-v105">
+document.addEventListener('DOMContentLoaded',()=>{
+  const card=document.querySelector('#panel .panel-card');
+  const chat=document.getElementById('galante-chat');
+  const admin=document.getElementById('galante-admin');
+  const footer=card?.querySelector('footer');
+  const anchor=footer || card?.lastElementChild;
+  if(card && anchor){if(chat)card.insertBefore(chat,anchor);if(admin)card.insertBefore(admin,anchor);}
+});
+</script></body>
 </html>
