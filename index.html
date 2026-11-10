@@ -53,6 +53,20 @@
 /* 9.6: colony actions and compact authenticated chat */
 .galante-chat{border:1px solid #64d9e577;border-radius:14px;background:#071b32;margin:12px 0;padding:12px;text-align:left}.galante-chat h3{font-size:14px;color:#9defff;margin:0 0 6px}.galante-chat-log{height:185px;overflow-y:auto;background:#061124;border:1px solid #315675;border-radius:9px;padding:8px;display:flex;flex-direction:column;gap:7px}.galante-chat-line{font-size:12px;line-height:1.35;overflow-wrap:anywhere}.galante-chat-line b{color:#86e6ff}.galante-chat-line small{color:#91a8c1}.galante-chat-form{display:flex;gap:6px;margin-top:8px}.galante-chat-form input{flex:1;min-width:0;padding:10px;background:#0a2945;border:1px solid #407aa0;border-radius:8px;color:white}.galante-chat-form button{background:#45b8db;border:0;border-radius:8px;padding:9px 12px;font-weight:900;color:#05213c}.galante-chat-form button:disabled{opacity:.4}.galante-chat-note{color:#adc4da;font-size:11px;margin:5px 0}
 .colony-hotspots{position:absolute;inset:0;pointer-events:none}.colony-hotspots button{position:absolute;pointer-events:auto;background:#082c4bdc;border:1px solid #85e9ff;color:#e7fbff;border-radius:9px;padding:8px 10px;font-weight:900;cursor:pointer;box-shadow:0 0 15px #1cbbe733}.colony-hotspots button:hover{background:#1a6480}.colony-hotspots button:disabled{opacity:.45}
+</style><style>
+/* V10.4: essential game controls visible before social sections */
+.panel-card{overflow-x:hidden!important}
+#galante-chat{margin-top:18px}
+#galante-chat-log{height:145px}
+#galante-admin{margin-top:16px}
+.menu-section-label{margin-top:13px}
+#start{position:sticky;bottom:0;z-index:15;margin:12px 0 4px;box-shadow:0 0 0 6px #08142c,0 12px 35px #45c9ff55}
+#quick-play{position:sticky;top:0;z-index:18;width:100%;padding:12px 15px;border:1px solid #9dfaff;border-radius:12px;background:linear-gradient(95deg,#64eaff,#a7a7ff);color:#07182c;font-weight:1000;letter-spacing:1px;box-shadow:0 7px 24px #0008;margin:10px 0}
+#galante-account{margin-bottom:8px}
+.overlay{background:radial-gradient(circle at 78% 23%,#5ac4e95a 0 7%,#194a8c44 13%,transparent 24%),radial-gradient(circle at 20% 70%,#844bdb33,transparent 30%),linear-gradient(155deg,#030b1b,#0b1641 60%,#080820)!important}
+.overlay::before{content:'';position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(#a8eaff 1px,transparent 1px),radial-gradient(#ffffff99 1px,transparent 1px);background-size:97px 107px,157px 163px;background-position:14px 23px,54px 70px;opacity:.27;animation:starsDrift 30s linear infinite}
+@keyframes starsDrift{to{background-position:194px 83px,-65px 130px}}
+@media(max-width:600px){#quick-play{font-size:12px;padding:11px}.panel-card{padding-top:10px}}
 </style></head>
 <body>
   <canvas id="game" aria-label="Игровое поле, космический корабль и враги"></canvas>
@@ -80,6 +94,7 @@
       <div class="menu-dashboard"><div id="wallet" class="wallet">💎 КРИСТАЛЛЫ: <b id="bank">0</b> <span id="equipped-name"></span></div><div class="menu-badge">✦ КАМПАНИЯ <span>20 УРОВНЕЙ НА КАРТУ</span></div></div>
       <div class="pilot-profile"><div class="pilot-profile-copy"><span>👨‍🚀 ТВОЙ НИК</span><strong id="pilot-name-display">Пилот</strong></div><button id="pilot-edit" type="button">✎ ИЗМЕНИТЬ</button></div>
 <section class="account-panel" id="galante-account"><h3>🔐 АККАУНТ ПИЛОТА</h3><div id="account-guest"><p>Регистрация по email и паролю. Можно играть и без аккаунта; для админских наград нужен вход.</p><input id="account-email" type="email" placeholder="Твоя почта" autocomplete="email" maxlength="180"><input id="account-password" type="password" placeholder="Пароль (минимум 6 символов)" autocomplete="current-password"><div class="account-actions"><button id="account-signin" type="button">ВОЙТИ</button><button id="account-signup" type="button">РЕГИСТРАЦИЯ</button></div></div><div id="account-member" hidden><p id="account-member-info"></p><div class="account-actions"><button id="account-claim" type="button">🎁 ПОЛУЧИТЬ НАГРАДЫ</button><button id="account-signout" type="button">ВЫЙТИ</button></div></div><div id="account-status" class="account-status">Проверяем вход…</div></section><section class="galante-chat" id="galante-chat"><h3>💬 ГАЛАКТИЧЕСКИЙ МИНИ-ЧАТ</h3><p class="galante-chat-note">Общий чат для зарегистрированных пилотов. Не публикуй личные данные. Сообщения видны всем игрокам с аккаунтом.</p><div id="galante-chat-log" class="galante-chat-log" aria-live="polite"><div class="galante-chat-line">Войди в аккаунт, чтобы читать и писать сообщения.</div></div><form id="galante-chat-form" class="galante-chat-form"><input id="galante-chat-input" maxlength="240" placeholder="Сообщение (до 240 символов)" autocomplete="off" aria-label="Сообщение в чат"><button id="galante-chat-send" type="submit">➤</button></form><div id="galante-chat-status" class="galante-chat-note">🔐 Требуется вход в аккаунт</div></section><div id="galante-rank-badge" class="rank-celebration" hidden></div><section class="account-panel admin-panel" id="galante-admin" hidden><h3>🛡️ ПАНЕЛЬ АДМИНИСТРАТОРА GALANTE GAMES</h3><p>Выдача кристаллов по ID аккаунта Supabase. Только назначенный администратор может отправлять награды.</p><input id="admin-target" placeholder="UUID аккаунта друга"><input id="admin-amount" type="number" min="1" max="100000" value="1000" placeholder="Количество кристаллов"><input id="admin-note" maxlength="120" placeholder="Причина (необязательно)"><button id="admin-send" type="button">💎 ВЫДАТЬ КРИСТАЛЛЫ</button><p id="admin-status"></p><div class="admin-tools"><strong>🛡️ Модерация игроков</strong><input id="mod-target" placeholder="UUID аккаунта игрока"><select id="mod-action"><option value="mute">🔇 Мут чата</option><option value="ban">⛔ Бан чата</option><option value="unmute">🔊 Снять мут</option><option value="unban">✅ Снять бан</option></select><input id="mod-minutes" type="number" value="60" min="1" max="10080" placeholder="Минуты (для мута)"><input id="mod-reason" maxlength="120" placeholder="Причина"><button id="mod-send" type="button">ПРИМЕНИТЬ МОДЕРАЦИЮ</button><small id="mod-status">Для работы выполни SQL-файл обновления 9.8.</small></div></section>
+      <button id="quick-play" type="button">🚀 ИГРАТЬ СЕЙЧАС · НАЧАТЬ ПОЛЁТ</button>
       <div class="menu-section-label">КОМАНДНЫЙ ЦЕНТР <span>ВЫБЕРИ РАЗДЕЛ</span></div>
       <nav class="menu-nav" aria-label="Разделы меню"><button type="button" class="menu-nav-btn active" data-section="hangar">🚀 АНГАР</button><button type="button" class="menu-nav-btn" data-section="missions">🎯 МИССИИ</button><button type="button" class="menu-nav-btn" data-section="records">🏆 РЕЙТИНГ</button><button type="button" class="menu-nav-btn" data-section="planet">🪐 ПЛАНЕТА</button></nav>
       <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Космолёты</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div><div id="ship-workshop" class="ship-workshop"></div></div></div>
@@ -130,6 +145,20 @@
   </div>
   <div id="colony-scene" hidden aria-label="Планета — интерактивная локация"><canvas id="colony-canvas"></canvas><div id="colony-hotspots" class="colony-hotspots"></div><button id="galante-help" type="button">🤖 Помощник</button><div id="galante-guide" hidden><div class="guide-head"><span class="guide-avatar">🤖</span><span>ГАЛ-7 · Помощник командира</span></div><div id="galante-guide-text" class="guide-text"></div><div id="galante-guide-buttons" class="guide-buttons"></div><div id="galante-guide-progress" class="guide-progress"></div></div><div id="colony-ui"><div class="colony-bar"><div><div id="colony-title" class="colony-label">🪐 ПЛАНЕТА ГАЛАНТЕ</div><div id="colony-subtitle" class="colony-caption"></div></div><button id="colony-close" class="colony-close" type="button">✕ В МЕНЮ</button></div><div><div id="colony-stats" class="colony-stat"></div><div id="colony-market" class="colony-market"></div><div id="colony-actions" class="colony-actions"></div></div></div></div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
+   <script>
+   // Put gameplay before the optional social and administration sections.
+   (()=>{
+     const card=document.querySelector('.panel-card');
+     const footer=card?.querySelector('footer');
+     if(card&&footer){
+       for(const id of ['galante-chat','galante-rank-badge','galante-admin']){
+         const node=document.getElementById(id);if(node)card.insertBefore(node,footer);
+       }
+     }
+     const quick=document.getElementById('quick-play');
+     quick?.addEventListener('click',()=>document.getElementById('start')?.click());
+   })();
+   </script>
   <script>
 // Вставьте URL проекта Supabase и публичный anon/publishable ключ.
 // НЕ вставляйте service_role / secret ключи.
