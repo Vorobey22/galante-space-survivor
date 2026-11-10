@@ -79,7 +79,7 @@
       <div class="features" id="features"><span>✦ 10 галактик</span><span>🎯 Ручной огонь</span><span>👹 Боссы</span><span>⚡ Бонусы</span></div>
       <div class="menu-dashboard"><div id="wallet" class="wallet">💎 КРИСТАЛЛЫ: <b id="bank">0</b> <span id="equipped-name"></span></div><div class="menu-badge">✦ КАМПАНИЯ <span>20 УРОВНЕЙ НА КАРТУ</span></div></div>
       <div class="pilot-profile"><div class="pilot-profile-copy"><span>👨‍🚀 ТВОЙ НИК</span><strong id="pilot-name-display">Пилот</strong></div><button id="pilot-edit" type="button">✎ ИЗМЕНИТЬ</button></div>
-<section class="account-panel" id="galante-account"><h3>🔐 АККАУНТ ПИЛОТА</h3><div id="account-guest"><p>Регистрация по email и паролю. Можно играть и без аккаунта; для админских наград нужен вход.</p><input id="account-email" type="email" placeholder="Твоя почта" autocomplete="email" maxlength="180"><input id="account-password" type="password" placeholder="Пароль (минимум 6 символов)" autocomplete="current-password"><div class="account-actions"><button id="account-signin" type="button">ВОЙТИ</button><button id="account-signup" type="button">РЕГИСТРАЦИЯ</button></div></div><div id="account-member" hidden><p id="account-member-info"></p><div class="account-actions"><button id="account-claim" type="button">🎁 ПОЛУЧИТЬ НАГРАДЫ</button><button id="account-signout" type="button">ВЫЙТИ</button></div></div><div id="account-status" class="account-status">Загрузка аккаунта…</div></section><section class="galante-chat" id="galante-chat"><h3>💬 ГАЛАКТИЧЕСКИЙ МИНИ-ЧАТ</h3><p class="galante-chat-note">Общий чат для зарегистрированных пилотов. Не публикуй личные данные. Сообщения видны всем игрокам с аккаунтом.</p><div id="galante-chat-log" class="galante-chat-log" aria-live="polite"><div class="galante-chat-line">Войди в аккаунт, чтобы читать и писать сообщения.</div></div><form id="galante-chat-form" class="galante-chat-form"><input id="galante-chat-input" maxlength="240" placeholder="Сообщение (до 240 символов)" autocomplete="off" aria-label="Сообщение в чат"><button id="galante-chat-send" type="submit">➤</button></form><div id="galante-chat-status" class="galante-chat-note">🔐 Требуется вход в аккаунт</div></section><div id="galante-rank-badge" class="rank-celebration" hidden></div><section class="account-panel admin-panel" id="galante-admin" hidden><h3>🛡️ ПАНЕЛЬ АДМИНИСТРАТОРА GALANTE GAMES</h3><p>Выдача кристаллов по ID аккаунта Supabase. Только назначенный администратор может отправлять награды.</p><input id="admin-target" placeholder="UUID аккаунта друга"><input id="admin-amount" type="number" min="1" max="100000" value="1000" placeholder="Количество кристаллов"><input id="admin-note" maxlength="120" placeholder="Причина (необязательно)"><button id="admin-send" type="button">💎 ВЫДАТЬ КРИСТАЛЛЫ</button><p id="admin-status"></p><div class="admin-tools"><strong>🛡️ Модерация игроков</strong><input id="mod-target" placeholder="UUID аккаунта игрока"><select id="mod-action"><option value="mute">🔇 Мут чата</option><option value="ban">⛔ Бан чата</option><option value="unmute">🔊 Снять мут</option><option value="unban">✅ Снять бан</option></select><input id="mod-minutes" type="number" value="60" min="1" max="10080" placeholder="Минуты (для мута)"><input id="mod-reason" maxlength="120" placeholder="Причина"><button id="mod-send" type="button">ПРИМЕНИТЬ МОДЕРАЦИЮ</button><small id="mod-status">Для работы выполни SQL-файл обновления 9.8.</small></div></section>
+<section class="account-panel" id="galante-account"><h3>🔐 АККАУНТ ПИЛОТА</h3><div id="account-guest"><p>Регистрация по email и паролю. Можно играть и без аккаунта; для админских наград нужен вход.</p><input id="account-email" type="email" placeholder="Твоя почта" autocomplete="email" maxlength="180"><input id="account-password" type="password" placeholder="Пароль (минимум 6 символов)" autocomplete="current-password"><div class="account-actions"><button id="account-signin" type="button">ВОЙТИ</button><button id="account-signup" type="button">РЕГИСТРАЦИЯ</button></div></div><div id="account-member" hidden><p id="account-member-info"></p><div class="account-actions"><button id="account-claim" type="button">🎁 ПОЛУЧИТЬ НАГРАДЫ</button><button id="account-signout" type="button">ВЫЙТИ</button></div></div><div id="account-status" class="account-status">Проверяем вход…</div></section><section class="galante-chat" id="galante-chat"><h3>💬 ГАЛАКТИЧЕСКИЙ МИНИ-ЧАТ</h3><p class="galante-chat-note">Общий чат для зарегистрированных пилотов. Не публикуй личные данные. Сообщения видны всем игрокам с аккаунтом.</p><div id="galante-chat-log" class="galante-chat-log" aria-live="polite"><div class="galante-chat-line">Войди в аккаунт, чтобы читать и писать сообщения.</div></div><form id="galante-chat-form" class="galante-chat-form"><input id="galante-chat-input" maxlength="240" placeholder="Сообщение (до 240 символов)" autocomplete="off" aria-label="Сообщение в чат"><button id="galante-chat-send" type="submit">➤</button></form><div id="galante-chat-status" class="galante-chat-note">🔐 Требуется вход в аккаунт</div></section><div id="galante-rank-badge" class="rank-celebration" hidden></div><section class="account-panel admin-panel" id="galante-admin" hidden><h3>🛡️ ПАНЕЛЬ АДМИНИСТРАТОРА GALANTE GAMES</h3><p>Выдача кристаллов по ID аккаунта Supabase. Только назначенный администратор может отправлять награды.</p><input id="admin-target" placeholder="UUID аккаунта друга"><input id="admin-amount" type="number" min="1" max="100000" value="1000" placeholder="Количество кристаллов"><input id="admin-note" maxlength="120" placeholder="Причина (необязательно)"><button id="admin-send" type="button">💎 ВЫДАТЬ КРИСТАЛЛЫ</button><p id="admin-status"></p><div class="admin-tools"><strong>🛡️ Модерация игроков</strong><input id="mod-target" placeholder="UUID аккаунта игрока"><select id="mod-action"><option value="mute">🔇 Мут чата</option><option value="ban">⛔ Бан чата</option><option value="unmute">🔊 Снять мут</option><option value="unban">✅ Снять бан</option></select><input id="mod-minutes" type="number" value="60" min="1" max="10080" placeholder="Минуты (для мута)"><input id="mod-reason" maxlength="120" placeholder="Причина"><button id="mod-send" type="button">ПРИМЕНИТЬ МОДЕРАЦИЮ</button><small id="mod-status">Для работы выполни SQL-файл обновления 9.8.</small></div></section>
       <div class="menu-section-label">КОМАНДНЫЙ ЦЕНТР <span>ВЫБЕРИ РАЗДЕЛ</span></div>
       <nav class="menu-nav" aria-label="Разделы меню"><button type="button" class="menu-nav-btn active" data-section="hangar">🚀 АНГАР</button><button type="button" class="menu-nav-btn" data-section="missions">🎯 МИССИИ</button><button type="button" class="menu-nav-btn" data-section="records">🏆 РЕЙТИНГ</button><button type="button" class="menu-nav-btn" data-section="planet">🪐 ПЛАНЕТА</button></nav>
       <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Космолёты</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div><div id="ship-workshop" class="ship-workshop"></div></div></div>
@@ -125,7 +125,7 @@
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V9.6</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V10.3</span></footer>
     </section>
   </div>
   <div id="colony-scene" hidden aria-label="Планета — интерактивная локация"><canvas id="colony-canvas"></canvas><div id="colony-hotspots" class="colony-hotspots"></div><button id="galante-help" type="button">🤖 Помощник</button><div id="galante-guide" hidden><div class="guide-head"><span class="guide-avatar">🤖</span><span>ГАЛ-7 · Помощник командира</span></div><div id="galante-guide-text" class="guide-text"></div><div id="galante-guide-buttons" class="guide-buttons"></div><div id="galante-guide-progress" class="guide-progress"></div></div><div id="colony-ui"><div class="colony-bar"><div><div id="colony-title" class="colony-label">🪐 ПЛАНЕТА ГАЛАНТЕ</div><div id="colony-subtitle" class="colony-caption"></div></div><button id="colony-close" class="colony-close" type="button">✕ В МЕНЮ</button></div><div><div id="colony-stats" class="colony-stat"></div><div id="colony-market" class="colony-market"></div><div id="colony-actions" class="colony-actions"></div></div></div></div>
@@ -1724,7 +1724,7 @@ $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode===
 // Galante 9.5: Supabase Auth, privileged grant RPC, account-based bonuses.
 (()=>{
  const $=id=>document.getElementById(id), cfg=window.NEON_CONFIG||{};
- const state={client:null,user:null,checking:false};
+ const state={client:null,user:null,checking:false,refreshing:null,adminRequest:0};
  const say=(message)=>{$('account-status').textContent=message};
  const err=e=>String(e?.message||e||'Неизвестная ошибка').slice(0,220);
  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -1738,19 +1738,62 @@ $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode===
    if(error){profileWriteDisabled=true;console.info('Galante: профиль временно не синхронизирован. Примените SQL 10.1. Код:',error.code||error.status||'access');}
   }catch(e){profileWriteDisabled=true;console.info('Galante: синхронизация профиля недоступна; игра продолжит работать.');}
  }
- async function checkAdmin(){const requested=state.user?.id;$('galante-admin').hidden=true;if(!requested)return;const {data,error}=await client().rpc('galante_is_admin');if(state.user?.id===requested&&!error&&data===true)$('galante-admin').hidden=false}
- async function refresh(){try{const {data:{user},error}=await client().auth.getUser();if(error)throw error;state.user=user||null;$('account-guest').hidden=!!user;$('account-member').hidden=!user;if(user){$('account-member-info').textContent='👨‍🚀 '+(user.email||'Пилот')+' · ID аккаунта: '+user.id;say('✅ Вход выполнен. Прогресс и кристаллы пока сохраняются в этом браузере.');await checkAdmin();await claim(false);profile().catch(()=>{})}else{say('Гостевой режим. Для получения подарков войди в аккаунт.');$('galante-admin').hidden=true}}catch(e){say('⚠️ '+err(e)+' · Проверь настройку Supabase SQL')}}
- async function auth(mode){const email=$('account-email').value.trim(),password=$('account-password').value;if(!email||password.length<6){say('Укажи email и пароль не короче 6 символов');return}say('⏳ Подключаемся…');try{const c=client(),{data,error}=mode==='signup'?await c.auth.signUp({email,password}):await c.auth.signInWithPassword({email,password});if(error)throw error;if(mode==='signup'&&!data.session){say('📨 Проверь почту и подтверди email, затем нажми «ВОЙТИ».');return}await refresh()}catch(e){say('⚠️ '+err(e))}}
+ async function checkAdmin(){
+  const requested=state.user?.id, request=++state.adminRequest;
+  $('galante-admin').hidden=true;
+  if(!requested)return;
+  try{
+   const {data,error}=await client().rpc('galante_is_admin');
+   if(request===state.adminRequest&&state.user?.id===requested&&!error&&data===true)$('galante-admin').hidden=false;
+  }catch(e){console.info('Galante: проверка роли временно недоступна.');}
+ }
+ function setGuest(message){
+  state.user=null;state.adminRequest++;
+  $('account-guest').hidden=false;$('account-member').hidden=true;
+  $('galante-admin').hidden=true;
+  $('account-member-info').textContent='';
+  say(message||'Гостевой режим. Войди в аккаунт, чтобы открыть чат и получить подарки.');
+ }
+ async function refresh(){
+  if(state.refreshing)return state.refreshing;
+  state.refreshing=(async()=>{
+   try{
+    const c=client();
+    // getSession reads and, when possible, refreshes persisted credentials.
+    const {data:sessionData,error:sessionError}=await c.auth.getSession();
+    if(sessionError){
+     setGuest('🔐 Сессия истекла. Введи почту и пароль и нажми «ВОЙТИ».');
+     return;
+    }
+    if(!sessionData?.session){setGuest();return;}
+    const {data:userData,error:userError}=await c.auth.getUser();
+    if(userError||!userData?.user){
+     setGuest('🔐 Не удалось подтвердить вход. Введи почту и пароль и нажми «ВОЙТИ».');
+     return;
+    }
+    const user=userData.user,changed=state.user?.id!==user.id;
+    state.user=user;
+    $('account-guest').hidden=true;$('account-member').hidden=false;
+    $('account-member-info').textContent='👨‍🚀 '+(user.email||'Пилот')+' · ID аккаунта: '+user.id;
+    say('✅ Аккаунт подключён. Прогресс и кристаллы сохраняются в этом браузере.');
+    if(changed){checkAdmin().catch(()=>{});claim(false).catch(()=>{});profile().catch(()=>{});}
+   }catch(e){
+    setGuest('⚠️ Не удалось проверить аккаунт: '+err(e)+'. Попробуй войти снова.');
+   }
+  })();
+  try{await state.refreshing}finally{state.refreshing=null}
+ }
+ async function auth(mode){const email=$('account-email').value.trim(),password=$('account-password').value;if(!email||password.length<6){say('Укажи email и пароль не короче 6 символов');return}say('⏳ Подключаемся…');try{const c=client(),{data,error}=mode==='signup'?await c.auth.signUp({email,password}):await c.auth.signInWithPassword({email,password});if(error)throw error;if(mode==='signup'&&!data.session){say('📨 Проверь почту и подтверди email, затем нажми «ВОЙТИ».');return}await refresh();window.dispatchEvent(new Event('galante-auth-updated'))}catch(e){say('⚠️ '+err(e))}}
  async function claim(show=true){if(!state.user)return;if(state.checking)return;state.checking=true;try{const {data,error}=await client().rpc('galante_claim_gifts');if(error)throw error;const amount=Number(data)||0;if(amount>0){const key='antonio_neon_economy_v3';let obj;try{obj=JSON.parse(localStorage.getItem(key)||'{}')}catch{obj={}}obj.bank=(Number(obj.bank)||0)+amount;localStorage.setItem(key,JSON.stringify(obj));say('🎁 Получено '+amount.toLocaleString('ru-RU')+' кристаллов! Обнови страницу, чтобы увидеть новый баланс.');if(show)alert('🎁 +'+amount+' кристаллов! Обнови страницу.')}else if(show)say('Новых подарков пока нет.')}catch(e){if(show)say('⚠️ Не удалось получить награды: '+err(e))}finally{state.checking=false}}
  async function grant(){const id=$('admin-target').value.trim(),amount=Number($('admin-amount').value),note=$('admin-note').value.trim();if(!UUID.test(id)||!Number.isSafeInteger(amount)||amount<1||amount>100000){$('admin-status').textContent='Укажи правильный UUID и сумму 1–100 000';return}if(!confirm('Выдать '+amount+' кристаллов игроку '+id+'?'))return;$('admin-status').textContent='⏳ Отправка…';try{const {data,error}=await client().rpc('galante_admin_grant',{p_recipient:id,p_amount:amount,p_note:note});if(error)throw error;$('admin-status').textContent='✅ Награда №'+data+' создана. Друг получит её после входа в аккаунт.'}catch(e){$('admin-status').textContent='⚠️ '+err(e)}}
  $('account-signin').addEventListener('click',()=>auth('signin'));
  $('account-signup').addEventListener('click',()=>auth('signup'));
- $('account-signout').addEventListener('click',async()=>{try{await client().auth.signOut();await refresh()}catch(e){say(err(e))}});
+ $('account-signout').addEventListener('click',async()=>{try{await client().auth.signOut();setGuest('Ты вышел из аккаунта. Для чата войди снова.');window.dispatchEvent(new Event('galante-auth-updated'))}catch(e){say(err(e))}});
  $('account-claim').addEventListener('click',()=>claim(true));$('admin-send').addEventListener('click',grant);
  $('nickname').addEventListener('change',()=>{if(state.user)profile().catch(()=>{})});
  function rankBadge(){const text=$('my-rank')?.textContent||'',box=$('galante-rank-badge');const m=text.match(/Твоё место: №(\d+)/);if(!m){box.hidden=true;return}const rank=Number(m[1]);box.hidden=false;box.textContent=rank===1?'👑 ТЫ КРУТЫШ! ТЫ №1 В ГАЛАКТИКЕ!':rank===2?'🥈 КОСМИЧЕСКАЯ ЛЕГЕНДА! ТЫ №2!':rank===3?'🥉 ВЕЛИКОЛЕПНО! ТЫ В ТОП-3!':rank<=10?'🌟 ТЫ В ТОП-10! ТВОЁ МЕСТО №'+rank:'🚀 ТВОЁ МЕСТО В ГАЛАКТИКЕ: №'+rank}
  const rank=$('my-rank');if(rank){new MutationObserver(rankBadge).observe(rank,{childList:true,characterData:true,subtree:true});rankBadge()}
- try{client().auth.onAuthStateChange(()=>{setTimeout(()=>{refresh().catch(()=>{});window.dispatchEvent(new Event('galante-auth-updated'))},0)});refresh()}catch(e){say('⚠️ '+err(e))}
+ try{client().auth.onAuthStateChange(()=>{setTimeout(()=>{refresh().catch(()=>{});window.dispatchEvent(new Event('galante-auth-updated'))},0)});refresh().catch(()=>{})}catch(e){setGuest('⚠️ Не удалось загрузить авторизацию: '+err(e))}
 })();
 </script><script>
 // 9.6: account-only chat; Supabase RLS controls access, never trust client roles.
@@ -1761,7 +1804,7 @@ $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode===
  const note=s=>{status.textContent=s};
  const reset=s=>{log.replaceChildren();const div=document.createElement('div');div.className='galante-chat-line';div.textContent=s;log.append(div)};
  async function load(){if(!uid||loadBusy)return;loadBusy=true;try{const {data,error}=await getClient().from('galante_chat').select('user_id,nickname,body,created_at').order('created_at',{ascending:false}).limit(40);if(error)throw error;log.replaceChildren();for(const msg of (data||[]).reverse()){const row=document.createElement('div');row.className='galante-chat-line';const b=document.createElement('b');b.textContent=String(msg.nickname||'Пилот').slice(0,24)+(msg.user_id===uid?' (ты)':'')+': ';const text=document.createElement('span');text.textContent=String(msg.body||'');row.append(b,text);log.append(row)}if(!data?.length)reset('Сообщений пока нет. Напиши первым!');log.scrollTop=log.scrollHeight;note('🟢 Чат работает · последние 40 сообщений')}catch(e){note('⚠️ Чат: '+String(e.message||e).slice(0,130)+' · Проверь SQL 10.2 для чата')}finally{loadBusy=false}}
- async function check(){try{const c=getClient(),{data:{user}}=await c.auth.getUser();const next=user?.id||null;if(next===uid){if(uid&&!loadBusy)await load();return;}uid=next;input.disabled=!uid;$('galante-chat-send').disabled=!uid;if(channel){c.removeChannel(channel);channel=null}if(!uid){reset('🔐 Войди в аккаунт, чтобы открыть чат.');note('Требуется вход в аккаунт');return}await load();channel=c.channel('galante-chat-v96').on('postgres_changes',{event:'INSERT',schema:'public',table:'galante_chat'},()=>load()).subscribe()}catch(e){note('⚠️ '+String(e.message||e).slice(0,100))}}
+ async function check(){try{const c=getClient(),{data:sessionData,error:sessionError}=await c.auth.getSession();if(sessionError)throw sessionError;const next=sessionData?.session?.user?.id||null;if(next===uid){if(uid&&!loadBusy)await load();return;}uid=next;input.disabled=!uid;$('galante-chat-send').disabled=!uid;if(channel){c.removeChannel(channel);channel=null}if(!uid){reset('🔐 Войди в аккаунт, чтобы открыть чат.');note('Требуется вход в аккаунт');return}await load();channel=c.channel('galante-chat-v96').on('postgres_changes',{event:'INSERT',schema:'public',table:'galante_chat'},()=>load()).subscribe()}catch(e){uid=null;input.disabled=true;$('galante-chat-send').disabled=true;reset('🔐 Авторизация недоступна. Повтори вход в аккаунт.');note('⚠️ '+String(e.message||e).slice(0,100))}}
  form.addEventListener('submit',async e=>{e.preventDefault();if(!uid){note('Сначала войди в аккаунт');return}const body=input.value.trim();if(!body||body.length>240)return;if(Date.now()-lastSend<5000){note('⏳ Подожди 5 секунд между сообщениями');return}lastSend=Date.now();const nickname=String(document.getElementById('nickname')?.value||'Пилот').trim().slice(0,20)||'Пилот';input.disabled=true;try{const {error}=await getClient().from('galante_chat').insert({user_id:uid,nickname,body});if(error)throw error;input.value='';await load()}catch(err){note('⚠️ '+String(err.message||err).slice(0,130))}finally{input.disabled=false}});
  input.disabled=true;$('galante-chat-send').disabled=true;
  try{getClient().auth.onAuthStateChange(()=>setTimeout(check,0));check()}catch(e){note('⚠️ '+e.message)}
