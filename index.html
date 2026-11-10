@@ -10,6 +10,7 @@
   <meta name="copyright" content="Copyright 2026 Galante Games. All rights reserved.">
   <style>
 :root{color-scheme:dark;--cyan:#7cf5ff;--violet:#c58dff;--panel:rgba(7,15,36,.88)}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#040817;font-family:Inter,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color:#eefaff}body{touch-action:none;-webkit-user-select:none;user-select:none}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #a8f5ff;outline-offset:3px}canvas#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}.hud{position:fixed;z-index:4;left:18px;right:18px;top:calc(14px + env(safe-area-inset-top));display:flex;align-items:flex-start;justify-content:space-between;gap:10px;pointer-events:none;text-shadow:0 2px 14px #030716}.hud-card{display:flex;align-items:center;gap:12px;padding:9px 15px;background:rgba(6,14,33,.66);border:1px solid rgba(134,217,255,.17);backdrop-filter:blur(15px);border-radius:16px;min-width:120px}.hud-icon{font-size:27px;color:#6cf1f5;text-shadow:0 0 20px #48e6ee}.hud-icon.trophy{color:#ffe091;text-shadow:0 0 16px #ffb963}.hud-meta{display:flex;flex-direction:column;line-height:1.1}.hud-meta b{font-size:22px;font-variant-numeric:tabular-nums}.hud-label{font-size:9px;letter-spacing:2px;color:#a7bcd6;font-weight:800;margin-bottom:4px}.hud-center{display:flex;align-items:center;flex-direction:column;gap:3px}.hud-center #life{color:#ff658c;font-size:27px;letter-spacing:2px;text-shadow:0 0 17px #ef4176;font-weight:900;white-space:nowrap}.wave{font-size:10px;letter-spacing:2px;color:#aac3ed;font-weight:800}#game-status{position:fixed;z-index:3;top:calc(91px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:1px;color:#8fdbff;pointer-events:none;text-shadow:0 0 10px #14284b;white-space:nowrap}#toast{position:fixed;z-index:7;top:22%;left:50%;transform:translate(-50%,9px) scale(.96);opacity:0;transition:opacity .3s,transform .3s;background:#101d38d9;border:1px solid #7fdcff88;color:#f5fbff;padding:13px 25px;border-radius:100px;font-size:14px;font-weight:900;letter-spacing:1px;pointer-events:none;text-align:center;white-space:nowrap;text-shadow:0 0 15px #4df7ff}#toast.visible{opacity:1;transform:translate(-50%,0) scale(1)}.pause-button,.boost-button{position:fixed;z-index:6;color:#dcfaff;border:1px solid #6deaff55;background:rgba(13,29,55,.76);backdrop-filter:blur(14px);box-shadow:0 10px 30px #0006;transition:transform .15s,background .15s}.pause-button:hover,.boost-button:hover{background:rgba(27,56,84,.9);transform:translateY(-2px)}.pause-button{right:calc(18px + env(safe-area-inset-right));bottom:calc(17px + env(safe-area-inset-bottom));border-radius:14px;padding:12px 16px;font-size:11px;font-weight:900;letter-spacing:1.4px}.boost-button{right:calc(18px + env(safe-area-inset-right));bottom:calc(82px + env(safe-area-inset-bottom));width:72px;height:72px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.boost-symbol{font-size:27px;color:#fee18b;text-shadow:0 0 18px #ffc471}.boost-caption{font-size:9px;letter-spacing:1px;font-weight:900}.boost-button.cooldown{border-color:#7d8aaa44;filter:saturate(.5)}.boost-button.cooldown .boost-symbol{color:#8994b2}.boost-button:disabled{cursor:default}#hint{position:fixed;z-index:3;pointer-events:none;left:50%;transform:translateX(-50%);bottom:18px;font-size:11px;font-weight:700;color:#b4d3eb;text-align:center;white-space:nowrap;text-shadow:0 1px 10px #000}#joystick{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));left:calc(22px + env(safe-area-inset-left));width:130px;height:130px;z-index:6;touch-action:none;border:2px solid #7fe8f566;border-radius:50%;background:radial-gradient(circle,#5bdcf622,#102b5344 63%,#04172a88);box-shadow:0 0 45px #32dcff19,inset 0 0 20px #2a7faf1a;display:none}.stick-halo{position:absolute;inset:18px;border:1px dashed #8fe8ff33;border-radius:50%;pointer-events:none}#stick{position:absolute;left:36px;top:36px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#b8faff,#48badc 65%,#245d9a);border:3px solid #ddfaff88;box-shadow:0 0 24px #52e9ff77;pointer-events:none}body.playing #joystick{display:none}body.playing #boost{display:flex}body:not(.playing) .boost-button,body:not(.playing) .pause-button,body:not(.playing) #hint{display:none}@media(pointer:coarse){body.playing #joystick{display:block}body.playing #hint{display:none}}@media(pointer:fine){.boost-button{display:none!important}}.overlay{position:fixed;z-index:10;inset:0;display:grid;place-items:center;overflow-y:auto;overscroll-behavior:contain;background:radial-gradient(ellipse at 50% 40%,#0d1646a0,#040916e0 70%);backdrop-filter:blur(9px);padding:22px 12px}.panel-card{width:min(100%,460px);max-height:calc(100dvh - 44px);overflow-y:auto;scrollbar-width:thin;text-align:center;padding:24px 28px 18px;background:linear-gradient(157deg,rgba(24,37,69,.97),rgba(6,14,32,.96) 60%,rgba(17,23,49,.98));border:1px solid rgba(105,215,255,.34);border-radius:26px;box-shadow:0 28px 110px #000a,0 0 60px #3867ff22,inset 0 1px #c7f8ff18}.eyebrow{font-size:10px;font-weight:900;letter-spacing:2.5px;color:#9be6f5;margin:0 0 14px}.eyebrow-divider{color:#657898;padding:0 5px}.pulse-dot{display:inline-block;width:7px;height:7px;background:#62ffc7;box-shadow:0 0 15px #40f7af;border-radius:50%;margin-right:7px;vertical-align:middle;animation:pulse 1.7s infinite}@keyframes pulse{50%{opacity:.35;transform:scale(.7)}}h1{font-size:clamp(29px,5vw,40px);line-height:1.08;letter-spacing:-1.8px;margin:0;font-weight:1000;text-shadow:0 5px 35px #1e7bd655}h1 span{display:block;background:linear-gradient(90deg,#9cf7ff 5%,#80dcff 42%,#bc99ff 90%);color:transparent;background-clip:text;-webkit-background-clip:text}.intro{margin:14px auto 12px;font-size:13px;color:#bdd0e7;line-height:1.65;max-width:360px}.features{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 17px}.features span{font-size:10px;color:#c9ddf6;border:1px solid #78aaff30;border-radius:40px;background:#23396377;padding:7px 10px;font-weight:750}.setup{display:grid;grid-template-columns:1fr;gap:7px;text-align:left}.field-label{font-size:10px;color:#96b5d5;font-weight:900;letter-spacing:1.5px;margin-top:4px}.setup input,.setup select{width:100%;padding:12px 13px;border-radius:12px;border:1px solid #70b6e755;background:#080f25;color:#e6f9ff;box-shadow:inset 0 1px 5px #0003;outline-offset:2px;font-size:14px}.setup input::placeholder{color:#768da8}.setup select{cursor:pointer}.start-button{background:linear-gradient(108deg,#7df4f9,#9cc4ff 54%,#bc9bff);color:#071324;font-weight:1000;letter-spacing:1.3px;padding:15px 16px;width:100%;margin:18px 0 4px;border:0;border-radius:14px;font-size:13px;box-shadow:0 10px 25px #5279ec33,0 0 30px #6cefff20;transition:filter .15s,transform .15s}.start-button:hover{filter:brightness(1.12);transform:translateY(-2px)}.start-button span{margin-left:8px;font-size:18px}.controls{font-size:10px;color:#819dba;margin-top:6px;line-height:1.5}.leaderboard{margin-top:17px;border:1px solid rgba(91,170,230,.22);background:rgba(2,12,27,.65);padding:11px 14px 9px;border-radius:15px;text-align:left}.leaderboard-head{display:flex;align-items:center;justify-content:space-between}.leaderboard h2{font-size:11px;letter-spacing:2px;color:#b7eaff;margin:0;font-weight:900}.leaderboard-head button{background:#274367;color:#b7f2ff;border:1px solid #76d3ee33;font-size:19px;border-radius:9px;line-height:1;padding:3px 9px}.leaderboard ol{padding-left:25px;margin:7px 0 0;max-height:105px;overflow:auto;scrollbar-width:thin}.leaderboard li{font-size:12px;padding:3px 0;color:#bfd2e5}.leaderboard li .leader-score{float:right;color:#99f7e3;font-weight:900;font-variant-numeric:tabular-nums}#status{font-size:10px;color:#88a3bf;margin-top:4px;min-height:13px}footer{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;font-size:9px;letter-spacing:1.5px;margin-top:16px;color:#768fac;font-weight:800}footer strong{color:#c8e8fc}footer span{margin-left:5px;color:#6f839e}.overlay[data-screen="pause"] #setup,.overlay[data-screen="pause"] #features,.overlay[data-screen="pause"] #leaderboard{display:none}.overlay[data-screen="pause"] .panel-card{max-width:410px}.overlay[data-screen="over"] #setup,.overlay[data-screen="over"] #features{display:none}@media(max-width:600px){.hud{left:8px;right:8px;top:calc(8px + env(safe-area-inset-top));gap:4px}.hud-card{min-width:0;gap:6px;padding:7px 9px;border-radius:11px}.hud-icon{font-size:19px}.hud-meta b{font-size:17px}.hud-label{font-size:7px;letter-spacing:1px}.hud-center #life{font-size:18px}.wave{font-size:8px;letter-spacing:1px}.panel-card{padding:20px 18px 14px;border-radius:20px}.overlay{padding:9px}.panel-card{max-height:calc(100dvh - 18px)}.intro{margin:10px auto}.features{margin-bottom:10px}.start-button{margin-top:13px}#joystick{width:118px;height:118px;left:calc(15px + env(safe-area-inset-left));bottom:calc(18px + env(safe-area-inset-bottom))}#stick{left:31px;top:31px}.boost-button{width:66px;height:66px;bottom:calc(86px + env(safe-area-inset-bottom));right:calc(14px + env(safe-area-inset-right))}.pause-button{bottom:calc(20px + env(safe-area-inset-bottom));right:calc(14px + env(safe-area-inset-right))}#game-status{top:calc(77px + env(safe-area-inset-top));font-size:10px}}@media(max-height:680px){.overlay{place-items:start center}.panel-card{max-height:none;margin:auto 0}.leaderboard ol{max-height:64px}.eyebrow{margin-bottom:6px}.intro{margin-top:8px;margin-bottom:8px}.features{margin-bottom:9px}.panel-card{padding-top:16px;padding-bottom:12px}.start-button{margin-top:11px;padding:12px}}@media(prefers-reduced-motion:reduce){.pulse-dot{animation:none}*{transition-duration:0s!important}}.wallet{margin:8px 0 10px;background:#081d36;border:1px solid #5fe9f477;border-radius:12px;padding:10px;color:#b9efff;font-size:12px;font-weight:800}.wallet b{color:#ffe68b;font-size:17px}.wallet span{display:block;color:#9fb8dd;font-size:10px;margin-top:4px}.hangar{margin:8px 0;border:1px solid #5884ce55;border-radius:15px;background:#061229aa;padding:9px}.tabs{display:flex;gap:5px}.tabs button{flex:1;min-width:0;padding:9px 3px;background:#15254a;color:#b4caee;border:1px solid #5879ad55;border-radius:9px;font-weight:800;font-size:11px}.tabs button.active{background:#3767b1;color:white;border-color:#77e4ff}.shop-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px;max-height:174px;overflow:auto}.shop-item{background:#101f3c;border:1px solid #6386b955;border-radius:11px;padding:9px 6px;display:flex;flex-direction:column;gap:4px;align-items:center}.shop-item strong{font-size:12px}.shop-item small{font-size:10px;color:#adc1dc;min-height:25px}.shop-item button{background:#66e9ed;border:0;border-radius:8px;color:#07172c;font-size:10px;font-weight:900;padding:7px;width:100%}.shop-item button:disabled{opacity:.5;cursor:default}.shop-icon{font-size:26px}.boss-hp{color:#ff8d9e;font-size:10px;font-weight:900;text-shadow:0 0 12px #ff397c}.boss-hp[hidden]{display:none}.overlay[data-screen="pause"] .hangar,.overlay[data-screen="pause"] .wallet{display:none}.mission-box{margin:9px 0;border:1px solid #88b4ff66;border-radius:12px;background:#0c1935;padding:10px;text-align:left;font-size:11px;color:#cce6ff}.mission-box strong{color:#f8d88b}.mission-line{display:flex;justify-content:space-between;gap:8px;margin-top:7px}.mission-line.done{color:#70ffca}.mission-box #loot-status{color:#e4baff;margin-top:8px}.tabs{flex-wrap:wrap}.tabs button{flex:1 1 21%}.ability-button{position:fixed;z-index:7;right:calc(102px + env(safe-area-inset-right));bottom:calc(82px + env(safe-area-inset-bottom));border:1px solid #e3a5ff88;border-radius:40px;background:#37175de8;color:#fff;padding:11px;font-weight:900;font-size:11px;box-shadow:0 0 20px #ad60ff44;display:none}.ability-button span{display:block;font-size:9px;color:#e5b7ff}.playing .ability-button{display:block}@media(pointer:fine){.ability-button{right:18px;bottom:76px}}@media(max-width:600px){.ability-button{right:92px;bottom:92px;padding:8px}}#fire-touch{display:none;position:fixed;right:calc(16px + env(safe-area-inset-right));bottom:calc(166px + env(safe-area-inset-bottom));z-index:9;width:86px;height:86px;border:2px solid #ffc17d;border-radius:50%;background:radial-gradient(circle,#ff9b5d,#7b294e);color:#fff;font-weight:900;box-shadow:0 0 24px #ff7a6a99;touch-action:none}@media(pointer:coarse){body.playing #fire-touch{display:block}}.achievement-line{display:flex;justify-content:space-between;gap:12px;margin:7px 0;padding:7px 9px;border-radius:8px;background:#121d36;color:#8b9ebc;font-size:12px}.achievement-line b{white-space:nowrap}.achievement-done{color:#8dfbd7;border:1px solid #4ee6b755}.leaderboard li.rank-1{color:#ffdc75;font-weight:900;text-shadow:0 0 12px #ffb832aa}.leaderboard li.rank-2{color:#d4e8ff;font-weight:800;text-shadow:0 0 9px #a8caff99}.leaderboard li.rank-3{color:#f2ae79;font-weight:800;text-shadow:0 0 9px #d47a4999}.leaderboard li.rank-1:before{content:'👑 ';}.leaderboard li.rank-2:before{content:'🥈 ';}.leaderboard li.rank-3:before{content:'🥉 ';}html,body{overscroll-behavior:none;overscroll-behavior-y:none;position:fixed;inset:0;width:100%;height:100%;-webkit-overflow-scrolling:auto}#game,#joystick,#fire-touch,#boost,#ability,.boost-button{touch-action:none!important;-webkit-touch-callout:none;user-select:none}@media(pointer:coarse){#fire-touch{bottom:calc(172px + env(safe-area-inset-bottom));right:calc(16px + env(safe-area-inset-right));width:82px;height:82px}#joystick{bottom:calc(34px + env(safe-area-inset-bottom))!important;left:calc(18px + env(safe-area-inset-left))!important}}
+.pilot-profile{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;margin:8px 0;border:1px solid #5edcf977;border-radius:14px;background:linear-gradient(100deg,#103454bb,#15183fbb);text-align:left}.pilot-profile-copy{display:flex;flex-direction:column;min-width:0;gap:2px}.pilot-profile-copy span{font-size:10px;letter-spacing:1.4px;color:#95dce9}.pilot-profile-copy strong{font-size:17px;color:#fff;overflow-wrap:anywhere}.pilot-profile button{flex-shrink:0;background:#19395c;border:1px solid #7cf5ff88;border-radius:10px;color:#e5fbff;font-weight:800;padding:9px 11px;cursor:pointer;font-size:11px}#nickname{scroll-margin-top:25vh}
 /* Galante Games — command deck menu redesign */
 .overlay{background:radial-gradient(ellipse at 50% 15%,#163c72bb,transparent 50%),linear-gradient(165deg,#030813ee,#070f29f0 60%,#0c0824f2);padding:16px 10px}
 .panel-card{width:min(100%,570px);max-height:calc(100dvh - 32px);padding:18px 22px 20px;border-radius:24px;border:1px solid #6edcff66;background:linear-gradient(150deg,#101f3ef7,#071226fa 53%,#11102bfa);box-shadow:0 30px 90px #000b,0 0 60px #2a7aff20,inset 0 1px #ffffff22}
@@ -33,7 +34,7 @@
   <button class="boost-button" id="boost" type="button" aria-label="Рывок" title="Рывок (пробел)"><span class="boost-symbol">⚡</span><span class="boost-caption" id="boost-caption">РЫВОК</span></button>
   <button id="ability" class="ability-button" type="button">💥 УЛЬТА <span id="ability-cd">ГОТОВО</span></button>
   <button id="pause" class="pause-button" type="button">Ⅱ ПАУЗА</button>
-  <div id="hint">WASD / стрелки — движение · ПРОБЕЛ — рывок · Q — ульта · огонь автоматический</div>
+  <div id="hint">WASD / стрелки — движение · ПРОБЕЛ — рывок · Q — ульта · ЛКМ / F — огонь · P2: IJKL + H</div>
 
   <div class="overlay" id="panel" data-screen="menu">
     <section class="panel-card" role="dialog" aria-labelledby="heading">
@@ -44,21 +45,34 @@
       <p id="message" class="intro">Пилотируй боевой космолёт, исследуй бесконечный космос и побеждай вражеские эскадрильи.</p>
       <div class="features" id="features"><span>✦ 10 галактик</span><span>🎯 Ручной огонь</span><span>👹 Боссы</span><span>⚡ Бонусы</span></div>
       <div class="menu-dashboard"><div id="wallet" class="wallet">💎 КРИСТАЛЛЫ: <b id="bank">0</b> <span id="equipped-name"></span></div><div class="menu-badge">✦ КАМПАНИЯ <span>20 УРОВНЕЙ НА КАРТУ</span></div></div>
+      <div class="pilot-profile"><div class="pilot-profile-copy"><span>👨‍🚀 ТВОЙ НИК</span><strong id="pilot-name-display">Пилот</strong></div><button id="pilot-edit" type="button">✎ ИЗМЕНИТЬ</button></div>
       <div class="menu-section-label">КОМАНДНЫЙ ЦЕНТР <span>ВЫБЕРИ РАЗДЕЛ</span></div>
       <nav class="menu-nav" aria-label="Разделы меню"><button type="button" class="menu-nav-btn active" data-section="hangar">🚀 АНГАР</button><button type="button" class="menu-nav-btn" data-section="missions">🎯 МИССИИ</button><button type="button" class="menu-nav-btn" data-section="records">🏆 РЕЙТИНГ</button></nav>
       <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Скины</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div></div></div>
-      <div class="menu-pane" id="menu-pane-missions" hidden><div class="mission-box"><strong>🏅 ДОСТИЖЕНИЯ ПИЛОТА</strong><div id="achievements"></div><small>Достижения хранятся на этом устройстве. Общий зал славы сравнивает очки игроков.</small></div><div class="mission-box"><strong>🎯 ЗАДАНИЯ</strong><div id="missions"></div><div id="loot-status"></div><div id="campaign-progress">🪐 Кампания: 1/20 · Волна 1/5</div></div></div>
+      <div class="menu-pane" id="menu-pane-missions" hidden><div class="mission-box"><strong>🏅 ДОСТИЖЕНИЯ ПИЛОТА</strong><div id="achievements"></div><small>Достижения хранятся на этом устройстве. Общий зал славы сравнивает очки игроков.</small></div><div class="mission-box"><strong>🎯 ЗАДАНИЯ</strong><div id="missions"></div><div class="daily-section"><strong>📅 ЕЖЕДНЕВНЫЕ ЗАДАНИЯ</strong><div id="daily-missions"></div><small>Обновляются каждый день по местному времени устройства.</small></div><div id="loot-status"></div><div id="campaign-progress">🪐 Кампания: 1/20 · Волна 1/5</div></div></div>
       <div class="menu-pane" id="menu-pane-records" hidden><div class="leaderboard" id="leaderboard"><div class="leaderboard-head"><h2>🏆 ЗАЛ СЛАВЫ</h2><button id="refresh" type="button" title="Обновить таблицу рекордов">↻</button></div><ol id="leaders"><li>Загрузка рекордов…</li></ol><div id="status" role="status"></div></div></div>
-      <div class="setup" id="setup">
+      <section class="custom-panel" id="custom-panel">
+ <div class="custom-title">🎨 ТЮНИНГ КОСМОЛЁТА</div>
+ <div class="custom-grid">
+ <label>Корпус <select id="tune-hull"><option value="standard">Стандарт</option><option value="arrow">Стрела</option><option value="heavy">Тяжёлый</option></select></label>
+ <label>Цвет двигателя <input id="tune-engine" type="color" value="#53eaff"></label>
+ <label>Цвет крыльев <input id="tune-wings" type="color" value="#6daaff"></label>
+ <label>След <select id="tune-trail"><option value="plasma">Плазма</option><option value="fire">Огонь</option><option value="violet">Фиолетовый</option></select></label>
+ <label>Выстрелы <select id="tune-shots"><option value="cyan">Лазурные</option><option value="gold">Золотые</option><option value="pink">Розовые</option></select></label>
+ </div><small>Оформление сохраняется в этом браузере</small>
+ </section>
+ <section class="season-panel"><strong>🏅 СЕЗОННЫЙ РАНГ</strong><div id="season-rank">Загрузка...</div><small>Личный сезонный прогресс; не глобальный рейтинг. Сезон меняется ежемесячно.</small></section>
+ <div class="setup" id="setup">
         <label class="field-label" for="nickname">ПОЗЫВНОЙ ПИЛОТА</label>
         <input id="nickname" type="text" maxlength="20" placeholder="Введите ник" autocomplete="nickname" aria-label="Имя игрока">
-        <label class="field-label" for="difficulty">СЛОЖНОСТЬ МИССИИ</label>
+        <label class="coop-label"><input id="coop-enabled" type="checkbox"> 👥 Локальный кооператив: 2 игрока на одном ПК</label>
+ <label class="field-label" for="difficulty">СЛОЖНОСТЬ МИССИИ</label>
         <select id="difficulty"><option value="0.78">Лёгкая орбита</option><option value="1" selected>Стандартный полёт</option><option value="1.28">Экстремальный космос</option></select>
       </div>
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
-      <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · Телефон: джойстик и ⚡</div>
+      <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V7.3</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V7.5</span></footer>
     </section>
   </div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
@@ -71,6 +85,11 @@ window.NEON_CONFIG = {
 };
 
 </script>
+  <style>
+.daily-section{margin-top:16px;padding:14px;border:1px solid #3c6688;border-radius:14px;background:#0a1832b8}.daily-section strong{display:block;margin-bottom:9px;color:#b9f6ff}.daily-section small{color:#94b5c9}.wave-choice[hidden]{display:none!important}.wave-choice{position:fixed;z-index:9999;inset:0;background:#020819dc;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}.wave-choice-box{max-width:620px;width:100%;border:1px solid #68d8ff;border-radius:22px;background:linear-gradient(140deg,#122b4c,#1d103b);padding:22px;color:white;box-shadow:0 0 45px #00c8ff55}.wave-choice-box h2{text-align:center;margin:0 0 10px}.wave-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.wave-choice-grid button{padding:16px 8px;border-radius:13px;background:#12365b;border:1px solid #55c8e8;color:#fff;font-weight:700;cursor:pointer;min-height:110px}.wave-choice-grid button:active{transform:scale(.98)}@media(max-width:500px){.wave-choice-grid{grid-template-columns:1fr}.wave-choice-grid button{min-height:65px}}
+.custom-panel,.season-panel{border:1px solid #5c9bc75c;background:#071a31c9;border-radius:15px;padding:12px;margin:12px 0;text-align:left}.custom-title,.season-panel strong{display:block;font-weight:900;font-size:12px;letter-spacing:1px;color:#b3f6ff;margin-bottom:9px}.custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.custom-grid label{font-size:11px;color:#bcd6f0;display:flex;flex-direction:column;gap:5px}.custom-grid select,.custom-grid input{width:100%;min-height:34px;background:#101e39;color:white;border:1px solid #4c8bb7;border-radius:8px;padding:4px}.custom-grid input[type=color]{padding:2px}.custom-panel small,.season-panel small{display:block;color:#93acc8;margin-top:8px;font-size:10px}.coop-label{display:flex;gap:9px;align-items:center;color:#b9f5ff;font-size:12px;font-weight:800;padding:9px;background:#11294c;border-radius:10px}.coop-label input{width:auto!important}.season-panel #season-rank{font-size:16px;font-weight:900;color:#ffe4a3;margin:6px 0}@media(max-width:380px){.custom-grid{grid-template-columns:1fr}}
+</style>
+<div id="wave-choice" class="wave-choice" hidden><div class="wave-choice-box"><h2>⚡ ВЫБЕРИ УСИЛЕНИЕ</h2><p style="text-align:center">Награда за пройденную волну — выбери одно из трёх</p><div id="wave-choice-options" class="wave-choice-grid"></div></div></div>
   <script>
 'use strict';
 // Copyright (c) 2026 Antonio Galante / Galante Games. All rights reserved.
@@ -126,12 +145,67 @@ weapons.push(
 const upgrades=[{id:'speed',name:'Турбодвигатель',icon:'💨',base:75,desc:'+12% скорости'},{id:'fire',name:'Лазер',icon:'🔫',base:90,desc:'+20% темпа и больше лазерных лучей'},{id:'armor',name:'Броня',icon:'🛡️',base:130,desc:'+1 жизнь'},{id:'magnet',name:'Магнит кристаллов',icon:'🧲',base:110,desc:'Притягивает кристаллы издалека'},{id:'power',name:'Усилитель плазмы',icon:'🔥',base:165,desc:'+1 урон каждого выстрела за уровень'},{id:'dash',name:'Импульсный рывок',icon:'⚡',base:145,desc:'Быстрее восстанавливается рывок'},{id:'ultimate',name:'Реактор ульты',icon:'🌟',base:210,desc:'Уменьшает перезарядку суперспособности'},{id:'luck',name:'Счастливый пилот',icon:'🍀',base:175,desc:'Бонусы появляются чаще'}];
 let economy;try{economy=JSON.parse(safeStore.get('antonio_neon_economy_v3','{}'))}catch{economy={}}
 economy={bank:Math.max(0,Number(economy?.bank)||0),owned:Array.isArray(economy?.owned)?economy.owned:['classic','nebula'],skin:economy?.skin||'classic',map:economy?.map||'nebula',levels:economy?.levels||{},weapon:economy?.weapon||'blaster',missionClaims:economy?.missionClaims||{},missionProgress:economy?.missionProgress||{kill:0,collect:0,boss:0},rareSkins:economy?.rareSkins||[],equippedRare:economy?.equippedRare||'',campaignBest:economy?.campaignBest||{},campaignUnlocked:economy?.campaignUnlocked||{},missionTiers:economy?.missionTiers||{},achievementStats:economy?.achievementStats||{kills:0,crystals:0,bosses:0,minibosses:0,levels:0,weapons:0}};
+// Daily missions are local-device progress; leaderboard stays independent.
+const dailyTasks=[{id:'kills',name:'Уничтожить 60 врагов',goal:60,reward:55},{id:'crystals',name:'Собрать 80 кристаллов',goal:80,reward:65},{id:'bosses',name:'Победить босса',goal:1,reward:90}];
+function todayKey(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function ensureDaily(){if(!economy.daily||economy.daily.date!==todayKey())economy.daily={date:todayKey(),progress:{},claimed:{}}}
+function trackDaily(id,n=1){ensureDaily();economy.daily.progress[id]=(Number(economy.daily.progress[id])||0)+n;saveEconomy()}
+function renderDaily(){const root=$('#daily-missions');if(!root)return;ensureDaily();root.replaceChildren();for(const task of dailyTasks){const n=Number(economy.daily.progress[task.id]||0),claimed=!!economy.daily.claimed[task.id];const line=document.createElement('div');line.className='mission-line'+(claimed?' done':'');const label=document.createElement('span');label.textContent=task.name+' · '+Math.min(n,task.goal)+'/'+task.goal;const btn=document.createElement('button');btn.textContent=claimed?'✓ Получено':'💎 '+task.reward;btn.disabled=claimed||n<task.goal;btn.addEventListener('click',()=>{ensureDaily();if(economy.daily.claimed[task.id])return;economy.daily.claimed[task.id]=true;economy.bank+=task.reward;saveEconomy();renderDaily();renderShop();showToast('📅 ЕЖЕДНЕВНАЯ НАГРАДА +'+task.reward+' 💎')});line.append(label,btn);root.append(line)}}
 function saveEconomy(){safeStore.set('antonio_neon_economy_v3',JSON.stringify(economy))}
 function owned(id){return economy.owned.includes(id)}
 function skin(){return skins.find(x=>x.id===economy.skin)||skins[0]}
 function chosenWeapon(){return weapons.find(w=>w.id===economy.weapon)||weapons[0]}
 function chosenMap(){return maps.find(x=>x.id===economy.map)||maps[0]}
 const rareItems=[{id:'crown',name:'Звёздная корона',icon:'👑',desc:'Корона над кораблём'},{id:'wings',name:'Крылья феникса',icon:'🔥',desc:'Пылающие крылья'},{id:'trail',name:'Космический след',icon:'🌈',desc:'Радужный выхлоп'}];
+// Local cosmetic customization and local monthly season.
+const tuneDefaults={hull:'standard',engine:'#53eaff',wings:'#6daaff',trail:'plasma',shots:'cyan'};
+let tune={...tuneDefaults};
+try{Object.assign(tune,JSON.parse(safeStore.get('galante_ship_tune','{}')))}catch{}
+for(const [id,key] of [['tune-hull','hull'],['tune-engine','engine'],['tune-wings','wings'],['tune-trail','trail'],['tune-shots','shots']]){
+ const el=$('#'+id);el.value=tune[key]||tuneDefaults[key];
+ el.addEventListener('change',()=>{tune[key]=el.value;safeStore.set('galante_ship_tune',JSON.stringify(tune))});
+}
+function seasonId(){return new Date().toISOString().slice(0,7)}
+function seasonInfo(){
+ const id=seasonId(),points=Math.max(0,Number(safeStore.get('galante_season_'+id,'0'))||0);
+ const ranks=[['Бронза',0,'🥉'],['Серебро',1500,'🥈'],['Золото',5000,'🥇'],['Алмаз',15000,'💎'],['Легенда',40000,'👑']];
+ let current=ranks[0];for(const rank of ranks)if(points>=rank[1])current=rank;
+ const next=ranks.find(r=>r[1]>points);
+ $('#season-rank').textContent=current[2]+' '+current[0]+' · '+points.toLocaleString('ru-RU')+' очков'+(next?' · до '+next[0]+': '+(next[1]-points):' · МАКСИМУМ');
+}
+seasonInfo();
+let coopEnabled=false,secondPlayer=null,secondFireCd=0;
+function nearestPilot(entity){
+ if(!secondPlayer)return player;
+ return distance(entity,secondPlayer)<distance(entity,player)?secondPlayer:player;
+}
+function updateSecondPlayer(dt){
+ if(!secondPlayer)return;
+ let dx=Number(inputKeys.has('l'))-Number(inputKeys.has('j')),dy=Number(inputKeys.has('k'))-Number(inputKeys.has('i'));
+ const mag=Math.hypot(dx,dy);
+ if(mag){dx/=mag;dy/=mag;secondPlayer.x+=dx*275*dt;secondPlayer.y+=dy*275*dt;secondPlayer.angle=Math.atan2(dy,dx)}
+ // Stay within the shared camera so both pilots remain visible.
+ secondPlayer.x=clamp(secondPlayer.x,player.x-W*.43,player.x+W*.43);
+ secondPlayer.y=clamp(secondPlayer.y,player.y-H*.43,player.y+H*.43);
+ secondPlayer.invulnerable=Math.max(0,secondPlayer.invulnerable-dt);
+ secondFireCd=Math.max(0,secondFireCd-dt);
+ if(inputKeys.has('h')&&secondFireCd<=0){
+  secondFireCd=.18;
+  const target=[...enemies,...(miniBoss?[miniBoss]:[]),...(boss?[boss]:[])].sort((a,b)=>distance(a,secondPlayer)-distance(b,secondPlayer))[0];
+  const angle=target?Math.atan2(target.y-secondPlayer.y,target.x-secondPlayer.x):secondPlayer.angle;
+  for(const offset of [-.09,0,.09]){
+   const a=angle+offset;shots.push({x:secondPlayer.x+Math.cos(a)*23,y:secondPlayer.y+Math.sin(a)*23,vx:Math.cos(a)*850,vy:Math.sin(a)*850,ttl:1.15,damage:1+Number(economy.levels.power||0),r:5,coop:true});
+  }
+  emit(secondPlayer.x,secondPlayer.y,'#ffa7ff',5,65,.18);
+ }
+}
+function secondPilotDamage(obj,r=0){
+ if(!secondPlayer||secondPlayer.invulnerable>0||distance(secondPlayer,obj)>secondPlayer.r+(r||obj.r||7))return false;
+ secondPlayer.invulnerable=1.6;screenShake=Math.max(screenShake,8);lives--;
+ emit(secondPlayer.x,secondPlayer.y,'#ff75bd',22,160,.5);
+ updateHud();if(lives<=0)endGame();
+ return true;
+}
 let shopTab='skins', campaignLevel=1,stageWave=1,stageClock=0,bossDefeated=false,clearWait=0,miniBoss=null,miniBossWave=0;
 function mapProgress(id){
  const unlocked=Math.max(1,Math.min(20,Number(economy.campaignUnlocked[id]||1)));
@@ -177,11 +251,12 @@ function renderMissions(){
   btn.disabled=claimed||p<m.goal;btn.addEventListener('click',()=>{if(economy.missionClaims[m.id])return;economy.missionClaims[m.id]=true;economy.bank+=m.reward;saveEconomy();renderMissions();renderShop();showToast('🎯 НАГРАДА +'+m.reward+' 💎')});
   line.append(text,btn);el.append(line);
  }
+ renderDaily();
  $('#loot-status').textContent=economy.rareSkins.length
  ? '🎁 Получено редких наград: '+economy.rareSkins.length+'/3 · вкладка «Награды» → ВЫБРАТЬ'
  : '🎁 Редкие эффекты выпадают после победы над боссами. Задания дают 💎 кристаллы.';
 }
-function progressMission(id,n=1){economy.missionProgress[id]=(Number(economy.missionProgress[id])||0)+n;saveEconomy()}
+function progressMission(id,n=1){economy.missionProgress[id]=(Number(economy.missionProgress[id])||0)+n;if(id==='kill')trackDaily('kills',n);if(id==='boss')trackDaily('bosses',n);saveEconomy()}
 renderMissions();renderAchievements();
 function showMapCampaign(){
  const m=mapProgress(economy.map);
@@ -276,9 +351,24 @@ function spawnPower(){
  if(Math.hypot(player.x-x,player.y-y)<100)return;
  powerups.push({x,y,r:18,age:0});showToast('◉ ЭНЕРГОЩИТ ПОЯВИЛСЯ');
 }
+
+// Run-only upgrades reset on a new flight; persistent shop upgrades remain untouched.
+const runUpgradePool=[
+ {id:'rapid',icon:'⚡',name:'Ускоренные пушки',desc:'Скорострельность +18%'},
+ {id:'power',icon:'🔥',name:'Усиленные снаряды',desc:'Урон +1'},
+ {id:'speed',icon:'💨',name:'Форсаж',desc:'Скорость +12%'},
+ {id:'armor',icon:'❤️',name:'Ремонт корпуса',desc:'+2 жизни'},
+ {id:'shield',icon:'🛡️',name:'Энергетический щит',desc:'Поглощает следующий удар'},
+ {id:'magnet',icon:'💎',name:'Магнит',desc:'Дополнительные 30 кристаллов'}
+];
+let runUpgrades={rapid:0,power:0,speed:0},choicePending=false,cosmicEvent=null,eventClock=0,eventNext=32,secretBossDefeated=0;
+function offerWaveUpgrade(){if(mode!=='play'||choicePending)return;choicePending=true;mouseFiring=false;touchFiring=false;const box=$('#wave-choice'),root=$('#wave-choice-options');root.replaceChildren();const options=[...runUpgradePool].sort(()=>Math.random()-.5).slice(0,3);for(const u of options){const b=document.createElement('button');b.textContent=u.icon+' '+u.name+' — '+u.desc;b.addEventListener('click',()=>{if(u.id==='armor')lives=Math.min(12,lives+2);else if(u.id==='shield')player.shield=true;else if(u.id==='magnet')earnCrystals(30);else runUpgrades[u.id]=(runUpgrades[u.id]||0)+1;choicePending=false;box.hidden=true;showToast('⚡ УСИЛЕНИЕ: '+u.name);updateHud();last=performance.now()});root.append(b)}box.hidden=false}
+function beginCosmicEvent(){const types=['meteor','ion','surge','rich'];const type=types[Math.floor(Math.random()*types.length)];cosmicEvent={type,left:11,tick:0};const names={meteor:'☄️ МЕТЕОРИТНЫЙ ДОЖДЬ',ion:'🌀 ИОННАЯ БУРЯ',surge:'👾 ВТОРЖЕНИЕ ЭСКАДРИЛЬИ',rich:'💎 КРИСТАЛЬНЫЙ ПОТОК'};showToast(names[type]);screenShake=Math.max(screenShake,7)}
+function updateCosmicEvent(dt){eventClock+=dt;if(!cosmicEvent){if(eventClock>=eventNext){eventClock=0;eventNext=rand(38,64);beginCosmicEvent()}return}const e=cosmicEvent;e.left-=dt;e.tick-=dt;if(e.tick<=0){e.tick=e.type==='meteor'?.85:e.type==='surge'?1.1:1.6;if(e.type==='meteor'){const x=player.x+rand(-W*.42,W*.42),y=player.y+rand(-H*.42,H*.42);airMines.push({x,y,age:0,life:5,armed:false,r:18})}else if(e.type==='surge'){for(let k=0;k<3;k++)spawnEnemy()}else if(e.type==='rich'){for(let k=0;k<3;k++)spawnCrystal(true)}else{screenShake=Math.max(screenShake,4);if(player.invulnerable<=0&&Math.random()<.18){player.invulnerable=.6;screenShake=9;showToast('🌀 ИОННЫЙ РАЗРЯД!')}}}if(e.left<=0){cosmicEvent=null;showToast('✦ КОСМИЧЕСКОЕ СОБЫТИЕ ЗАВЕРШЕНО')}}
+
 function startGame(){
- difficulty=Number($('#difficulty').value)||1;validNickname();
- player={x:0,y:0,r:18,angle:-Math.PI/2,shield:false,invulnerable:1.25,boostCd:0,boostLeft:0,dx:0,dy:0,boostX:0,boostY:-1,thruster:0};
+ difficulty=Number($('#difficulty').value)||1;validNickname();coopEnabled=$('#coop-enabled').checked;runUpgrades={rapid:0,power:0,speed:0};choicePending=false;$('#wave-choice').hidden=true;cosmicEvent=null;eventClock=0;eventNext=rand(25,42);secretBossDefeated=0;
+ player={x:0,y:0,r:18,angle:-Math.PI/2,shield:false,invulnerable:1.25,boostCd:0,boostLeft:0,dx:0,dy:0,boostX:0,boostY:-1,thruster:0};secondPlayer=coopEnabled?{x:75,y:25,r:18,angle:-Math.PI/2,invulnerable:2,thruster:0}:null;secondFireCd=0;
  stopBossMusic();mode='play';panel.style.display='none';document.body.classList.add('playing');
  inputKeys.clear();if(document.activeElement instanceof HTMLElement)document.activeElement.blur();
  elapsed=0;campaignLevel=mapProgress(economy.map).unlocked;stageWave=1;stageClock=0;bossDefeated=false;clearWait=0;score=0;lives=3+Number(economy.levels.armor||0);wave=1;totalKills=0;bankEarned=0;boss=null;miniBoss=null;miniBossWave=0;bossWave=0;bossKills=0;abilityCd=0;abilityPulse=0;screenShake=0;impactFlash=0;manualFireTimer=0;mouseFiring=false;touchFiring=false;bomber=null;bomberTimer=9;airMines=[];bonusDrops=[];bonusTimer=rand(7,12);activeBonuses={speed:0,rapid:0,damage:0};lootDrops=[];rockets=[];bossShots=[];spawner=2;crystalTimer=1.5;powerTimer=24;fireTimer=.12;
@@ -306,14 +396,14 @@ function openPanel(screen){
 }
 function pause(){if(mode!=='play')return;mode='pause';syncBossMusic();openPanel('pause');pauseButton.textContent='▶ ПРОДОЛЖИТЬ'}
 function resume(){if(mode!=='pause')return;mode='play';syncBossMusic();panel.style.display='none';document.body.classList.add('playing');pauseButton.textContent='Ⅱ ПАУЗА';last=performance.now()}
-function endGame(){if(mode!=='play')return;mode='over';stopBossMusic();pointerTarget=null;stopJoy();playSound(160,.4,'sawtooth',.05);emit(player.x,player.y,'#7eefff',48,260,.95);openPanel('over');submitScore()}
+function endGame(){if(mode!=='play')return;mode='over';stopBossMusic();pointerTarget=null;stopJoy();playSound(160,.4,'sawtooth',.05);emit(player.x,player.y,'#7eefff',48,260,.95);openPanel('over');safeStore.set('galante_season_'+seasonId(),String((Number(safeStore.get('galante_season_'+seasonId(),'0'))||0)+Math.floor(score)));seasonInfo();submitScore()}
 function togglePause(){if(mode==='play')pause();else if(mode==='pause')resume()}
 startButton.addEventListener('click',()=>{if(mode==='pause')resume();else startGame()});pauseButton.addEventListener('click',togglePause);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='play')pause()});
-const controlKeys=['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d',' ','shift','f'];
+const controlKeys=['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d','i','j','k','l','h',' ','shift','f'];
 function normalizeGameKey(e){
  const code=(e.code||'').toLowerCase();
- const byCode={keyw:'w',keya:'a',keys:'s',keyd:'d',arrowup:'arrowup',arrowdown:'arrowdown',arrowleft:'arrowleft',arrowright:'arrowright',space:' ',shiftleft:'shift',shiftright:'shift'};
+ const byCode={keyw:'w',keya:'a',keys:'s',keyd:'d',keyi:'i',keyj:'j',keyk:'k',keyl:'l',keyh:'h',arrowup:'arrowup',arrowdown:'arrowdown',arrowleft:'arrowleft',arrowright:'arrowright',space:' ',shiftleft:'shift',shiftright:'shift'};
  return byCode[code] || (e.key||'').toLowerCase();
 }
 window.addEventListener('keydown',e=>{if(boss)syncBossMusic();
@@ -371,9 +461,11 @@ function defeatBoss(){
  if(!boss)return;
  screenShake=24;impactFlash=.8;emit(boss.x,boss.y,'#ffba66',110,370,1);addPoints(500);earnCrystals(80);bossKills++;trackAchievement('bosses');progressMission('boss');
  lootDrops.push({x:boss.x,y:boss.y,r:18,age:0});bossDefeated=true;clearWait=2.2;
+ if(boss.secret){secretBossDefeated++;earnCrystals(180);lootDrops.push({x:boss.x+35,y:boss.y+20,r:18,age:0});showToast('👑 СЕКРЕТНЫЙ БОСС! +180 💎 И ДВОЙНОЙ ЛУТ')}
  boss=null;stopBossMusic();showToast('🏆 БОСС ПОБЕЖДЁН! +80 💎 · ПОДБЕРИ 🎁');playSound(880,.4,'triangle');
 }
 function update(dt){
+ updateCosmicEvent(dt);
  for(const key of Object.keys(activeBonuses))activeBonuses[key]=Math.max(0,activeBonuses[key]-dt);
  bonusTimer-=dt;
  if(bonusTimer<=0){
@@ -409,15 +501,16 @@ function update(dt){
  if(length>1){vx/=length;vy/=length}else if(length<.07){vx=vy=0}
  player.dx=vx;player.dy=vy;
  if(Math.hypot(vx,vy)>.05){const targetAngle=Math.atan2(vy,vx);let angleDelta=Math.atan2(Math.sin(targetAngle-player.angle),Math.cos(targetAngle-player.angle));player.angle+=angleDelta*Math.min(1,dt*12)}
- let mx=vx,my=vy,speed=270*(1+.12*Number(economy.levels.speed||0))*(activeBonuses.speed>0?1.65:1);
+ let mx=vx,my=vy,speed=270*(1+.12*Number(economy.levels.speed||0)+runUpgrades.speed*.12)*(activeBonuses.speed>0?1.65:1);
  if(player.boostLeft>0){mx=player.boostX;my=player.boostY;speed=830;player.boostLeft=Math.max(0,player.boostLeft-dt)}
  player.x+=mx*speed*dt;player.y+=my*speed*dt;
+ updateSecondPlayer(dt);
  cameraX=player.x-W*.5;cameraY=player.y-H*.52;worldTravel+=Math.hypot(mx,my)*speed*dt;
  player.invulnerable=Math.max(0,player.invulnerable-dt);player.boostCd=Math.max(0,player.boostCd-dt);
  player.thruster+=dt*19;parallax.x+=mx*speed*dt*.13;parallax.y+=my*speed*dt*.13;
  if(Math.hypot(mx,my)>.1&&particles.length<240){const a=player.angle+Math.PI+rand(-.4,.4);particles.push({x:player.x-Math.cos(player.angle)*22,y:player.y-Math.sin(player.angle)*22,vx:Math.cos(a)*rand(35,120),vy:Math.sin(a)*rand(35,120),r:rand(1.5,4.2),t:rand(.22,.55),life:.55,color:Math.random()<.38?'#ffce6c':'#4af7f8'})}
  stageClock+=dt;
- if(stageWave<5&&stageClock>=19){stageClock=0;stageWave++;
+ if(stageWave<5&&stageClock>=19){stageClock=0;stageWave++;offerWaveUpgrade();
   const seed=[...economy.map].reduce((a,c)=>a+c.charCodeAt(0),0);
   if(campaignLevel>=2 && (campaignLevel+seed)%3!==0 && stageWave===2+((campaignLevel+seed)%2) && !miniBoss)spawnMiniBoss();
 wave=(campaignLevel-1)*5+stageWave;showToast('⚠ УРОВЕНЬ '+campaignLevel+' · ВОЛНА '+stageWave+'/5');updateHud();playSound(460,.17,'triangle')}
@@ -441,8 +534,8 @@ wave=(campaignLevel-1)*5+stageWave;showToast('⚠ УРОВЕНЬ '+campaignLevel
   }
   if(d<m.r+player.r&&player.invulnerable<=0){if(player.shield)player.shield=false;else lives--;player.invulnerable=1.5;screenShake=12;updateHud();if(lives<=0){endGame();return}}
  }
- if(boss){boss.fireCd=(boss.fireCd??2)-dt;if(boss.fireCd<=0){const angle=Math.atan2(player.y-boss.y,player.x-boss.x);for(let j=-2;j<=2;j++){const a=angle+j*.24;bossShots.push({x:boss.x,y:boss.y,vx:Math.cos(a)*230,vy:Math.sin(a)*230,ttl:4,r:8})}boss.fireCd=boss.kind==='overlord'?1.4:boss.kind==='serpent'?1.9:2.5}const dx=player.x-boss.x,dy=player.y-boss.y,m=Math.hypot(dx,dy)||1;boss.x+=dx/m*boss.speed*dt;boss.y+=dy/m*boss.speed*dt;boss.angle+=dt;boss.hit=Math.max(0,boss.hit-dt);if(m<boss.r+player.r-7&&player.invulnerable<=0){screenShake=Math.max(screenShake,13);impactFlash=.25;if(player.shield){player.shield=false;showToast('◉ ЩИТ СПАС ТЕБЯ')}else{lives--;if(lives<=0){updateHud();endGame();return}}player.invulnerable=1.8;updateHud()}}
- for(let i=bossShots.length-1;i>=0;i--){const b=bossShots[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.ttl-=dt;if(b.ttl<=0){bossShots.splice(i,1);continue}if(player.invulnerable<=0&&Math.hypot(player.x-b.x,player.y-b.y)<player.r+b.r){bossShots.splice(i,1);screenShake=Math.max(screenShake,12);impactFlash=.24;if(player.shield)player.shield=false;else lives--;player.invulnerable=1.5;updateHud();if(lives<=0){endGame();return}}}
+ if(boss){if(secondPilotDamage(boss,boss.r)){if(mode!=='play')return;}boss.fireCd=(boss.fireCd??2)-dt;if(boss.fireCd<=0){const angle=Math.atan2(player.y-boss.y,player.x-boss.x);for(let j=-2;j<=2;j++){const a=angle+j*.24;bossShots.push({x:boss.x,y:boss.y,vx:Math.cos(a)*230,vy:Math.sin(a)*230,ttl:4,r:8})}boss.fireCd=boss.kind==='overlord'?1.4:boss.kind==='serpent'?1.9:2.5}const dx=player.x-boss.x,dy=player.y-boss.y,m=Math.hypot(dx,dy)||1;boss.x+=dx/m*boss.speed*dt;boss.y+=dy/m*boss.speed*dt;boss.angle+=dt;boss.hit=Math.max(0,boss.hit-dt);if(m<boss.r+player.r-7&&player.invulnerable<=0){screenShake=Math.max(screenShake,13);impactFlash=.25;if(player.shield){player.shield=false;showToast('◉ ЩИТ СПАС ТЕБЯ')}else{lives--;if(lives<=0){updateHud();endGame();return}}player.invulnerable=1.8;updateHud()}}
+ for(let i=bossShots.length-1;i>=0;i--){const b=bossShots[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.ttl-=dt;if(b.ttl<=0){bossShots.splice(i,1);continue}if(secondPilotDamage(b,b.r)){bossShots.splice(i,1);if(mode!=='play')return;continue}if(player.invulnerable<=0&&Math.hypot(player.x-b.x,player.y-b.y)<player.r+b.r){bossShots.splice(i,1);screenShake=Math.max(screenShake,12);impactFlash=.24;if(player.shield)player.shield=false;else lives--;player.invulnerable=1.5;updateHud();if(lives<=0){endGame();return}}}
  for(let i=lootDrops.length-1;i>=0;i--){const d=lootDrops[i];d.age+=dt;if(distance(d,player)<player.r+d.r+85||d.age>6){lootDrops.splice(i,1);const rare=['crown','wings','trail'];const item=rare[Math.floor(Math.random()*rare.length)];if(!economy.rareSkins.includes(item)){economy.rareSkins.push(item);showToast('🎁 НОВЫЙ ЭФФЕКТ: '+(rareItems.find(x=>x.id===item)?.name||item)+' · ВКЛАДКА «НАГРАДЫ»')}else{earnCrystals(125);showToast('🎁 ДУБЛИКАТ: +125 💎')}saveEconomy();renderShop();renderMissions()} }
  // Налёт вражеского минного бомбардировщика, предупреждение и мины.
  bomberTimer-=dt;
@@ -487,7 +580,7 @@ wave=(campaignLevel-1)*5+stageWave;showToast('⚠ УРОВЕНЬ '+campaignLevel
  powerTimer-=dt;if(powerTimer<=0){spawnPower();powerTimer=rand(26,34)}
  // Автострельба отключена: выстрел только по действию игрока.
  for(let i=enemies.length-1;i>=0;i--){
-  const e=enemies[i];let dx=player.x-e.x,dy=player.y-e.y,m=Math.hypot(dx,dy)||1;
+  const e=enemies[i];if(secondPilotDamage(e,e.r)){if(mode!=='play')return;}let dx=player.x-e.x,dy=player.y-e.y,m=Math.hypot(dx,dy)||1;
   if(e.type==='spinner'){let side=Math.sin(elapsed*1.2+e.phase)*.23;e.x+=(dx/m-side*dy/m)*e.speed*dt;e.y+=(dy/m+side*dx/m)*e.speed*dt}else{e.x+=dx/m*e.speed*dt;e.y+=dy/m*e.speed*dt}
   e.angle+=e.turn*dt;e.hit=Math.max(0,e.hit-dt);
   e.fireCd-=dt;
@@ -506,7 +599,7 @@ wave=(campaignLevel-1)*5+stageWave;showToast('⚠ УРОВЕНЬ '+campaignLevel
  for(let i=enemyShots.length-1;i>=0;i--){
   const b=enemyShots[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.ttl-=dt;
   if(b.ttl<=0||Math.abs(b.x-player.x)>W*.95||Math.abs(b.y-player.y)>H*.95){enemyShots.splice(i,1);continue}
-  if(player.invulnerable<=0&&Math.hypot(b.x-player.x,b.y-player.y)<player.r+b.r){
+  if(secondPilotDamage(b,b.r)){enemyShots.splice(i,1);if(mode!=='play')return;continue}if(player.invulnerable<=0&&Math.hypot(b.x-player.x,b.y-player.y)<player.r+b.r){
    enemyShots.splice(i,1);screenShake=Math.max(screenShake,10);impactFlash=.24;
    if(player.shield){player.shield=false;showToast('◉ ЩИТ ОТРАЗИЛ ВЫСТРЕЛ')}else{lives--;emit(player.x,player.y,'#ff638b',18,130);if(lives<=0){updateHud();endGame();return}}
    player.invulnerable=1.5;updateHud();
@@ -518,13 +611,13 @@ wave=(campaignLevel-1)*5+stageWave;showToast('⚠ УРОВЕНЬ '+campaignLevel
   let hit=false;
   if(miniBoss&&Math.hypot(b.x-miniBoss.x,b.y-miniBoss.y)<miniBoss.r+6){
     if(miniBoss.shield>0){miniBoss.shield--;emit(b.x,b.y,'#9eeaff',9,100,.3)}
-    else miniBoss.hp-=b.damage||1;
+    else miniBoss.hp-=(b.damage||1)+runUpgrades.power;
     miniBoss.hit=.14;hit=true;emit(b.x,b.y,'#d4aaff',8,100,.3);
     if(miniBoss.hp<=0)defeatMiniBoss();
   }
-  if(!hit&&boss&&Math.hypot(b.x-boss.x,b.y-boss.y)<boss.r+6){boss.hp-=b.damage||1;boss.hit=.12;screenShake=Math.max(screenShake,2.8);hit=true;emit(b.x,b.y,'#ffcc9c',4,85,.25);if(boss.hp<=0)defeatBoss() }
+  if(!hit&&boss&&Math.hypot(b.x-boss.x,b.y-boss.y)<boss.r+6){boss.hp-=(b.damage||1)+runUpgrades.power;boss.hit=.12;screenShake=Math.max(screenShake,2.8);hit=true;emit(b.x,b.y,'#ffcc9c',4,85,.25);if(boss.hp<=0)defeatBoss() }
   if(!hit)for(let j=enemies.length-1;j>=0;j--){const e=enemies[j];if(Math.hypot(b.x-e.x,b.y-e.y)<e.r+5){
-   e.hp-=b.damage||1;e.hit=.13;emit(b.x,b.y,'#aef7ff',5,100,.28);hit=true;
+   e.hp-=(b.damage||1)+runUpgrades.power;e.hit=.13;emit(b.x,b.y,'#aef7ff',5,100,.28);hit=true;
    if(e.hp<=0){screenShake=Math.max(screenShake,3.3);emit(e.x,e.y,e.type==='armored'?'#ffc179':'#ff6f9c',13,145,.55);enemies.splice(j,1);totalKills++;trackAchievement('kills');progressMission('kill');addPoints(10);playSound(490,.055,'triangle',.024)}break
   }}if(hit)shots.splice(i,1)
  }
@@ -543,7 +636,7 @@ wave=(campaignLevel-1)*5+stageWave;showToast('⚠ УРОВЕНЬ '+campaignLevel
  if(toastTimeout>0){toastTimeout-=dt;if(toastTimeout<=0)toastEl.classList.remove('visible')}
  hudStamp+=dt;if(hudStamp>.11){hudStamp=0;renderAchievements();const left=player.boostCd;$('#boost-caption').textContent=left>.05?left.toFixed(1)+'с':'РЫВОК';boostButton.classList.toggle('cooldown',left>.05)}
 }
-function earnCrystals(n){economy.bank+=n;bankEarned+=n;saveEconomy()}
+function earnCrystals(n){economy.bank+=n;bankEarned+=n;trackDaily('crystals',n);saveEconomy()}
 function spawnMiniBoss(){
  const kinds=['phantom','mine','shield'],kind=kinds[(campaignLevel+maps.findIndex(m=>m.id===economy.map))%3];
  const names={phantom:'ПРИЗРАЧНЫЙ ПЕРЕХВАТЧИК',mine:'МИННЫЙ КРЕЙСЕР',shield:'ЩИТОВОЙ СТРАЖ'};
@@ -558,11 +651,11 @@ function defeatMiniBoss(){
  bonusDrops.push({x,y,type:['speed','rapid','damage'][Math.floor(Math.random()*3)],r:21,age:0,ttl:15});
  showToast('🏅 МИНИ-БОСС ПОВЕРЖЕН! +45 💎 И БОНУС');
 }
-function spawnBoss(){const kinds=['titan','serpent','overlord'],kind=kinds[(campaignLevel-1)%3];const names={titan:'КОСМИЧЕСКИЙ ТИТАН',serpent:'ЗМЕЙ БЕЗДНЫ',overlord:'ВЛАДЫКА ПЛАЗМЫ'};boss={x:player.x+rand(-W*.25,W*.25),y:player.y-H*.7,r:kind==='overlord'?62:48,hp:48+campaignLevel*10,maxHp:48+campaignLevel*10,speed:kind==='serpent'?95:36+wave*2,angle:0,hit:0,kind,fireCd:1.4};showToast('☠ БОСС: '+names[kind]);syncBossMusic();playSound(120,.6,'sawtooth')}
+function spawnBoss(){const secret=campaignLevel>=3&&((campaignLevel*7+maps.findIndex(m=>m.id===economy.map)*11)%5===0||Math.random()<.12);const kinds=['titan','serpent','overlord'],kind=secret?'overlord':kinds[(campaignLevel-1)%3];const names={titan:'КОСМИЧЕСКИЙ ТИТАН',serpent:'ЗМЕЙ БЕЗДНЫ',overlord:'ВЛАДЫКА ПЛАЗМЫ'};boss={x:player.x+rand(-W*.25,W*.25),y:player.y-H*.7,r:secret?76:kind==='overlord'?62:48,hp:(48+campaignLevel*10)*(secret?2:1),maxHp:(48+campaignLevel*10)*(secret?2:1),speed:secret?75:kind==='serpent'?95:36+wave*2,angle:0,hit:0,kind,secret,fireCd:secret?.75:1.4};showToast(secret?'💀 СЕКРЕТНЫЙ БОСС: ФАНТОМ ГАЛАКТИКИ!':'☠ БОСС: '+names[kind]);syncBossMusic();playSound(120,.6,'sawtooth')}
 function shootManual(){
  if(mode!=='play'||!player||manualFireTimer>0)return;
  const baseDelay={blaster:.15,shotgun:.44,minigun:.065,missile:.40,railgun:.72,pulse:.34,twin:.11,nova:.78,scatter:.32}[economy.weapon]||.15;
- manualFireTimer=baseDelay/(1+.16*Number(economy.levels.fire||0))/(activeBonuses.rapid>0?2.1:1);
+ manualFireTimer=baseDelay/(1+.16*Number(economy.levels.fire||0))/(activeBonuses.rapid>0?2.1:1)/(1+runUpgrades.rapid*.18);
  let a=player.angle;
  if(mouseAim&&!touchFiring){a=Math.atan2(mouseAim.y-H*.52,mouseAim.x-W*.5)}
  else {let closest=null,dist=Infinity;for(const e of [...enemies,...(miniBoss?[miniBoss]:[]),...(boss?[boss]:[])]){const d=distance(player,e);if(d<dist){dist=d;closest=e}}if(closest)a=Math.atan2(closest.y-player.y,closest.x-player.x)}
@@ -757,23 +850,25 @@ function drawBoss(b){
 function drawShip(p,decorative=false){
  const angle=p.angle+Math.PI/2;const shipStyle=skin();
  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(angle);
+ if(tune.hull==='arrow')ctx.scale(.78,1.17);
+ else if(tune.hull==='heavy')ctx.scale(1.19,.94);
  const flash=p.invulnerable>0&&Math.floor(p.invulnerable*14)%2===0&&!decorative;
  ctx.globalAlpha=flash?.52:1;
  let glow=ctx.createRadialGradient(0,0,3,0,0,49);glow.addColorStop(0,'rgba(57,231,255,.16)');glow.addColorStop(1,'rgba(57,231,255,0)');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(0,0,49,0,TAU);ctx.fill();
  // Объёмные анимированные струи двигателя.
  const engine=7+Math.sin(time*34)*3+((p.dx||p.dy)?8:0)+((p.boostLeft||0)>0?20:0);
  for(const side of [-1,1]){
-  ctx.save();ctx.translate(side*8,15);const flame=ctx.createLinearGradient(0,4,0,engine+28);flame.addColorStop(0,'#fffbdc');flame.addColorStop(.32,'#55f8ff');flame.addColorStop(.69,'#6b77ffbb');flame.addColorStop(1,'#827bff00');
+  ctx.save();ctx.translate(side*8,15);const flame=ctx.createLinearGradient(0,4,0,engine+28);flame.addColorStop(0,'#fffbdc');flame.addColorStop(.32,tune.engine);flame.addColorStop(.69,tune.trail==='fire'?'#ff712cbb':tune.trail==='violet'?'#ad6bffbb':'#6b77ffbb');flame.addColorStop(1,'#827bff00');
   ctx.globalAlpha=.85;ctx.shadowColor='#49f7ff';ctx.shadowBlur=17;ctx.fillStyle=flame;
   ctx.beginPath();ctx.moveTo(-4,0);ctx.quadraticCurveTo(0,engine+27,4,0);ctx.closePath();ctx.fill();ctx.restore();
  }
  // Два крыла, широкие двигатели и обтекаемая броня.
- ctx.shadowColor=shipStyle.color;ctx.shadowBlur=26;ctx.strokeStyle=shipStyle.color;ctx.lineWidth=1.7;
- const wing=ctx.createLinearGradient(-27,-17,27,20);wing.addColorStop(0,'#b6ddff');wing.addColorStop(.37,shipStyle.wing);wing.addColorStop(.78,'#282f79');wing.addColorStop(1,'#95b0fb');
+ ctx.shadowColor=tune.wings;ctx.shadowBlur=26;ctx.strokeStyle=tune.wings;ctx.lineWidth=1.7;
+ const wing=ctx.createLinearGradient(-27,-17,27,20);wing.addColorStop(0,'#b6ddff');wing.addColorStop(.37,tune.wings);wing.addColorStop(.78,'#282f79');wing.addColorStop(1,'#95b0fb');
  ctx.fillStyle=wing;ctx.beginPath();ctx.moveTo(0,-29);ctx.lineTo(10,-11);ctx.lineTo(28,9);ctx.lineTo(26,22);ctx.lineTo(9,13);ctx.lineTo(0,21);ctx.lineTo(-9,13);ctx.lineTo(-26,22);ctx.lineTo(-28,9);ctx.lineTo(-10,-11);ctx.closePath();ctx.fill();ctx.stroke();
  // Тёмные металлические вставки и светящиеся панели.
  ctx.shadowBlur=0;ctx.fillStyle='#081b41';ctx.beginPath();ctx.moveTo(0,-24);ctx.lineTo(10,-1);ctx.lineTo(7,17);ctx.lineTo(0,12);ctx.lineTo(-7,17);ctx.lineTo(-10,-1);ctx.closePath();ctx.fill();
- ctx.fillStyle=shipStyle.color;ctx.shadowColor=shipStyle.color;ctx.shadowBlur=15;ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(5,-6);ctx.lineTo(0,5);ctx.lineTo(-5,-6);ctx.closePath();ctx.fill();
+ ctx.fillStyle=tune.engine;ctx.shadowColor=tune.engine;ctx.shadowBlur=15;ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(5,-6);ctx.lineTo(0,5);ctx.lineTo(-5,-6);ctx.closePath();ctx.fill();
  ctx.shadowBlur=8;ctx.strokeStyle='#8ef7ff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-23,12);ctx.lineTo(-13,7);ctx.moveTo(23,12);ctx.lineTo(13,7);ctx.stroke();
  ctx.fillStyle='#ffe7a6';for(const side of [-1,1]){ctx.beginPath();ctx.arc(side*21,13,2.4,0,TAU);ctx.fill()}
  ctx.restore();
@@ -788,7 +883,7 @@ function drawShots(){
  for(const b of enemyShots){
   ctx.save();ctx.shadowColor='#ff446e';ctx.shadowBlur=18;ctx.fillStyle='#ff567d';ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.fillStyle='#ffe5ef';ctx.beginPath();ctx.arc(b.x,b.y,2,0,TAU);ctx.fill();ctx.restore();
  }
- for(const b of shots){const a=Math.atan2(b.vy,b.vx);ctx.save();ctx.translate(b.x,b.y);ctx.rotate(a);ctx.shadowColor='#80f6ff';ctx.shadowBlur=15;ctx.fillStyle='#ddffff';ctx.fillRect(-16,-2,27,4);ctx.fillStyle='#60daff';ctx.fillRect(-21,-1,13,2);ctx.restore()}
+ for(const b of shots){const a=Math.atan2(b.vy,b.vx);ctx.save();ctx.translate(b.x,b.y);ctx.rotate(a);ctx.shadowColor=b.coop?'#ffa6f9':tune.shots==='gold'?'#ffda74':tune.shots==='pink'?'#ff82c4':'#80f6ff';ctx.shadowBlur=15;ctx.fillStyle=b.coop?'#ffe4ff':tune.shots==='gold'?'#fff1c0':tune.shots==='pink'?'#ffe0f2':'#ddffff';ctx.fillRect(-16,-2,27,4);ctx.fillStyle=ctx.shadowColor;ctx.fillRect(-21,-1,13,2);ctx.restore()}
 }
 function drawParticles(){
  ctx.save();for(const p of particles){ctx.globalAlpha=clamp(p.t/p.life,0,1);ctx.fillStyle=p.color;ctx.shadowColor=p.color;ctx.shadowBlur=7;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.fill()}
@@ -845,10 +940,13 @@ function draw(){
  }
  ctx.restore();
  if(impactFlash>0){ctx.save();ctx.fillStyle='rgba(255,105,136,'+(impactFlash*.20)+')';ctx.fillRect(0,0,W,H);ctx.restore()}
+ if(secondPlayer&&mode==='play'){
+  ctx.save();drawShip(secondPlayer,true);ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffb4fc';ctx.fillText('P2',secondPlayer.x,secondPlayer.y-32);ctx.restore();
+ }
  if(muzzleFlash>0&&player){ctx.save();ctx.strokeStyle='rgba(120,239,255,'+(muzzleFlash*2.3)+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(mode==='play'?W*.5:player.x,mode==='play'?H*.52:player.y,37+muzzleFlash*55,0,TAU);ctx.stroke();ctx.restore()}
 }
 function frame(now){let dt=last?clamp((now-last)/1000,0,.045):.016;last=now;
- if(mode==='play')update(dt);else time+=dt*.65;
+ if(mode==='play'&&!choicePending)update(dt);else time+=dt*.65;
  if(mode!=='play'&&toastTimeout>0){toastTimeout-=dt;if(toastTimeout<=0)toastEl.classList.remove('visible')}
  draw();requestAnimationFrame(frame)
 }
@@ -888,6 +986,10 @@ $('#refresh').addEventListener('click',loadLeaderboard);loadLeaderboard();
  function selectSection(name){buttons.forEach(b=>{const active=b.dataset.section===name;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});['hangar','missions','records'].forEach(k=>{document.getElementById('menu-pane-'+k).hidden=k!==name})}
  buttons.forEach(b=>b.addEventListener('click',()=>selectSection(b.dataset.section)));
  selectSection('hangar');
+ const nickInput=document.getElementById('nickname'),nickDisplay=document.getElementById('pilot-name-display');
+ function showNick(){const n=nickInput.value.trim().replace(/\s+/g,' ').slice(0,20);nickDisplay.textContent=n||'Пилот';try{if(n)localStorage.setItem('antonio_neon_nick',n)}catch(e){}}
+ nickInput.addEventListener('input',showNick);nickInput.addEventListener('change',showNick);showNick();
+ document.getElementById('pilot-edit').addEventListener('click',()=>{nickInput.scrollIntoView({block:'center',behavior:'smooth'});nickInput.focus();nickInput.select()});
  const modal=document.getElementById('about-overlay');
  const close=()=>{modal.hidden=true};
  document.getElementById('about-open').addEventListener('click',()=>{modal.hidden=false});
