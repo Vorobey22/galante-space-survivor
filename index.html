@@ -51,7 +51,15 @@
       <nav class="menu-nav" aria-label="Разделы меню"><button type="button" class="menu-nav-btn active" data-section="hangar">🚀 АНГАР</button><button type="button" class="menu-nav-btn" data-section="missions">🎯 МИССИИ</button><button type="button" class="menu-nav-btn" data-section="records">🏆 РЕЙТИНГ</button></nav>
       <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Скины</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div></div></div>
       <div class="menu-pane" id="menu-pane-missions" hidden><div class="mission-box"><strong>🏅 ДОСТИЖЕНИЯ ПИЛОТА</strong><div id="achievements"></div><small>Достижения хранятся на этом устройстве. Общий зал славы сравнивает очки игроков.</small></div><div class="mission-box"><strong>🎯 ЗАДАНИЯ</strong><div id="missions"></div><div class="daily-section"><strong>📅 ЕЖЕДНЕВНЫЕ ЗАДАНИЯ</strong><div id="daily-missions"></div><small>Обновляются каждый день по местному времени устройства.</small></div><div id="loot-status"></div><div id="campaign-progress">🪐 Кампания: 1/20 · Волна 1/5</div></div></div>
-      <div class="menu-pane" id="menu-pane-records" hidden><div class="leaderboard" id="leaderboard"><div class="leaderboard-head"><h2>🏆 ЗАЛ СЛАВЫ</h2><button id="refresh" type="button" title="Обновить таблицу рекордов">↻</button></div><ol id="leaders"><li>Загрузка рекордов…</li></ol><div id="status" role="status"></div></div></div>
+      <div class="menu-pane" id="menu-pane-records" hidden><div class="leaderboard" id="leaderboard"><div class="leaderboard-head"><h2>🏆 ЗАЛ СЛАВЫ</h2><button id="refresh" type="button" title="Обновить таблицу рекордов">↻</button></div><ol id="leaders"><li>Загрузка рекордов…</li></ol><div id="status" role="status"></div>
+<div class="rank-tools" style="margin-top:10px;display:grid;gap:7px">
+ <div id="my-rank" style="font-size:12px;color:#9cf6e8;font-weight:800">👤 Личный рейтинг загружается…</div>
+ <div id="player-id" style="font-size:10px;color:#a6b9d6;overflow-wrap:anywhere"></div>
+ <div style="display:flex;gap:6px"><input id="rank-search" type="search" placeholder="Поиск по нику" maxlength="30" style="min-width:0;flex:1;padding:8px;border:1px solid #598cb8;border-radius:9px;background:#0a1932;color:#eafaff"><button type="button" id="rank-search-btn" style="border:1px solid #598cb8;border-radius:9px;background:#1b4362;color:white;padding:7px">Найти</button></div>
+ <div id="rank-search-result" style="font-size:11px;color:#c5d5ee"></div>
+ <button type="button" id="rank-history-btn" style="padding:8px;border:1px solid #598cb8;border-radius:9px;background:#18395a;color:#eafaff">📜 Моя история рекордов</button>
+ <div id="rank-history" style="font-size:11px;color:#b4cde6;max-height:130px;overflow:auto" hidden></div>
+</div></div></div>
       <section class="custom-panel" id="custom-panel">
  <div class="custom-title">🎨 ТЮНИНГ КОСМОЛЁТА</div>
  <div class="custom-grid">
@@ -74,7 +82,7 @@
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V8.3</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V8.4</span></footer>
     </section>
   </div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
@@ -1084,11 +1092,22 @@ function localLeaders(){try{const x=JSON.parse(safeStore.get('antonio_neon_score
 function showLeaders(items){leadersEl.replaceChildren();if(!items.length){const li=document.createElement('li');li.textContent='Пока нет рекордов. Будь первым!';leadersEl.append(li);return}
  items.slice(0,10).forEach((item,i)=>{const li=document.createElement('li');li.className='rank-'+(i+1);li.append(document.createTextNode(String(item.nickname||'Пилот')+' '));const points=document.createElement('span');points.className='leader-score';points.textContent=(Number(item.score)||0).toLocaleString('ru-RU')+' ✦';li.append(points);leadersEl.append(li)})}
 function leaderboardStatusText(s){leaderboardStatus.textContent=s}
-// Leaderboard 8.3: durable per-nickname outbox and automatic retry.
+// Leaderboard 8.4: durable per-nickname outbox and automatic retry.
 // Only solo runs qualify. Never claim a server save before HTTP 2xx.
 let leaderboardBusy=false;
 let leaderboardRunCoop=false,leaderboardLastSent=0,leaderboardLastAttempt=0,leaderboardSending=false;
 let leaderboardQueued=0;
+const PLAYER_ID_KEY='galante_player_id_v1';
+function persistentPlayerId(){
+ let id=String(safeStore.get(PLAYER_ID_KEY,'')||'');
+ if(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)){
+  if(!crypto?.randomUUID)throw Error('Для постоянного ID нужен защищённый HTTPS-сайт');
+  id=crypto.randomUUID();safeStore.set(PLAYER_ID_KEY,id);
+ }
+ return id;
+}
+const PLAYER_ID=persistentPlayerId();
+$('#player-id').textContent='🆔 ID игрока: '+PLAYER_ID;
 const OUTBOX_KEY='galante_leaderboard_pending_v81';
 const OUTBOX_MAX=40;
 let leaderboardRetryTimer=null;
@@ -1132,7 +1151,7 @@ async function flushLeaderboardOutbox(showStatus=true){
    if(!nick||!Number.isSafeInteger(target)||target<=0){const q=readScoreOutbox();delete q[key];saveScoreOutbox(q);continue}
    if(showStatus)leaderboardStatusText('⏳ Отправляем '+target.toLocaleString('ru-RU')+' очков ('+nick+')…');
    try{
-    await leaderboardRequest('leaderboard',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nickname:nick,score:target})});
+    await leaderboardRequest('leaderboard',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nickname:nick,score:target,player_id:PLAYER_ID})});
     // Only clear if no newer score arrived while the request was in flight.
     const q=readScoreOutbox();if(q[key]&&Number(q[key].score)<=target){delete q[key];saveScoreOutbox(q)}
     if(nick.toLocaleLowerCase()===validNickname().toLocaleLowerCase())leaderboardLastSent=Math.max(leaderboardLastSent,target);
@@ -1170,23 +1189,60 @@ async function leaderboardRequest(path,options={}){
   return response;
  }finally{clearTimeout(timeout)}
 }
+let lastRanked=[],lastRows=[];
+function formatScore(n){return Number(n||0).toLocaleString('ru-RU')}
+function rankRows(rows){
+ const best=new Map();
+ for(const row of rows){
+  const nick=String(row.nickname||'Пилот').trim(),score=Number(row.score)||0;
+  const id=row.player_id&&String(row.player_id).length>10?String(row.player_id):'legacy:'+nick.toLocaleLowerCase();
+  const prev=best.get(id);
+  if(!prev||score>prev.score)best.set(id,{nickname:nick,score,player_id:row.player_id||null});
+ }
+ return [...best.values()].sort((a,b)=>b.score-a.score);
+}
+function renderRankSearch(){
+ const q=$('#rank-search').value.trim().toLocaleLowerCase();
+ const box=$('#rank-search-result');
+ if(!q){box.textContent='';return}
+ const hits=lastRanked.map((r,i)=>({...r,place:i+1})).filter(r=>r.nickname.toLocaleLowerCase().includes(q)).slice(0,12);
+ box.textContent=hits.length?hits.map(r=>'№'+r.place+' · '+r.nickname+' — '+formatScore(r.score)+' ✦').join(' | '):'Совпадений среди загруженных результатов нет';
+}
+$('#rank-search-btn').addEventListener('click',renderRankSearch);
+$('#rank-search').addEventListener('keydown',e=>{if(e.key==='Enter')renderRankSearch()});
+$('#rank-history-btn').addEventListener('click',async()=>{
+ const box=$('#rank-history');box.hidden=!box.hidden;if(box.hidden)return;
+ box.textContent='Загружаем историю…';
+ try{
+  const url='leaderboard?select=score,created_at,nickname&player_id=eq.'+encodeURIComponent(PLAYER_ID)+'&order=created_at.desc&limit=30';
+  const r=await leaderboardRequest(url),data=await r.json();
+  box.replaceChildren();
+  if(!data.length){box.textContent='Для этого ID пока нет сохранённых результатов. Старые рекорды без ID здесь не отображаются.';return}
+  data.forEach(v=>{const d=document.createElement('div');d.textContent=(v.created_at?new Date(v.created_at).toLocaleString('ru-RU'):'')+' · '+formatScore(v.score)+' ✦ · '+v.nickname;box.append(d)})
+ }catch(e){box.textContent='Ошибка загрузки истории: '+String(e.message||e).slice(0,120)}
+});
 async function loadLeaderboard(){
  if(leaderboardBusy)return;
  if(!online){showLeaders(localLeaders().sort((a,b)=>b.score-a.score));leaderboardStatusText('⚠️ Нет подключения к Supabase. Показаны результаты этого устройства');return}
  leaderboardBusy=true;leaderboardStatusText('🌍 Загружаем мировой рейтинг…');
  try{
-  const response=await leaderboardRequest('leaderboard?select=nickname,score&order=score.desc&limit=1000');
-  const data=await response.json();
-  // One entry per nickname; keep the best score, not every attempt.
-  const best=new Map();
-  for(const row of data){const nick=String(row.nickname||'Пилот').trim();const value=Number(row.score)||0;const key=nick.toLocaleLowerCase();if(!best.has(key)||best.get(key).score<value)best.set(key,{nickname:nick,score:value})}
-  const ranked=[...best.values()].sort((a,b)=>b.score-a.score);
-  showLeaders(ranked);
-  const myNick=validNickname().toLocaleLowerCase(),position=ranked.findIndex(x=>x.nickname.toLocaleLowerCase()===myNick);
-  leaderboardStatusText((pendingCount()?'⚠️ Ожидают отправки: '+pendingCount()+' · ':'')+'🌍 Мировой рейтинг (одиночная игра) · обновлено сейчас'+(position>=0?' · '+ranked[position].nickname+': место №'+(position+1)+' ('+ranked[position].score.toLocaleString('ru-RU')+' ✦)':' · твоего ника пока нет в рейтинге'));
- }catch(e){console.warn('Leaderboard load:',e);showLeaders(localLeaders().sort((a,b)=>b.score-a.score));leaderboardStatusText('⚠️ Сервер недоступен. Показаны ЛОКАЛЬНЫЕ очки. '+String(e.message||e).slice(0,150))}
+  // Pages avoid the old 1000-row cap. Each record is a separate attempt.
+  const rows=[];let offset=0;
+  for(let page=0;page<20;page++){
+   const response=await leaderboardRequest('leaderboard?select=nickname,score,player_id&order=score.desc&limit=500&offset='+offset);
+   const batch=await response.json();rows.push(...batch);offset+=batch.length;
+   if(batch.length<500)break;
+  }
+  lastRows=rows;lastRanked=rankRows(rows);showLeaders(lastRanked);
+  const pos=lastRanked.findIndex(r=>r.player_id===PLAYER_ID);
+  const mine=pos>=0?lastRanked[pos]:null;
+  $('#my-rank').textContent=mine?'👤 Твоё место: №'+(pos+1)+' · '+formatScore(mine.score)+' ✦ · '+mine.nickname:'👤 Для этого ID пока нет мирового рекорда';
+  renderRankSearch();
+  leaderboardStatusText((pendingCount()?'⚠️ Ожидают отправки: '+pendingCount()+' · ':'')+'🌍 Мировой рейтинг · '+lastRanked.length+' игроков · обновлено сейчас'+(rows.length>=10000?' · показаны первые 10 000 попыток':''));
+ }catch(e){console.warn('Leaderboard load:',e);showLeaders(localLeaders().sort((a,b)=>b.score-a.score));$('#my-rank').textContent='⚠️ Личное место пока недоступно';leaderboardStatusText('⚠️ Сервер недоступен или не добавлена колонка player_id. '+String(e.message||e).slice(0,150))}
  finally{leaderboardBusy=false}
 }
+
 async function submitScore(){
  if(submitted||score<=0)return;
  if(netConnected||leaderboardRunCoop){submitted=true;leaderboardStatusText('⚠️ Тестовый кооператив не участвует в мировом рейтинге');return}
