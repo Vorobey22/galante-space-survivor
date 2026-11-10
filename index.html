@@ -21,6 +21,8 @@
 @media(max-width:600px){.panel-card{padding:13px 13px 15px;max-height:calc(100dvh - 16px)}.hero-ship{height:74px}.ship-silhouette{font-size:48px}.intro{font-size:11px}.features{gap:5px}.features span{font-size:9px;padding:5px 7px}.menu-pane{max-height:22dvh}.menu-nav-btn{padding:9px 2px;font-size:10px}.setup{grid-template-columns:1fr 1fr}.setup input,.setup select{font-size:12px}.menu-brand{font-size:10px}.controls{font-size:9px}}
 @media(max-height:700px){.hero-ship{height:54px}.ship-silhouette{font-size:42px}.menu-pane{max-height:18dvh}.panel-card{max-height:calc(100dvh - 10px)}.intro{margin:6px auto}.features{margin-bottom:7px}}
 .shop-items:has(.ship-preview){max-height:340px}.shop-item:has(.ship-preview){padding:10px 7px;gap:7px;background:linear-gradient(155deg,#152b50,#0b1731);border-color:#5688bf88}.shop-item.ship-selected{border-color:#74f8ed;box-shadow:inset 0 0 20px #45e2ec22}.ship-preview{width:100%;height:102px;object-fit:contain;filter:drop-shadow(0 0 9px #6bd9ff66)}.shop-item:has(.ship-preview) small{min-height:52px;line-height:1.5}.shop-item:has(.ship-preview) strong{font-size:13px}
+.ship-workshop{margin-top:12px;padding:10px;border:1px solid #4071a7;border-radius:12px;background:#0b1931}.workshop-title{font-weight:900;color:#a8eaff;font-size:12px;margin-bottom:8px}.workshop-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-top:1px solid #29496b}.workshop-row span{font-size:11px;line-height:1.5}.workshop-row button{flex-shrink:0;padding:8px 10px;border-radius:8px;background:#4fe0e8;color:#081526;font-weight:900;border:0}.workshop-row button:disabled{opacity:.45}
+.planet-head,.planet-box{border:1px solid #498bc4;border-radius:13px;background:#0b203b;padding:12px;margin:7px 0;color:#d8f2ff}.planet-head strong{font-size:14px;color:#92ffe7}.planet-head p,.planet-box small{font-size:11px;color:#b3cde5}.planet-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.planet-box h3{margin:0 0 9px;font-size:13px;color:#b9f9ff}.planet-line{padding:7px 0;border-bottom:1px solid #ffffff22;font-size:11px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:7px}.planet-line button{padding:7px 9px;background:#176479;border:1px solid #64d8e3;color:white;border-radius:8px;font-weight:800;cursor:pointer}.planet-line button:disabled{opacity:.48;cursor:not-allowed}.planet-status-good{color:#88ffca;font-weight:800}.planet-status-danger{color:#ffb5a2;font-weight:800}@media(max-width:560px){.planet-grid{grid-template-columns:1fr}.menu-nav{flex-wrap:wrap}.menu-nav-btn{flex:1 1 40%}}
 </style>
 </head>
 <body>
@@ -49,9 +51,19 @@
       <div class="menu-dashboard"><div id="wallet" class="wallet">💎 КРИСТАЛЛЫ: <b id="bank">0</b> <span id="equipped-name"></span></div><div class="menu-badge">✦ КАМПАНИЯ <span>20 УРОВНЕЙ НА КАРТУ</span></div></div>
       <div class="pilot-profile"><div class="pilot-profile-copy"><span>👨‍🚀 ТВОЙ НИК</span><strong id="pilot-name-display">Пилот</strong></div><button id="pilot-edit" type="button">✎ ИЗМЕНИТЬ</button></div>
       <div class="menu-section-label">КОМАНДНЫЙ ЦЕНТР <span>ВЫБЕРИ РАЗДЕЛ</span></div>
-      <nav class="menu-nav" aria-label="Разделы меню"><button type="button" class="menu-nav-btn active" data-section="hangar">🚀 АНГАР</button><button type="button" class="menu-nav-btn" data-section="missions">🎯 МИССИИ</button><button type="button" class="menu-nav-btn" data-section="records">🏆 РЕЙТИНГ</button></nav>
-      <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Космолёты</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div></div></div>
-      <div class="menu-pane" id="menu-pane-missions" hidden><div class="mission-box"><strong>🏅 ДОСТИЖЕНИЯ ПИЛОТА</strong><div id="achievements"></div><small>Достижения хранятся на этом устройстве. Общий зал славы сравнивает очки игроков.</small></div><div class="mission-box"><strong>🎯 ЗАДАНИЯ</strong><div id="missions"></div><div class="daily-section"><strong>📅 ЕЖЕДНЕВНЫЕ ЗАДАНИЯ</strong><div id="daily-missions"></div><small>Обновляются каждый день по местному времени устройства.</small></div><div id="loot-status"></div><div id="campaign-progress">🪐 Кампания: 1/20 · Волна 1/5</div></div></div>
+      <nav class="menu-nav" aria-label="Разделы меню"><button type="button" class="menu-nav-btn active" data-section="hangar">🚀 АНГАР</button><button type="button" class="menu-nav-btn" data-section="missions">🎯 МИССИИ</button><button type="button" class="menu-nav-btn" data-section="records">🏆 РЕЙТИНГ</button><button type="button" class="menu-nav-btn" data-section="planet">🪐 ПЛАНЕТА</button></nav>
+      <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Космолёты</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div><div id="ship-workshop" class="ship-workshop"></div></div></div>
+      <div class="menu-pane" id="menu-pane-missions" hidden><div class="mission-box"><strong>🏅 ДОСТИЖЕНИЯ ПИЛОТА</strong><div id="achievements"></div><small>Достижения хранятся на этом устройстве. Общий зал славы сравнивает очки игроков.</small></div><div class="mission-box"><strong>🎯 ЗАДАНИЯ</strong><div id="missions"></div><div class="daily-section"><strong>📅 ЕЖЕДНЕВНЫЕ ЗАДАНИЯ</strong><div id="daily-missions"></div><small>Обновляются каждый день по местному времени устройства.</small></div><div class="daily-section"><strong>📆 ЕЖЕНЕДЕЛЬНЫЕ ЗАДАНИЯ</strong><div id="weekly-missions"></div><small>Обновляются каждый понедельник по времени устройства. Награда выдаётся один раз.</small></div><div id="loot-status"></div><div id="campaign-progress">🪐 Кампания: 1/20 · Волна 1/5</div></div></div>
+      <div class="menu-pane" id="menu-pane-planet" hidden>
+        <div class="planet-head"><strong>🪐 ПЛАНЕТА ГАЛАНТЕ · КОЛОНИЯ</strong><p>Строй базу, добывай ресурсы, создавай турели и отражай налёты пиратов.</p><div id="planet-status"></div></div>
+        <div class="planet-grid">
+          <section class="planet-box"><h3>⛏️ Склад ресурсов</h3><div id="planet-resources"></div><small>Металл — за уничтожение врагов, плазма — за кристаллы, микросхемы — с боссов. Ресурсы сохраняются.</small></section>
+          <section class="planet-box"><h3>🏗️ Постройка ангара</h3><div id="planet-hangar"></div></section>
+          <section class="planet-box"><h3>🛠️ Крафт обороны</h3><div id="planet-craft"></div></section>
+          <section class="planet-box"><h3>🛍️ Рынок планеты «Орион»</h3><div id="planet-market"></div><small>Торговля за кристаллы. Цены фиксированы; покупки требуют ресурсов.</small></section>
+          <section class="planet-box"><h3>⚔️ Оборона колонии</h3><div id="planet-defense"></div></section>
+        </div>
+      </div>
       <div class="menu-pane" id="menu-pane-records" hidden><div class="leaderboard" id="leaderboard"><div class="leaderboard-head"><h2>🏆 ЗАЛ СЛАВЫ</h2><button id="refresh" type="button" title="Обновить таблицу рекордов">↻</button></div><ol id="leaders"><li>Загрузка рекордов…</li></ol><div id="status" role="status"></div>
 <div class="rank-tools" style="margin-top:10px;display:grid;gap:7px">
  <div id="my-rank" style="font-size:12px;color:#9cf6e8;font-weight:800">👤 Личный рейтинг загружается…</div>
@@ -83,7 +95,7 @@
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V8.4</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V9.1</span></footer>
     </section>
   </div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
@@ -131,7 +143,7 @@ let screenShake=0, impactFlash=0, manualFireTimer=0, mouseAim=null, mouseFiring=
 let bomber=null, bomberTimer=11, airMines=[];
 let bonusDrops=[], bonusTimer=12, activeBonuses={speed:0,rapid:0,damage:0};
 let toastTimeout=0, hudStamp=0, totalKills=0, boss=null, bossWave=0, bankEarned=0, bossKills=0, abilityCd=0, abilityPulse=0, lootDrops=[], rockets=[], bossShots=[];
-const skins=[{id:'classic',name:'Лазурный',icon:'🚀',cost:0,color:'#64eaff',wing:'#357bb6',slots:2,speedBonus:0,powerMult:0.84,fireMult:0.8},{id:'ember',name:'Феникс',icon:'🔥',cost:120,color:'#ffb252',wing:'#b54a32',slots:4,speedBonus:0.06,powerMult:1.06,fireMult:1.04},{id:'violet',name:'Призрак',icon:'👾',cost:250,color:'#e29aff',wing:'#7c45c7',slots:5,speedBonus:0.12,powerMult:1.08,fireMult:1.1},{id:'gold',name:'Золотой',icon:'👑',cost:500,color:'#ffe88a',wing:'#b69b3c',slots:7,speedBonus:0.09,powerMult:1.17,fireMult:1.13},{id:'emerald',name:'Изумрудный охотник',icon:'🐉',cost:360,color:'#79ffc4',wing:'#198b77',slots:6,speedBonus:0.15,powerMult:1.11,fireMult:1.06},{id:'frost',name:'Ледяной клинок',icon:'🧊',cost:420,color:'#c7faff',wing:'#4c8fe0',slots:6,speedBonus:0.08,powerMult:1.13,fireMult:1.14},{id:'shadow',name:'Теневой рейдер',icon:'🥷',cost:580,color:'#b5a7ff',wing:'#44367e',slots:7,speedBonus:0.2,powerMult:1.15,fireMult:1.05},{id:'solar',name:'Солнечный страж',icon:'☀️',cost:680,color:'#ffe29b',wing:'#e36b3d',slots:8,speedBonus:0.11,powerMult:1.24,fireMult:1.18},{id:'toxic',name:'Токсичный скорпион',icon:'☣️',cost:750,color:'#c5ff4c',wing:'#59892b',slots:9,speedBonus:0.13,powerMult:1.28,fireMult:1.16},{id:'royal',name:'Королевский флот',icon:'💠',cost:900,color:'#ffb2e9',wing:'#9d3c94',slots:12,speedBonus:0.17,powerMult:1.38,fireMult:1.24}];
+const skins=[{id:'classic',name:'Лазурный',icon:'🚀',cost:0,color:'#64eaff',wing:'#357bb6',slots:2,speedBonus:0,powerMult:0.84,fireMult:0.8},{id:'ember',name:'Феникс',icon:'🔥',cost:800,color:'#ffb252',wing:'#b54a32',slots:4,speedBonus:0.06,powerMult:1.06,fireMult:1.04},{id:'violet',name:'Призрак',icon:'👾',cost:2000,color:'#e29aff',wing:'#7c45c7',slots:5,speedBonus:0.12,powerMult:1.08,fireMult:1.1},{id:'gold',name:'Золотой',icon:'👑',cost:5000,color:'#ffe88a',wing:'#b69b3c',slots:7,speedBonus:0.09,powerMult:1.17,fireMult:1.13},{id:'emerald',name:'Изумрудный охотник',icon:'🐉',cost:3200,color:'#79ffc4',wing:'#198b77',slots:6,speedBonus:0.15,powerMult:1.11,fireMult:1.06},{id:'frost',name:'Ледяной клинок',icon:'🧊',cost:4200,color:'#c7faff',wing:'#4c8fe0',slots:6,speedBonus:0.08,powerMult:1.13,fireMult:1.14},{id:'shadow',name:'Теневой рейдер',icon:'🥷',cost:7500,color:'#b5a7ff',wing:'#44367e',slots:7,speedBonus:0.2,powerMult:1.15,fireMult:1.05},{id:'solar',name:'Солнечный страж',icon:'☀️',cost:11000,color:'#ffe29b',wing:'#e36b3d',slots:8,speedBonus:0.11,powerMult:1.24,fireMult:1.18},{id:'toxic',name:'Токсичный скорпион',icon:'☣️',cost:16000,color:'#c5ff4c',wing:'#59892b',slots:9,speedBonus:0.13,powerMult:1.28,fireMult:1.16},{id:'royal',name:'Королевский флот',icon:'💠',cost:25000,color:'#ffb2e9',wing:'#9d3c94',slots:12,speedBonus:0.17,powerMult:1.38,fireMult:1.24}];
 const maps=[{id:'nebula',name:'Туманность',icon:'🌌',cost:0,desc:'Голубой космос'},{id:'ember',name:'Огненный пояс',icon:'🌋',cost:180,desc:'Красные туманности'},{id:'void',name:'Тёмная бездна',icon:'🌑',cost:320,desc:'Фиолетовый космос'},{id:'ice',name:'Ледяная орбита',icon:'❄️',cost:440,desc:'Синие кристальные кольца'},{id:'storm',name:'Шторм Юпитера',icon:'🪐',cost:560,desc:'Золотые вихри и грозы'},{id:'jungle',name:'Биокосмос',icon:'🌿',cost:650,desc:'Зелёные туманности и живые споры'},{id:'cyber',name:'Кибергород',icon:'🏙️',cost:760,desc:'Неоновые башни и сетки'},{id:'blood',name:'Кровавая луна',icon:'🌕',cost:860,desc:'Алые звёзды и мрачная луна'},{id:'aurora',name:'Северное сияние',icon:'🌈',cost:980,desc:'Переливы сияния и ледяные звёзды'},{id:'abyss',name:'Чёрная дыра',icon:'🕳️',cost:1100,desc:'Гравитационные кольца и космический разлом'}];
 const weapons=[{id:'blaster',name:'Тройной лазер',icon:'🔹',cost:0,desc:'Быстрый веер лазеров'},{id:'shotgun',name:'Плазменный дробовик',icon:'💥',cost:160,desc:'Девять зарядов в упор'},{id:'minigun',name:'Пулемёт',icon:'⚙️',cost:260,desc:'Сверхбыстрая очередь'},{id:'missile',name:'Ракетница',icon:'🚀',cost:420,desc:'Самонаводящиеся ракеты'}];
 const achievements=[
@@ -146,7 +158,7 @@ const achievements=[
  {id:'legend',name:'Легенда космоса',icon:'🌠',stat:'levels',goal:50},
  {id:'arsenal',name:'Коллекционер оружия',icon:'🔫',stat:'weapons',goal:5}
 ];
-const missions=[{id:'kill',label:'Уничтожить 25 врагов',goal:25,reward:35},{id:'collect',label:'Собрать 30 кристаллов',goal:30,reward:45},{id:'boss',label:'Победить 2 боссов',goal:2,reward:100}];
+const missions=[{id:'kill',label:'Уничтожить 25 врагов',goal:25,reward:15},{id:'collect',label:'Собрать 30 кристаллов',goal:30,reward:20},{id:'boss',label:'Победить 2 боссов',goal:2,reward:35}];
 weapons.push(
  {id:'railgun',name:'Рельсотрон',icon:'⚡',cost:540,desc:'Один мощный бронебойный выстрел'},
  {id:'pulse',name:'Импульсная пушка',icon:'🌊',cost:630,desc:'Широкий залп энергетических импульсов'},
@@ -154,22 +166,92 @@ weapons.push(
  {id:'nova',name:'Нова-пушка',icon:'🌟',cost:890,desc:'Тяжёлые снаряды с высоким уроном'},
  {id:'scatter',name:'Звёздный шквал',icon:'✨',cost:1050,desc:'Большой веер быстрых зарядов'}
 );
+const shipUnlocks={'classic': [0, 0], 'ember': [2, 0], 'violet': [4, 1], 'emerald': [5, 1], 'frost': [6, 2], 'gold': [8, 3], 'shadow': [10, 4], 'solar': [12, 6], 'toxic': [14, 8], 'royal': [15, 12]};
 const upgrades=[{id:'speed',name:'Турбодвигатель',icon:'💨',base:75,desc:'+12% скорости'},{id:'fire',name:'Лазер',icon:'🔫',base:90,desc:'+20% темпа и больше лазерных лучей'},{id:'armor',name:'Броня',icon:'🛡️',base:130,desc:'+1 жизнь'},{id:'magnet',name:'Магнит кристаллов',icon:'🧲',base:110,desc:'Притягивает кристаллы издалека'},{id:'power',name:'Усилитель плазмы',icon:'🔥',base:165,desc:'+1 урон каждого выстрела за уровень'},{id:'dash',name:'Импульсный рывок',icon:'⚡',base:145,desc:'Быстрее восстанавливается рывок'},{id:'ultimate',name:'Реактор ульты',icon:'🌟',base:210,desc:'Уменьшает перезарядку суперспособности'},{id:'luck',name:'Счастливый пилот',icon:'🍀',base:175,desc:'Бонусы появляются чаще'}];
 let economy;try{economy=JSON.parse(safeStore.get('antonio_neon_economy_v3','{}'))}catch{economy={}}
-economy={bank:Math.max(0,Number(economy?.bank)||0),owned:Array.isArray(economy?.owned)?economy.owned:['classic','nebula'],skin:economy?.skin||'classic',map:economy?.map||'nebula',levels:economy?.levels||{},weapon:economy?.weapon||'blaster',missionClaims:economy?.missionClaims||{},missionProgress:economy?.missionProgress||{kill:0,collect:0,boss:0},rareSkins:economy?.rareSkins||[],equippedRare:economy?.equippedRare||'',campaignBest:economy?.campaignBest||{},campaignUnlocked:economy?.campaignUnlocked||{},missionTiers:economy?.missionTiers||{},achievementStats:economy?.achievementStats||{kills:0,crystals:0,bosses:0,minibosses:0,levels:0,weapons:0}};
+economy={bank:Math.max(0,Number(economy?.bank)||0),owned:Array.isArray(economy?.owned)?economy.owned:['classic','nebula'],skin:economy?.skin||'classic',map:economy?.map||'nebula',levels:economy?.levels||{},weapon:economy?.weapon||'blaster',missionClaims:economy?.missionClaims||{},missionProgress:economy?.missionProgress||{kill:0,collect:0,boss:0},rareSkins:economy?.rareSkins||[],equippedRare:economy?.equippedRare||'',campaignBest:economy?.campaignBest||{},campaignUnlocked:economy?.campaignUnlocked||{},missionTiers:economy?.missionTiers||{},achievementStats:economy?.achievementStats||{kills:0,crystals:0,bosses:0,minibosses:0,levels:0,weapons:0},shipParts:Math.max(0,Number(economy?.shipParts)||0),shipTech:economy?.shipTech||{},planet:economy?.planet||{metal:0,plasma:0,chips:0,hangar:0,turrets:0,lasers:0,shield:0,raidCount:0,lastRaid:0,raidDue:0},weekly:economy?.weekly||null};
 // Daily missions are local-device progress; leaderboard stays independent.
-const dailyTasks=[{id:'kills',name:'Уничтожить 60 врагов',goal:60,reward:55},{id:'crystals',name:'Собрать 80 кристаллов',goal:80,reward:65},{id:'bosses',name:'Победить босса',goal:1,reward:90}];
+const dailyTasks=[{id:'kills',name:'Уничтожить 60 врагов',goal:90,reward:20},{id:'crystals',name:'Собрать 80 кристаллов',goal:120,reward:25},{id:'bosses',name:'Победить босса',goal:2,reward:35}];
 function todayKey(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
 function ensureDaily(){if(!economy.daily||economy.daily.date!==todayKey())economy.daily={date:todayKey(),progress:{},claimed:{}}}
 function trackDaily(id,n=1){ensureDaily();economy.daily.progress[id]=(Number(economy.daily.progress[id])||0)+n;saveEconomy()}
 function renderDaily(){const root=$('#daily-missions');if(!root)return;ensureDaily();root.replaceChildren();for(const task of dailyTasks){const n=Number(economy.daily.progress[task.id]||0),claimed=!!economy.daily.claimed[task.id];const line=document.createElement('div');line.className='mission-line'+(claimed?' done':'');const label=document.createElement('span');label.textContent=task.name+' · '+Math.min(n,task.goal)+'/'+task.goal;const btn=document.createElement('button');btn.textContent=claimed?'✓ Получено':'💎 '+task.reward;btn.disabled=claimed||n<task.goal;btn.addEventListener('click',()=>{ensureDaily();if(economy.daily.claimed[task.id])return;economy.daily.claimed[task.id]=true;economy.bank+=task.reward;saveEconomy();renderDaily();renderShop();showToast('📅 ЕЖЕДНЕВНАЯ НАГРАДА +'+task.reward+' 💎')});line.append(label,btn);root.append(line)}}
+
+// Colony progression is device-local, like the campaign. Never exposes admin keys.
+function colony(){const p=economy.planet;for(const k of ['metal','plasma','chips','hangar','turrets','lasers','shield','raidCount','lastRaid','raidDue'])p[k]=Math.max(0,Number(p[k])||0);return p}
+function weekKey(){const d=new Date(),utc=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));utc.setUTCDate(utc.getUTCDate()-(utc.getUTCDay()+6)%7);return utc.toISOString().slice(0,10)}
+const weeklyTasks=[
+ {id:'kills',name:'Уничтожить 400 врагов',goal:400,crystals:160,metal:100,plasma:0,chips:0},
+ {id:'bosses',name:'Победить 8 боссов',goal:8,crystals:200,metal:0,plasma:0,chips:4},
+ {id:'crystals',name:'Собрать 350 кристаллов',goal:350,crystals:140,metal:0,plasma:90,chips:0},
+ {id:'raids',name:'Отразить 3 нападения на планету',goal:3,crystals:260,metal:90,plasma:70,chips:3},
+ {id:'crafts',name:'Создать 5 оборонительных сооружений',goal:5,crystals:180,metal:70,plasma:50,chips:0}
+];
+function ensureWeekly(){if(!economy.weekly||economy.weekly.week!==weekKey())economy.weekly={week:weekKey(),progress:{},claimed:{}}}
+function weeklyProgress(id,n=1){ensureWeekly();economy.weekly.progress[id]=(Number(economy.weekly.progress[id])||0)+n;saveEconomy()}
+function colonyEarn(kind,n){const p=colony();p[kind]=Math.max(0,p[kind]+n);saveEconomy()}
+function planetLine(root,label,buttonText,action,disabled=false){const row=document.createElement('div');row.className='planet-line';const txt=document.createElement('span');txt.textContent=label;row.append(txt);if(buttonText){const btn=document.createElement('button');btn.textContent=buttonText;btn.disabled=disabled;btn.addEventListener('click',action);row.append(btn)}root.append(row)}
+function spendPlanet(cost){const p=colony();if((cost.bank||0)>economy.bank)return false;for(const k of ['metal','plasma','chips'])if((cost[k]||0)>p[k])return false;economy.bank-=cost.bank||0;for(const k of ['metal','plasma','chips'])p[k]-=cost[k]||0;return true}
+function renderWeekly(){
+ const root=$('#weekly-missions');if(!root)return;ensureWeekly();root.replaceChildren();
+ for(const task of weeklyTasks){const n=economy.weekly.progress[task.id]||0,claimed=!!economy.weekly.claimed[task.id];planetLine(root,task.name+' · '+Math.min(n,task.goal)+'/'+task.goal,claimed?'✓ Получено':'🎁 '+task.crystals+' 💎',()=>{ensureWeekly();if(economy.weekly.claimed[task.id]||(economy.weekly.progress[task.id]||0)<task.goal)return;economy.weekly.claimed[task.id]=true;economy.bank+=task.crystals;const p=colony();p.metal+=task.metal;p.plasma+=task.plasma;p.chips+=task.chips;saveEconomy();renderWeekly();renderPlanet();renderShop();showToast('📆 ЕЖЕНЕДЕЛЬНАЯ НАГРАДА ПОЛУЧЕНА')},claimed||n<task.goal)}
+}
+function renderPlanet(){
+ const p=colony(),now=Date.now(),ready=now>=p.raidDue;
+ $('#planet-resources').textContent='⛓️ Металл: '+p.metal+' · ⚡ Плазма: '+p.plasma+' · 💾 Микросхемы: '+p.chips+' · 💎 Кристаллы: '+Math.floor(economy.bank);
+ $('#planet-status').textContent='🏠 Ангар '+p.hangar+'/5 · 🛡️ Защита: '+planetPower()+' · ⚔️ Отражено налётов: '+p.raidCount;
+ const hangar=$('#planet-hangar');hangar.replaceChildren();
+ const hcost={metal:80+p.hangar*110,plasma:35+p.hangar*50,chips:p.hangar>=2?p.hangar:0};
+ planetLine(hangar,'Уровень '+p.hangar+'/5 · даёт +2 места обороны за уровень',p.hangar>=5?'МАКСИМУМ':'🏗️ Улучшить',()=>{if(p.hangar>=5||!spendPlanet(hcost))return;p.hangar++;saveEconomy();renderPlanet();showToast('🏗️ АНГАР УЛУЧШЕН')},p.hangar>=5||p.metal<hcost.metal||p.plasma<hcost.plasma||p.chips<hcost.chips);
+ planetLine(hangar,'Цена: ⛓️ '+hcost.metal+' ⚡ '+hcost.plasma+' 💾 '+hcost.chips);
+ const craft=$('#planet-craft');craft.replaceChildren();
+ const recipes=[
+  ['turrets','🔫 Автотурель',{metal:70,plasma:25,chips:0},'Обычная пушка · +18 защиты'],
+  ['lasers','⚡ Лазерная батарея',{metal:110,plasma:75,chips:1},'Против тяжёлых кораблей · +36 защиты'],
+  ['shield','🛡️ Генератор щита',{metal:160,plasma:120,chips:3},'Защита всей базы · +65 защиты']
+ ];
+ for(const [id,name,cost,desc] of recipes){const used=p.turrets+p.lasers+p.shield,capacity=p.hangar*2;
+  planetLine(craft,name+' ('+p[id]+') · '+desc+' · ⛓️'+cost.metal+' ⚡'+cost.plasma+' 💾'+cost.chips,'СКРАФТИТЬ',()=>{if(!p.hangar||p.turrets+p.lasers+p.shield>=p.hangar*2||!spendPlanet(cost))return;p[id]++;weeklyProgress('crafts');saveEconomy();renderPlanet();renderWeekly();showToast('🛠️ СОЗДАНО: '+name)},!p.hangar||used>=capacity||p.metal<cost.metal||p.plasma<cost.plasma||p.chips<cost.chips)}
+ planetLine(craft,'Места обороны: '+(p.turrets+p.lasers+p.shield)+'/'+(p.hangar*2));
+ const market=$('#planet-market');market.replaceChildren();
+ for(const [name,kind,amount,price] of [['Металлолом','metal',60,100],['Плазменные ячейки','plasma',40,120],['Микросхема','chips',1,240]]){
+  planetLine(market,name+' · +'+amount+' · 💎 '+price,'КУПИТЬ',()=>{if(economy.bank<price)return;economy.bank-=price;p[kind]+=amount;saveEconomy();renderPlanet();renderShop();showToast('🛍️ РЕСУРСЫ ДОСТАВЛЕНЫ')},economy.bank<price)
+ }
+ const defense=$('#planet-defense');defense.replaceChildren();
+ const threat=raidThreat();const until=Math.max(0,Math.ceil((p.raidDue-now)/60000));
+ planetLine(defense,'Угроза пиратов: '+threat+' · Твоя оборона: '+planetPower());
+ planetLine(defense,ready?'⚠️ Вражеский флот на орбите!':'Следующий налёт примерно через '+until+' мин','⚔️ ОТРАЗИТЬ НАЛЁТ',()=>defendPlanet(),!ready||!p.hangar);
+ planetLine(defense,'После постройки ангара нападения начинаются через 20 минут игрового времени/реального времени с сохранением таймера. Победа зависит от силы обороны.');
+}
+function planetPower(){const p=colony();return p.turrets*18+p.lasers*36+p.shield*65+p.hangar*5}
+function raidThreat(){return 25+colony().raidCount*17}
+function defendPlanet(){
+ const p=colony(),now=Date.now();if(!p.hangar||now<p.raidDue)return;
+ const power=planetPower(),threat=raidThreat();
+ if(power>=threat){p.raidCount++;p.metal+=40+Math.min(80,p.raidCount*5);p.plasma+=25;p.chips+=p.raidCount%2===0?1:0;economy.bank+=35;weeklyProgress('raids');showToast('🏆 КОЛОНИЯ ЗАЩИЩЕНА! +РЕСУРСЫ')}
+ else {const lost=Math.min(p.metal,Math.ceil((threat-power)/2));p.metal-=lost;showToast('💥 ОБОРОНА ПРОРВАНА! ПОТЕРЯНО '+lost+' МЕТАЛЛА')}
+ p.lastRaid=now;p.raidDue=now+20*60*1000;saveEconomy();renderPlanet();renderWeekly();renderShop();
+}
+function initPlanet(){const p=colony();if(!p.raidDue){p.raidDue=Date.now()+20*60*1000;saveEconomy()}}
+initPlanet();
 function saveEconomy(){safeStore.set('antonio_neon_economy_v3',JSON.stringify(economy))}
 function owned(id){return economy.owned.includes(id)}
 function skin(){return skins.find(x=>x.id===economy.skin)||skins[0]}
 // Upgrade modules occupy limited ship slots. Purchased modules remain in inventory when switching ships.
 function shipModules(){const ship=skin();let used=0;const applied={};for(const item of upgrades){const n=Math.max(0,Math.min(5,Number(economy.levels[item.id]||0)));const take=Math.min(n,Math.max(0,ship.slots-used));applied[item.id]=take;used+=take;}return {used,capacity:ship.slots,applied};}
 function effectiveLevel(id){return shipModules().applied[id]||0}
-function shipPower(){return skin().powerMult||1}
+function techLevel(id,shipId=economy.skin){return Math.max(0,Math.min(5,Number(economy.shipTech[shipId]?.[id]||0)))}
+function techPrice(id,level){return 250*(level+1)*(level+1)+(id==='shield'?200:0)}
+function techParts(id,level){return level>=2?Math.ceil((level+1)/2):0}
+function highestCampaign(){return Math.max(0,...Object.values(economy.campaignBest).map(x=>Number(x)||0))}
+function shipPower(){return (skin().powerMult||1)*(1+techLevel('weapon')*.075)}
+function renderShipWorkshop(){
+ const root=document.querySelector('#ship-workshop');if(!root)return;root.replaceChildren();
+ const title=document.createElement('div');title.className='workshop-title';title.textContent='🛠️ ВЕРФЬ: '+skin().name+' · 🔩 Детали '+economy.shipParts+' · Лучший уровень кампании '+highestCampaign()+'/20';root.append(title);
+ const data=[['armor','🛡️ Броня','+1 жизнь за уровень'],['engine','🚀 Двигатель','+4% скорости за уровень'],['weapon','🔫 Оружие','+7,5% урона за уровень'],['shield','🔰 Энергетический щит','+0,5 секунды неуязвимости при старте за уровень']];
+ for(const [id,name,desc] of data){const lvl=techLevel(id),cost=techPrice(id,lvl),parts=techParts(id,lvl),row=document.createElement('div');row.className='workshop-row';const label=document.createElement('span');label.textContent=name+' · '+lvl+'/5 · '+desc;const btn=document.createElement('button');btn.textContent=lvl===5?'МАКСИМУМ':'💎 '+cost+(parts?' + 🔩 '+parts:'');btn.disabled=lvl===5||economy.bank<cost||economy.shipParts<parts;btn.addEventListener('click',()=>{if(techLevel(id)!==lvl||economy.bank<cost||economy.shipParts<parts)return;economy.bank-=cost;economy.shipParts-=parts;economy.shipTech[economy.skin]??={};economy.shipTech[economy.skin][id]=lvl+1;saveEconomy();renderShop();showToast('🛠️ '+name+' улучшено до '+(lvl+1)+'/5')});row.append(label,btn);root.append(row)}
+}
+
 
 function chosenWeapon(){return weapons.find(w=>w.id===economy.weapon)||weapons[0]}
 function chosenMap(){return maps.find(x=>x.id===economy.map)||maps[0]}
@@ -372,7 +454,7 @@ function shipPreview(item){
  const img=document.createElement('img');img.className='ship-preview';img.alt='Космолёт '+item.name;img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);return img;
 }
 function renderShop(){
- $('#bank').textContent=Math.floor(economy.bank);$('#equipped-name').textContent='Корабль: '+skin().name+' · Модули '+shipModules().used+'/'+shipModules().capacity+' · Карта: '+chosenMap().name;
+ $('#bank').textContent=Math.floor(economy.bank);renderShipWorkshop();$('#equipped-name').textContent='Корабль: '+skin().name+' · Модули '+shipModules().used+'/'+shipModules().capacity+' · Карта: '+chosenMap().name;
  document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===shopTab));
  const area=$('#shop-items');area.replaceChildren();
  const arr=shopTab==='skins'?skins:shopTab==='maps'?maps:shopTab==='weapons'?weapons:shopTab==='rewards'?rareItems:upgrades;
@@ -382,9 +464,12 @@ function renderShop(){
   const name=document.createElement('strong');name.textContent=item.name;if(shopTab==='skins'&&selected)card.classList.add('ship-selected');
   const desc=document.createElement('small');
   desc.textContent=isUpgrade?item.desc+' · куплено '+level+'/5 · слоты '+shipModules().used+'/'+shipModules().capacity:shopTab==='skins'?'🔧 Слоты: '+item.slots+' · Скорость +'+Math.round(item.speedBonus*100)+'% · Урон ×'+item.powerMult.toFixed(2)+' · Скорострельность ×'+item.fireMult.toFixed(2):shopTab==='maps'?(item.desc+' · Пройдено '+mapProgress(item.id).best+'/20 · Открыт '+mapProgress(item.id).unlocked+'/20'):isRare?(isOwned?'🎁 Получено! Нажми «ВЫБРАТЬ»':item.desc+' · Выпадает с босса'):item.desc||'Новый облик корабля';
-  const btn=document.createElement('button');btn.textContent=maxed?(isUpgrade&&level<5?'НЕТ СЛОТОВ':'МАКСИМУМ'):selected?'ВЫБРАНО':isOwned?'ВЫБРАТЬ':isRare?'🔒 С БОССОВ':'💎 '+price;
-  btn.disabled=maxed||selected||(isRare&&!isOwned)||(!isRare&&!isOwned&&economy.bank<price);
-  btn.addEventListener('click',()=>{if(isRare){economy.equippedRare=item.id;saveEconomy();renderShop();return}if(!isOwned){if(economy.bank<price||(isUpgrade&&shipModules().used>=shipModules().capacity))return;economy.bank-=price;if(isUpgrade)economy.levels[item.id]=level+1;else economy.owned.push(item.id)}if(!isUpgrade){if(shopTab==='skins')economy.skin=item.id;else if(shopTab==='weapons')economy.weapon=item.id;else economy.map=item.id}saveEconomy();renderShop();renderAchievements();showMapCampaign();playSound(790,.14,'triangle');});
+  const [reqLevel,reqParts]=shopTab==='skins'?(shipUnlocks[item.id]||[0,0]):[0,0];
+  const locked=shopTab==='skins'&&!isOwned&&highestCampaign()<reqLevel;
+  if(shopTab==='skins'&&!isOwned){desc.textContent+=' · 🔓 Кампания '+reqLevel+'/20 · 🔩 Детали '+reqParts;}
+  const btn=document.createElement('button');btn.textContent=locked?'🔒 УРОВЕНЬ '+reqLevel:maxed?(isUpgrade&&level<5?'НЕТ СЛОТОВ':'МАКСИМУМ'):selected?'ВЫБРАНО':isOwned?'ВЫБРАТЬ':isRare?'🔒 С БОССОВ':'💎 '+price;
+  btn.disabled=locked||maxed||selected||(isRare&&!isOwned)||(!isRare&&!isOwned&&(economy.bank<price||(shopTab==='skins'&&economy.shipParts<reqParts)));
+  btn.addEventListener('click',()=>{if(isRare){economy.equippedRare=item.id;saveEconomy();renderShop();return}if(!isOwned){if(economy.bank<price||(isUpgrade&&shipModules().used>=shipModules().capacity)||(shopTab==='skins'&&(highestCampaign()<reqLevel||economy.shipParts<reqParts)))return;economy.bank-=price;if(shopTab==='skins')economy.shipParts-=reqParts;if(isUpgrade)economy.levels[item.id]=level+1;else economy.owned.push(item.id)}if(!isUpgrade){if(shopTab==='skins')economy.skin=item.id;else if(shopTab==='weapons')economy.weapon=item.id;else economy.map=item.id}saveEconomy();renderShop();renderAchievements();showMapCampaign();playSound(790,.14,'triangle');});
   card.append(ico,name,desc,btn);area.append(card);
  }
 }
@@ -398,13 +483,13 @@ function renderMissions(){
   btn.disabled=claimed||p<m.goal;btn.addEventListener('click',()=>{if(economy.missionClaims[m.id])return;economy.missionClaims[m.id]=true;economy.bank+=m.reward;saveEconomy();renderMissions();renderShop();showToast('🎯 НАГРАДА +'+m.reward+' 💎')});
   line.append(text,btn);el.append(line);
  }
- renderDaily();
+ renderDaily();renderWeekly();
  $('#loot-status').textContent=economy.rareSkins.length
  ? '🎁 Получено редких наград: '+economy.rareSkins.length+'/3 · вкладка «Награды» → ВЫБРАТЬ'
  : '🎁 Редкие эффекты выпадают после победы над боссами. Задания дают 💎 кристаллы.';
 }
-function progressMission(id,n=1){economy.missionProgress[id]=(Number(economy.missionProgress[id])||0)+n;if(id==='kill')trackDaily('kills',n);if(id==='boss')trackDaily('bosses',n);saveEconomy()}
-renderMissions();renderAchievements();
+function progressMission(id,n=1){if(id==='kill'){weeklyProgress('kills',n);if((economy.achievementStats.kills||0)%3===0)colonyEarn('metal',1)}if(id==='boss')weeklyProgress('bosses',n);economy.missionProgress[id]=(Number(economy.missionProgress[id])||0)+n;if(id==='kill')trackDaily('kills',n);if(id==='boss')trackDaily('bosses',n);saveEconomy()}
+renderMissions();renderAchievements();renderPlanet();
 function showMapCampaign(){
  const m=mapProgress(economy.map);
  $('#campaign-progress').textContent='🪐 '+chosenMap().name+' · Пройдено '+m.best+'/20 · Следующий уровень '+m.unlocked+'/20 · 5 волн на уровень';
@@ -620,7 +705,7 @@ function startGame(){
  if(netConnected&&netPeer){netPeer.x=netHost?75:0;netPeer.y=25;netPeer.angle=-Math.PI/2;}netWorldReceived=false;player={x:0,y:0,r:18,angle:-Math.PI/2,shield:false,invulnerable:1.25,boostCd:0,boostLeft:0,dx:0,dy:0,boostX:0,boostY:-1,thruster:0};secondPlayer=coopEnabled?{x:75,y:25,r:18,angle:-Math.PI/2,invulnerable:2,thruster:0}:null;secondFireCd=0;
  stopBossMusic();mode='play';panel.style.display='none';document.body.classList.add('playing');
  inputKeys.clear();if(document.activeElement instanceof HTMLElement)document.activeElement.blur();
- elapsed=0;campaignLevel=mapProgress(economy.map).unlocked;stageWave=1;stageClock=0;bossDefeated=false;clearWait=0;score=0;lives=3+effectiveLevel('armor');wave=1;totalKills=0;bankEarned=0;boss=null;miniBoss=null;miniBossWave=0;bossWave=0;bossKills=0;abilityCd=0;abilityPulse=0;screenShake=0;impactFlash=0;manualFireTimer=0;mouseFiring=false;touchFiring=false;bomber=null;bomberTimer=9;airMines=[];bonusDrops=[];bonusTimer=rand(7,12);activeBonuses={speed:0,rapid:0,damage:0};lootDrops=[];rockets=[];bossShots=[];spawner=2;crystalTimer=1.5;powerTimer=24;fireTimer=.12;
+ elapsed=0;campaignLevel=mapProgress(economy.map).unlocked;stageWave=1;stageClock=0;bossDefeated=false;clearWait=0;score=0;lives=3+effectiveLevel('armor')+techLevel('armor');player.invulnerable+=techLevel('shield')*.5;wave=1;totalKills=0;bankEarned=0;boss=null;miniBoss=null;miniBossWave=0;bossWave=0;bossKills=0;abilityCd=0;abilityPulse=0;screenShake=0;impactFlash=0;manualFireTimer=0;mouseFiring=false;touchFiring=false;bomber=null;bomberTimer=9;airMines=[];bonusDrops=[];bonusTimer=rand(7,12);activeBonuses={speed:0,rapid:0,damage:0};lootDrops=[];rockets=[];bossShots=[];spawner=2;crystalTimer=1.5;powerTimer=24;fireTimer=.12;
  enemies=[];crystals=[];shots=[];enemyShots=[];particles=[];floaters=[];powerups=[];submitted=false;leaderboardLastSent=0;leaderboardLastAttempt=0;leaderboardQueued=0;leaderboardRunCoop=netConnected||coopEnabled;pointerTarget=null;
  joy.x=joy.y=0;stopJoy();parallax.x=parallax.y=0;cameraX=-W*.5;cameraY=-H*.52;worldTravel=0;
  for(let i=0;i<Math.min(7,Math.max(4,Math.floor(W*H/75000)));i++)spawnCrystal(true);
@@ -708,10 +793,10 @@ function activateAbility(){
 }
 function defeatBoss(){
  if(!boss)return;
- screenShake=24;impactFlash=.8;emit(boss.x,boss.y,'#ffba66',110,370,1);addPoints(500);earnCrystals(80);bossKills++;trackAchievement('bosses');progressMission('boss');
+ screenShake=24;impactFlash=.8;emit(boss.x,boss.y,'#ffba66',110,370,1);addPoints(500);earnCrystals(24);economy.shipParts+=boss.secret?3:1;colonyEarn('chips',boss.secret?3:1);saveEconomy();bossKills++;trackAchievement('bosses');progressMission('boss');
  lootDrops.push({x:boss.x,y:boss.y,r:18,age:0});bossDefeated=true;clearWait=2.2;
- if(boss.secret){secretBossDefeated++;earnCrystals(180);lootDrops.push({x:boss.x+35,y:boss.y+20,r:18,age:0});showToast('👑 СЕКРЕТНЫЙ БОСС! +180 💎 И ДВОЙНОЙ ЛУТ')}
- boss=null;stopBossMusic();showToast('🏆 БОСС ПОБЕЖДЁН! +80 💎 · ПОДБЕРИ 🎁');playSound(880,.4,'triangle');
+ if(boss.secret){secretBossDefeated++;earnCrystals(65);lootDrops.push({x:boss.x+35,y:boss.y+20,r:18,age:0});showToast('👑 СЕКРЕТНЫЙ БОСС! +3 🔩 И ДВОЙНОЙ ЛУТ')}
+ boss=null;stopBossMusic();showToast('🏆 БОСС ПОБЕЖДЁН! +24 💎 И 🔩 ДЕТАЛЬ · ПОДБЕРИ 🎁');playSound(880,.4,'triangle');
 }
 function update(dt){combatMusicTick();
  updateCosmicEvent(dt);
@@ -750,7 +835,7 @@ function update(dt){combatMusicTick();
  if(length>1){vx/=length;vy/=length}else if(length<.07){vx=vy=0}
  player.dx=vx;player.dy=vy;
  if(Math.hypot(vx,vy)>.05){const targetAngle=Math.atan2(vy,vx);let angleDelta=Math.atan2(Math.sin(targetAngle-player.angle),Math.cos(targetAngle-player.angle));player.angle+=angleDelta*Math.min(1,dt*12)}
- let mx=vx,my=vy,speed=270*(1+skin().speedBonus)*(1+.12*effectiveLevel('speed')+runUpgrades.speed*.12)*(activeBonuses.speed>0?1.65:1);
+ let mx=vx,my=vy,speed=270*(1+skin().speedBonus+techLevel('engine')*.04)*(1+.12*effectiveLevel('speed')+runUpgrades.speed*.12)*(activeBonuses.speed>0?1.65:1);
  if(player.boostLeft>0){mx=player.boostX;my=player.boostY;speed=830;player.boostLeft=Math.max(0,player.boostLeft-dt)}
  player.x+=mx*speed*dt;player.y+=my*speed*dt;
  updateSecondPlayer(dt);
@@ -891,7 +976,7 @@ wave=(campaignLevel-1)*5+stageWave;showToast('⚠ УРОВЕНЬ '+campaignLevel
  if(toastTimeout>0){toastTimeout-=dt;if(toastTimeout<=0)toastEl.classList.remove('visible')}
  hudStamp+=dt;if(hudStamp>.11){hudStamp=0;renderAchievements();const left=player.boostCd;$('#boost-caption').textContent=left>.05?left.toFixed(1)+'с':'РЫВОК';boostButton.classList.toggle('cooldown',left>.05)}
 }
-function earnCrystals(n){economy.bank+=n;bankEarned+=n;trackDaily('crystals',n);saveEconomy()}
+function earnCrystals(n){if(n>0){weeklyProgress('crystals',n);colonyEarn('plasma',Math.max(1,Math.floor(n/4)))}economy.bank+=n;bankEarned+=n;trackDaily('crystals',n);saveEconomy()}
 function spawnMiniBoss(){
  const kinds=['phantom','mine','shield'],kind=kinds[(campaignLevel+maps.findIndex(m=>m.id===economy.map))%3];
  const names={phantom:'ПРИЗРАЧНЫЙ ПЕРЕХВАТЧИК',mine:'МИННЫЙ КРЕЙСЕР',shield:'ЩИТОВОЙ СТРАЖ'};
@@ -902,7 +987,7 @@ function defeatMiniBoss(){
  if(!miniBoss)return;
  const x=miniBoss.x,y=miniBoss.y;miniBoss=null;syncBossMusic();
  emit(x,y,'#c5a0ff',60,260,.9);screenShake=17;impactFlash=.35;
- earnCrystals(45);addPoints(250);trackAchievement('minibosses');
+ earnCrystals(12);addPoints(250);if(Math.random()<.3){economy.shipParts++;saveEconomy();showToast('🔩 РЕДКАЯ ДЕТАЛЬ С МИНИ-БОССА')} trackAchievement('minibosses');
  bonusDrops.push({x,y,type:['speed','rapid','damage'][Math.floor(Math.random()*3)],r:21,age:0,ttl:15});
  showToast('🏅 МИНИ-БОСС ПОВЕРЖЕН! +45 💎 И БОНУС');
 }
@@ -939,7 +1024,7 @@ function shootNearest(){
  fireVolley(base,false);
 }
 
-function finishCampaign(){stopBossMusic();showToast('🏆 ВСЕ 20 УРОВНЕЙ ПРОЙДЕНЫ!');economy.campaignBest[economy.map]=20;earnCrystals(500);saveEconomy();mode='over';openPanel('over');message.innerHTML='🏆 КАМПАНИЯ ЗАВЕРШЕНА! 20 уровней, 100 волн и 20 боссов!<br>Награда: 💎 500 кристаллов';submitScore()}
+function finishCampaign(){stopBossMusic();showToast('🏆 ВСЕ 20 УРОВНЕЙ ПРОЙДЕНЫ!');economy.campaignBest[economy.map]=20;earnCrystals(200);economy.shipParts+=10;saveEconomy();mode='over';openPanel('over');message.innerHTML='🏆 КАМПАНИЯ ЗАВЕРШЕНА! 20 уровней, 100 волн и 20 боссов!<br>Награда: 💎 200 кристаллов и 🔩 10 деталей';submitScore()}
 // Each campaign level changes the biome. Procedural sectors stay fixed in world
 // coordinates, so flying actually reveals new structures instead of repeating one picture.
 function sectorNoise(x,y,seed){
@@ -1237,7 +1322,7 @@ function localLeaders(){try{const x=JSON.parse(safeStore.get('antonio_neon_score
 function showLeaders(items){leadersEl.replaceChildren();if(!items.length){const li=document.createElement('li');li.textContent='Пока нет рекордов. Будь первым!';leadersEl.append(li);return}
  items.slice(0,10).forEach((item,i)=>{const li=document.createElement('li');li.className='rank-'+(i+1);li.append(document.createTextNode(String(item.nickname||'Пилот')+' '));const points=document.createElement('span');points.className='leader-score';points.textContent=(Number(item.score)||0).toLocaleString('ru-RU')+' ✦';li.append(points);leadersEl.append(li)})}
 function leaderboardStatusText(s){leaderboardStatus.textContent=s}
-// Leaderboard 8.9: durable per-nickname outbox and automatic retry.
+// Leaderboard 9.1: durable per-nickname outbox and automatic retry.
 // Only solo runs qualify. Never claim a server save before HTTP 2xx.
 let leaderboardBusy=false;
 let leaderboardRunCoop=false,leaderboardLastSent=0,leaderboardLastAttempt=0,leaderboardSending=false;
@@ -1426,7 +1511,7 @@ $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode===
 // Menu navigation and creator credits — no changes to gameplay/save data.
 (()=>{
  const buttons=[...document.querySelectorAll('.menu-nav-btn')];
- function selectSection(name){buttons.forEach(b=>{const active=b.dataset.section===name;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});['hangar','missions','records'].forEach(k=>{document.getElementById('menu-pane-'+k).hidden=k!==name})}
+ function selectSection(name){buttons.forEach(b=>{const active=b.dataset.section===name;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});['hangar','missions','records','planet'].forEach(k=>{document.getElementById('menu-pane-'+k).hidden=k!==name})}
  buttons.forEach(b=>b.addEventListener('click',()=>selectSection(b.dataset.section)));
  selectSection('hangar');
  const nickInput=document.getElementById('nickname'),nickDisplay=document.getElementById('pilot-name-display');
