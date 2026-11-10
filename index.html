@@ -73,7 +73,7 @@
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V7.7</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V7.8</span></footer>
     </section>
   </div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
@@ -1043,22 +1043,52 @@ function localLeaders(){try{const x=JSON.parse(safeStore.get('antonio_neon_score
 function showLeaders(items){leadersEl.replaceChildren();if(!items.length){const li=document.createElement('li');li.textContent='Пока нет рекордов. Будь первым!';leadersEl.append(li);return}
  items.slice(0,10).forEach((item,i)=>{const li=document.createElement('li');li.className='rank-'+(i+1);li.append(document.createTextNode(String(item.nickname||'Пилот')+' '));const points=document.createElement('span');points.className='leader-score';points.textContent=(Number(item.score)||0).toLocaleString('ru-RU')+' ✦';li.append(points);leadersEl.append(li)})}
 function leaderboardStatusText(s){leaderboardStatus.textContent=s}
+// Leaderboard 7.8: explicit server status, best score per nickname, retry after transient failures.
+let leaderboardBusy=false;
+async function leaderboardRequest(path,options={}){
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+ try{
+  const response=await fetch(apiUrl+'/rest/v1/'+path,{...options,cache:'no-store',signal:controller.signal,headers:{apikey:anonKey,...(options.headers||{})}});
+  if(!response.ok){let details='';try{details=(await response.text()).slice(0,220)}catch{}throw Error('HTTP '+response.status+(details?' · '+details:''))}
+  return response;
+ }finally{clearTimeout(timeout)}
+}
 async function loadLeaderboard(){
- if(!online){showLeaders(localLeaders().sort((a,b)=>b.score-a.score));leaderboardStatusText('Только рекорды этого браузера. Для общего рейтинга подключи Supabase (README)');return}
- leaderboardStatusText('Соединяемся с мировым рейтингом…');
- try{const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),7000);
-  let response;try{response=await fetch(apiUrl+'/rest/v1/leaderboard?select=nickname,score&order=score.desc&limit=10',{headers:{apikey:anonKey},signal:controller.signal})}finally{clearTimeout(timeout)}
-  if(!response.ok)throw Error(String(response.status)+' '+(await response.text()).slice(0,120));showLeaders(await response.json());leaderboardStatusText('🌍 Мировой рейтинг · актуальные результаты')
- }catch(e){console.warn('Leaderboard load:',e);showLeaders(localLeaders().sort((a,b)=>b.score-a.score));leaderboardStatusText('Не удалось загрузить онлайн-рейтинг · '+String(e.message||e).slice(0,90))}
+ if(leaderboardBusy)return;
+ if(!online){showLeaders(localLeaders().sort((a,b)=>b.score-a.score));leaderboardStatusText('⚠️ Нет подключения к Supabase. Показаны результаты этого устройства');return}
+ leaderboardBusy=true;leaderboardStatusText('🌍 Загружаем мировой рейтинг…');
+ try{
+  const response=await leaderboardRequest('leaderboard?select=nickname,score&order=score.desc&limit=1000');
+  const data=await response.json();
+  // One entry per nickname; keep the best score, not every attempt.
+  const best=new Map();
+  for(const row of data){const nick=String(row.nickname||'Пилот').trim();const value=Number(row.score)||0;const key=nick.toLocaleLowerCase();if(!best.has(key)||best.get(key).score<value)best.set(key,{nickname:nick,score:value})}
+  const ranked=[...best.values()].sort((a,b)=>b.score-a.score);
+  showLeaders(ranked);
+  const myNick=validNickname().toLocaleLowerCase(),position=ranked.findIndex(x=>x.nickname.toLocaleLowerCase()===myNick);
+  leaderboardStatusText('🌍 Мировой рейтинг · обновлено сейчас'+(position>=0?' · '+ranked[position].nickname+': место №'+(position+1)+' ('+ranked[position].score.toLocaleString('ru-RU')+' ✦)':' · твоего ника пока нет в рейтинге'));
+ }catch(e){console.warn('Leaderboard load:',e);showLeaders(localLeaders().sort((a,b)=>b.score-a.score));leaderboardStatusText('⚠️ Сервер недоступен. Показаны ЛОКАЛЬНЫЕ очки. '+String(e.message||e).slice(0,150))}
+ finally{leaderboardBusy=false}
 }
 async function submitScore(){
- if(submitted||score<=0)return;submitted=true;
+ if(submitted||score<=0)return;
+ // Co-op is not server-authoritative: do not mix unverified multiplayer scores into the global board.
+ if(netConnected){submitted=true;leaderboardStatusText('⚠️ Счёт тестового онлайн-кооператива не отправляется в мировой рейтинг');return}
  const nickname=validNickname(),s=localLeaders();s.push({nickname,score});s.sort((a,b)=>b.score-a.score);safeStore.set('antonio_neon_scores',JSON.stringify(s.slice(0,10)));
- if(!online){loadLeaderboard();return}leaderboardStatusText('Сохраняем твой рекорд…');
- try{const response=await fetch(apiUrl+'/rest/v1/leaderboard',{method:'POST',headers:{apikey:anonKey,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nickname,score})});if(!response.ok)throw Error(String(response.status));await loadLeaderboard()}
- catch(e){console.warn('Leaderboard submit:',e);showLeaders(s);leaderboardStatusText('Ошибка отправки рекорда · '+String(e.message||e).slice(0,90))}
+ if(!online){leaderboardStatusText('⚠️ Supabase не подключён: результат только на этом устройстве');showLeaders(s);return}
+ leaderboardStatusText('⏳ Отправляем '+score+' очков на сервер…');
+ try{
+  await leaderboardRequest('leaderboard',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nickname,score})});
+  submitted=true;
+  leaderboardStatusText('✅ Результат отправлен на сервер');
+  await loadLeaderboard();
+ }catch(e){
+  // Keep submitted=false so player can retry on refresh or after reopening the records.
+  console.warn('Leaderboard submit:',e);showLeaders(s);
+  leaderboardStatusText('❌ Результат НЕ подтверждён сервером · '+String(e.message||e).slice(0,140)+' · нажми «Обновить», чтобы повторить');
+ }
 }
-$('#refresh').addEventListener('click',loadLeaderboard);loadLeaderboard();
+$('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode==='over')await submitScore();else await loadLeaderboard()});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!leaderboardBusy)loadLeaderboard()});loadLeaderboard();
 })();
 
 </script>
