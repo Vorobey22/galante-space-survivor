@@ -20,6 +20,7 @@
 #heading{font-size:clamp(29px,6.2vw,44px);letter-spacing:-1.7px;line-height:1.03}#heading span{font-size:.8em;letter-spacing:1px}.eyebrow{margin:0 0 9px;color:#92bfe7}.intro{margin:10px auto 12px;max-width:420px;font-size:12px}.features{margin:0 0 12px}.features span{background:#11294caa;border-color:#60c5ff45;color:#bfeaff}.menu-dashboard{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}.menu-dashboard .wallet{margin:0;min-height:60px;text-align:left;display:flex;flex-wrap:wrap;align-content:center;align-items:center;gap:4px 8px;background:linear-gradient(125deg,#08263e,#0d2449);font-size:10px}.menu-dashboard .wallet b{font-size:20px}.menu-dashboard .wallet span{flex-basis:100%;margin:0}.menu-badge{border:1px solid #9971ff55;background:linear-gradient(125deg,#1b1745,#152a53);border-radius:12px;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:900;letter-spacing:1px;font-size:11px;color:#dcc4ff}.menu-badge span{font-size:9px;color:#a3b4dc;margin-top:5px}.menu-section-label{display:flex;justify-content:space-between;align-items:center;text-align:left;font-size:10px;font-weight:950;letter-spacing:1.5px;color:#bfefff;margin-bottom:7px}.menu-section-label span{font-size:9px;color:#7c98b9}.menu-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:10px}.menu-nav-btn{background:#0d1e3c;border:1px solid #527ca777;color:#a5c4e4;border-radius:11px;padding:11px 4px;font-size:11px;font-weight:900;transition:.2s}.menu-nav-btn.active{color:#071628;background:linear-gradient(110deg,#72f2ff,#a4b4ff);border-color:#8dfaff;box-shadow:0 0 22px #51caff33}.menu-pane[hidden],.about-overlay[hidden]{display:none!important}.menu-pane{max-height:min(230px,30dvh);overflow:auto;scrollbar-width:thin;overscroll-behavior:contain;border:1px solid #4a7ba244;background:#06142988;border-radius:14px;padding:6px}.menu-pane .hangar{border:0;background:transparent;padding:0;margin:0}.menu-pane .leaderboard{margin:0;border:0;background:transparent}.menu-pane .leaderboard ol{max-height:180px}.menu-pane .mission-box{margin:5px 0}.tabs{flex-wrap:wrap}.tabs button{flex:1 1 17%;font-size:10px}.setup{grid-template-columns:1fr 1fr;gap:5px 10px}.setup .field-label{margin-top:5px}.setup input,.setup select{padding:10px}.start-button{font-size:15px;padding:15px;box-shadow:0 12px 35px #45c9ff33}.controls{margin-top:7px}.panel-card footer{margin-top:12px;line-height:1.6}.about-overlay{position:fixed;inset:0;z-index:30;background:#020813dd;backdrop-filter:blur(15px);display:grid;place-items:center;padding:18px}.about-card{position:relative;width:min(100%,420px);padding:30px 26px;text-align:center;border-radius:24px;border:1px solid #6deaff88;background:linear-gradient(140deg,#132e56,#090e25);box-shadow:0 30px 90px #000c}.about-close{position:absolute;right:13px;top:13px;border:0;background:#1a3756;color:#cdefff;padding:9px;border-radius:10px}.about-emblem{font-size:60px;color:#75eaff;text-shadow:0 0 35px #50dfff}.about-card h2{font-size:32px;line-height:1.1;margin:10px 0;color:#fff}.about-card h2 span{font-size:24px;color:#81ebff}.about-card p{font-size:13px;line-height:1.7;color:#c3d5ee}.about-author{border:1px solid #75d9ff55;border-radius:12px;padding:12px;color:#8cb9db;font-size:10px;letter-spacing:2px}.about-author strong{font-size:18px;color:#fff;display:block;margin-top:5px}.about-card .about-legal{font-size:10px;color:#829db8}
 @media(max-width:600px){.panel-card{padding:13px 13px 15px;max-height:calc(100dvh - 16px)}.hero-ship{height:74px}.ship-silhouette{font-size:48px}.intro{font-size:11px}.features{gap:5px}.features span{font-size:9px;padding:5px 7px}.menu-pane{max-height:22dvh}.menu-nav-btn{padding:9px 2px;font-size:10px}.setup{grid-template-columns:1fr 1fr}.setup input,.setup select{font-size:12px}.menu-brand{font-size:10px}.controls{font-size:9px}}
 @media(max-height:700px){.hero-ship{height:54px}.ship-silhouette{font-size:42px}.menu-pane{max-height:18dvh}.panel-card{max-height:calc(100dvh - 10px)}.intro{margin:6px auto}.features{margin-bottom:7px}}
+.shop-items:has(.ship-preview){max-height:340px}.shop-item:has(.ship-preview){padding:10px 7px;gap:7px;background:linear-gradient(155deg,#152b50,#0b1731);border-color:#5688bf88}.shop-item.ship-selected{border-color:#74f8ed;box-shadow:inset 0 0 20px #45e2ec22}.ship-preview{width:100%;height:102px;object-fit:contain;filter:drop-shadow(0 0 9px #6bd9ff66)}.shop-item:has(.ship-preview) small{min-height:52px;line-height:1.5}.shop-item:has(.ship-preview) strong{font-size:13px}
 </style>
 </head>
 <body>
@@ -49,7 +50,7 @@
       <div class="pilot-profile"><div class="pilot-profile-copy"><span>👨‍🚀 ТВОЙ НИК</span><strong id="pilot-name-display">Пилот</strong></div><button id="pilot-edit" type="button">✎ ИЗМЕНИТЬ</button></div>
       <div class="menu-section-label">КОМАНДНЫЙ ЦЕНТР <span>ВЫБЕРИ РАЗДЕЛ</span></div>
       <nav class="menu-nav" aria-label="Разделы меню"><button type="button" class="menu-nav-btn active" data-section="hangar">🚀 АНГАР</button><button type="button" class="menu-nav-btn" data-section="missions">🎯 МИССИИ</button><button type="button" class="menu-nav-btn" data-section="records">🏆 РЕЙТИНГ</button></nav>
-      <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Скины</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div></div></div>
+      <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Космолёты</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div></div></div>
       <div class="menu-pane" id="menu-pane-missions" hidden><div class="mission-box"><strong>🏅 ДОСТИЖЕНИЯ ПИЛОТА</strong><div id="achievements"></div><small>Достижения хранятся на этом устройстве. Общий зал славы сравнивает очки игроков.</small></div><div class="mission-box"><strong>🎯 ЗАДАНИЯ</strong><div id="missions"></div><div class="daily-section"><strong>📅 ЕЖЕДНЕВНЫЕ ЗАДАНИЯ</strong><div id="daily-missions"></div><small>Обновляются каждый день по местному времени устройства.</small></div><div id="loot-status"></div><div id="campaign-progress">🪐 Кампания: 1/20 · Волна 1/5</div></div></div>
       <div class="menu-pane" id="menu-pane-records" hidden><div class="leaderboard" id="leaderboard"><div class="leaderboard-head"><h2>🏆 ЗАЛ СЛАВЫ</h2><button id="refresh" type="button" title="Обновить таблицу рекордов">↻</button></div><ol id="leaders"><li>Загрузка рекордов…</li></ol><div id="status" role="status"></div>
 <div class="rank-tools" style="margin-top:10px;display:grid;gap:7px">
@@ -353,6 +354,23 @@ function renderAchievements(){
  }
 }
 function trackAchievement(stat,amount=1){economy.achievementStats[stat]=Math.max(0,Number(economy.achievementStats[stat]||0))+amount;saveEconomy()}
+function shipPreview(item){
+ const silhouettes={
+ classic:'50,10 60,35 78,65 73,80 59,70 50,81 41,70 27,80 22,65 40,35',
+ ember:'50,6 62,36 88,49 74,83 62,67 50,76 38,67 26,83 12,49 38,36',
+ violet:'50,5 61,31 88,24 72,49 88,86 59,68 50,81 41,68 12,86 28,49 12,24 39,31',
+ gold:'50,8 67,30 85,28 82,70 71,84 59,67 50,78 41,67 29,84 18,70 15,28 33,30',
+ emerald:'50,5 60,31 84,20 74,52 89,78 60,67 50,85 40,67 11,78 26,52 16,20 40,31',
+ frost:'50,4 60,35 80,34 90,50 72,77 60,67 50,84 40,67 28,77 10,50 20,34 40,35',
+ shadow:'50,3 60,32 90,15 75,51 90,85 65,66 50,78 35,66 10,85 25,51 10,15 40,32',
+ solar:'50,5 67,30 91,40 75,63 84,85 60,69 50,85 40,69 16,85 25,63 9,40 33,30',
+ toxic:'50,3 63,27 92,27 78,53 92,84 66,70 50,87 34,70 8,84 22,53 8,27 37,27',
+ royal:'50,2 67,27 94,20 81,53 94,87 69,75 50,93 31,75 6,87 19,53 6,20 33,27'
+ };
+ const polygon=silhouettes[item.id]||silhouettes.classic;
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g"><stop stop-color="'+item.color+'" stop-opacity=".25"/><stop offset="1" stop-color="'+item.color+'" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="51" r="47" fill="url(#g)"/><path d="M43 70 L40 92 L50 84 L60 92 L57 70" fill="#ffb45b"/><polygon points="'+polygon+'" fill="'+item.wing+'" stroke="'+item.color+'" stroke-width="3" stroke-linejoin="round"/><path d="M50 15 L58 52 L50 70 L42 52Z" fill="#091d36" stroke="'+item.color+'" stroke-width="2"/><path d="M50 23 L54 44 L50 55 L46 44Z" fill="#bafaff"/></svg>';
+ const img=document.createElement('img');img.className='ship-preview';img.alt='Космолёт '+item.name;img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);return img;
+}
 function renderShop(){
  $('#bank').textContent=Math.floor(economy.bank);$('#equipped-name').textContent='Корабль: '+skin().name+' · Модули '+shipModules().used+'/'+shipModules().capacity+' · Карта: '+chosenMap().name;
  document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===shopTab));
@@ -360,10 +378,10 @@ function renderShop(){
  const arr=shopTab==='skins'?skins:shopTab==='maps'?maps:shopTab==='weapons'?weapons:shopTab==='rewards'?rareItems:upgrades;
  for(const item of arr){let level=Number(economy.levels[item.id]||0),isUpgrade=shopTab==='upgrades',isRare=shopTab==='rewards',maxed=isUpgrade&&(level>=5||shipModules().used>=shipModules().capacity),price=isUpgrade?item.base*(level+1):item.cost,isOwned=isRare?economy.rareSkins.includes(item.id):!isUpgrade&&owned(item.id),selected=isOwned&&(isRare?economy.equippedRare===item.id:shopTab==='skins'?economy.skin===item.id:shopTab==='weapons'?economy.weapon===item.id:economy.map===item.id);
   const card=document.createElement('div');card.className='shop-item';
-  const ico=document.createElement('span');ico.className='shop-icon';ico.textContent=item.icon;
-  const name=document.createElement('strong');name.textContent=item.name;
+  const ico=shopTab==='skins'?shipPreview(item):document.createElement('span');if(shopTab!=='skins'){ico.className='shop-icon';ico.textContent=item.icon;}
+  const name=document.createElement('strong');name.textContent=item.name;if(shopTab==='skins'&&selected)card.classList.add('ship-selected');
   const desc=document.createElement('small');
-  desc.textContent=isUpgrade?item.desc+' · куплено '+level+'/5 · слоты '+shipModules().used+'/'+shipModules().capacity:shopTab==='skins'?'⚙️ '+item.slots+' модулей · скорость +'+Math.round(item.speedBonus*100)+'% · урон ×'+item.powerMult.toFixed(2)+' · огонь ×'+item.fireMult.toFixed(2):shopTab==='maps'?(item.desc+' · Пройдено '+mapProgress(item.id).best+'/20 · Открыт '+mapProgress(item.id).unlocked+'/20'):isRare?(isOwned?'🎁 Получено! Нажми «ВЫБРАТЬ»':item.desc+' · Выпадает с босса'):item.desc||'Новый облик корабля';
+  desc.textContent=isUpgrade?item.desc+' · куплено '+level+'/5 · слоты '+shipModules().used+'/'+shipModules().capacity:shopTab==='skins'?'🔧 Слоты: '+item.slots+' · Скорость +'+Math.round(item.speedBonus*100)+'% · Урон ×'+item.powerMult.toFixed(2)+' · Скорострельность ×'+item.fireMult.toFixed(2):shopTab==='maps'?(item.desc+' · Пройдено '+mapProgress(item.id).best+'/20 · Открыт '+mapProgress(item.id).unlocked+'/20'):isRare?(isOwned?'🎁 Получено! Нажми «ВЫБРАТЬ»':item.desc+' · Выпадает с босса'):item.desc||'Новый облик корабля';
   const btn=document.createElement('button');btn.textContent=maxed?(isUpgrade&&level<5?'НЕТ СЛОТОВ':'МАКСИМУМ'):selected?'ВЫБРАНО':isOwned?'ВЫБРАТЬ':isRare?'🔒 С БОССОВ':'💎 '+price;
   btn.disabled=maxed||selected||(isRare&&!isOwned)||(!isRare&&!isOwned&&economy.bank<price);
   btn.addEventListener('click',()=>{if(isRare){economy.equippedRare=item.id;saveEconomy();renderShop();return}if(!isOwned){if(economy.bank<price||(isUpgrade&&shipModules().used>=shipModules().capacity))return;economy.bank-=price;if(isUpgrade)economy.levels[item.id]=level+1;else economy.owned.push(item.id)}if(!isUpgrade){if(shopTab==='skins')economy.skin=item.id;else if(shopTab==='weapons')economy.weapon=item.id;else economy.map=item.id}saveEconomy();renderShop();renderAchievements();showMapCampaign();playSound(790,.14,'triangle');});
@@ -1101,15 +1119,35 @@ function drawShip(p,decorative=false){
   ctx.globalAlpha=.85;ctx.shadowColor='#49f7ff';ctx.shadowBlur=17;ctx.fillStyle=flame;
   ctx.beginPath();ctx.moveTo(-4,0);ctx.quadraticCurveTo(0,engine+27,4,0);ctx.closePath();ctx.fill();ctx.restore();
  }
+ // Each purchased ship has a unique recognizable hull and wing geometry.
+ const shapes={
+ classic:[0,-29,10,-11,24,9,22,20,8,12,0,21,-8,12,-22,20,-24,9,-10,-11],
+ ember:[0,-35,9,-13,32,1,24,23,13,12,0,18,-13,12,-24,23,-32,1,-9,-13],
+ violet:[0,-37,8,-15,34,-3,18,9,32,27,7,15,0,22,-7,15,-32,27,-18,9,-34,-3,-8,-15],
+ gold:[0,-33,14,-15,30,-14,28,15,19,25,7,11,0,18,-7,11,-19,25,-28,15,-30,-14,-14,-15],
+ emerald:[0,-37,8,-16,29,-22,20,1,35,20,10,15,0,25,-10,15,-35,20,-20,1,-29,-22,-8,-16],
+ frost:[0,-38,7,-13,27,-10,35,5,19,20,7,13,0,24,-7,13,-19,20,-35,5,-27,-10,-7,-13],
+ shadow:[0,-40,8,-12,36,-21,22,2,35,22,13,12,0,17,-13,12,-35,22,-22,2,-36,-21,-8,-12],
+ solar:[0,-36,14,-15,37,-7,24,11,31,28,9,16,0,24,-9,16,-31,28,-24,11,-37,-7,-14,-15],
+ toxic:[0,-38,11,-19,37,-18,25,3,38,25,15,15,0,26,-15,15,-38,25,-25,3,-37,-18,-11,-19],
+ royal:[0,-42,15,-18,39,-23,29,1,40,27,18,18,0,30,-18,18,-40,27,-29,1,-39,-23,-15,-18]
+ };
+ const hull=shapes[shipStyle.id]||shapes.classic;
  // Два крыла, широкие двигатели и обтекаемая броня.
- ctx.shadowColor=tune.wings;ctx.shadowBlur=26;ctx.strokeStyle=tune.wings;ctx.lineWidth=1.7;
- const wing=ctx.createLinearGradient(-27,-17,27,20);wing.addColorStop(0,'#b6ddff');wing.addColorStop(.37,tune.wings);wing.addColorStop(.78,'#282f79');wing.addColorStop(1,'#95b0fb');
- ctx.fillStyle=wing;ctx.beginPath();ctx.moveTo(0,-29);ctx.lineTo(10,-11);ctx.lineTo(28,9);ctx.lineTo(26,22);ctx.lineTo(9,13);ctx.lineTo(0,21);ctx.lineTo(-9,13);ctx.lineTo(-26,22);ctx.lineTo(-28,9);ctx.lineTo(-10,-11);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.shadowColor=shipStyle.color;ctx.shadowBlur=26;ctx.strokeStyle=shipStyle.color;ctx.lineWidth=1.7;
+ const wing=ctx.createLinearGradient(-27,-17,27,20);wing.addColorStop(0,'#b6ddff');wing.addColorStop(.37,shipStyle.wing);wing.addColorStop(.78,shipStyle.color);wing.addColorStop(1,'#95b0fb');
+ ctx.fillStyle=wing;ctx.beginPath();ctx.moveTo(hull[0],hull[1]);for(let j=2;j<hull.length;j+=2)ctx.lineTo(hull[j],hull[j+1]);ctx.closePath();ctx.fill();ctx.stroke();
  // Тёмные металлические вставки и светящиеся панели.
  ctx.shadowBlur=0;ctx.fillStyle='#081b41';ctx.beginPath();ctx.moveTo(0,-24);ctx.lineTo(10,-1);ctx.lineTo(7,17);ctx.lineTo(0,12);ctx.lineTo(-7,17);ctx.lineTo(-10,-1);ctx.closePath();ctx.fill();
  ctx.fillStyle=tune.engine;ctx.shadowColor=tune.engine;ctx.shadowBlur=15;ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(5,-6);ctx.lineTo(0,5);ctx.lineTo(-5,-6);ctx.closePath();ctx.fill();
  ctx.shadowBlur=8;ctx.strokeStyle='#8ef7ff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-23,12);ctx.lineTo(-13,7);ctx.moveTo(23,12);ctx.lineTo(13,7);ctx.stroke();
- ctx.fillStyle='#ffe7a6';for(const side of [-1,1]){ctx.beginPath();ctx.arc(side*21,13,2.4,0,TAU);ctx.fill()}
+ if(shipStyle.id!=='classic'){
+ ctx.strokeStyle=shipStyle.color;ctx.lineWidth=2;ctx.shadowColor=shipStyle.color;ctx.shadowBlur=13;
+ ctx.beginPath();ctx.moveTo(-12,2);ctx.lineTo(-18,12);ctx.moveTo(12,2);ctx.lineTo(18,12);ctx.stroke();
+ if(['royal','solar','gold'].includes(shipStyle.id)){ctx.beginPath();ctx.moveTo(-10,-13);ctx.lineTo(0,-29);ctx.lineTo(10,-13);ctx.stroke()}
+ if(['shadow','violet','toxic'].includes(shipStyle.id)){ctx.beginPath();ctx.moveTo(-28,9);ctx.lineTo(-35,26);ctx.moveTo(28,9);ctx.lineTo(35,26);ctx.stroke()}
+}
+ctx.fillStyle='#ffe7a6';for(const side of [-1,1]){ctx.beginPath();ctx.arc(side*21,13,2.4,0,TAU);ctx.fill()}
  ctx.restore();
  if(p.shield){ctx.save();ctx.globalAlpha=.5+.2*Math.sin(time*5);ctx.strokeStyle='#81eafe';ctx.shadowColor='#59d9ff';ctx.shadowBlur=23;ctx.lineWidth=2.2;ctx.beginPath();ctx.arc(p.x,p.y,35,0,TAU);ctx.stroke();ctx.restore()}
 }
@@ -1199,7 +1237,7 @@ function localLeaders(){try{const x=JSON.parse(safeStore.get('antonio_neon_score
 function showLeaders(items){leadersEl.replaceChildren();if(!items.length){const li=document.createElement('li');li.textContent='Пока нет рекордов. Будь первым!';leadersEl.append(li);return}
  items.slice(0,10).forEach((item,i)=>{const li=document.createElement('li');li.className='rank-'+(i+1);li.append(document.createTextNode(String(item.nickname||'Пилот')+' '));const points=document.createElement('span');points.className='leader-score';points.textContent=(Number(item.score)||0).toLocaleString('ru-RU')+' ✦';li.append(points);leadersEl.append(li)})}
 function leaderboardStatusText(s){leaderboardStatus.textContent=s}
-// Leaderboard 8.8: durable per-nickname outbox and automatic retry.
+// Leaderboard 8.9: durable per-nickname outbox and automatic retry.
 // Only solo runs qualify. Never claim a server save before HTTP 2xx.
 let leaderboardBusy=false;
 let leaderboardRunCoop=false,leaderboardLastSent=0,leaderboardLastAttempt=0,leaderboardSending=false;
