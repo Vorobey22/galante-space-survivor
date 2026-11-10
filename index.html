@@ -65,14 +65,15 @@
  <div class="setup" id="setup">
         <label class="field-label" for="nickname">ПОЗЫВНОЙ ПИЛОТА</label>
         <input id="nickname" type="text" maxlength="20" placeholder="Введите ник" autocomplete="nickname" aria-label="Имя игрока">
-        <label class="coop-label"><input id="coop-enabled" type="checkbox"> 👥 Локальный кооператив: 2 игрока на одном ПК</label>
+        <section class="online-coop"><strong>🌐 ОНЛАЙН-КОМНАТА · ТЕСТ</strong><p>Один создаёт комнату, другой вводит код. Работает на ПК и телефоне.</p><div class="online-buttons"><button id="online-create" type="button">СОЗДАТЬ КОМНАТУ</button><input id="online-code" maxlength="8" placeholder="КОД КОМНАТЫ" autocomplete="off"><button id="online-join" type="button">ВОЙТИ</button></div><div id="online-status">Не подключено</div><button id="online-leave" type="button" hidden>ВЫЙТИ ИЗ КОМНАТЫ</button><small>Тестовая версия: синхронизируются корабли и выстрелы. Враги, здоровье и счёт пока локальные — это ещё не полноценная общая битва.</small></section>
+ <label class="coop-label"><input id="coop-enabled" type="checkbox"> 👥 Локальный кооператив: 2 игрока на одном ПК</label>
  <label class="field-label" for="difficulty">СЛОЖНОСТЬ МИССИИ</label>
         <select id="difficulty"><option value="0.78">Лёгкая орбита</option><option value="1" selected>Стандартный полёт</option><option value="1.28">Экстремальный космос</option></select>
       </div>
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V7.5</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V7.6 ONLINE TEST</span></footer>
     </section>
   </div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
@@ -87,9 +88,10 @@ window.NEON_CONFIG = {
 </script>
   <style>
 .daily-section{margin-top:16px;padding:14px;border:1px solid #3c6688;border-radius:14px;background:#0a1832b8}.daily-section strong{display:block;margin-bottom:9px;color:#b9f6ff}.daily-section small{color:#94b5c9}.wave-choice[hidden]{display:none!important}.wave-choice{position:fixed;z-index:9999;inset:0;background:#020819dc;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}.wave-choice-box{max-width:620px;width:100%;border:1px solid #68d8ff;border-radius:22px;background:linear-gradient(140deg,#122b4c,#1d103b);padding:22px;color:white;box-shadow:0 0 45px #00c8ff55}.wave-choice-box h2{text-align:center;margin:0 0 10px}.wave-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.wave-choice-grid button{padding:16px 8px;border-radius:13px;background:#12365b;border:1px solid #55c8e8;color:#fff;font-weight:700;cursor:pointer;min-height:110px}.wave-choice-grid button:active{transform:scale(.98)}@media(max-width:500px){.wave-choice-grid{grid-template-columns:1fr}.wave-choice-grid button{min-height:65px}}
-.custom-panel,.season-panel{border:1px solid #5c9bc75c;background:#071a31c9;border-radius:15px;padding:12px;margin:12px 0;text-align:left}.custom-title,.season-panel strong{display:block;font-weight:900;font-size:12px;letter-spacing:1px;color:#b3f6ff;margin-bottom:9px}.custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.custom-grid label{font-size:11px;color:#bcd6f0;display:flex;flex-direction:column;gap:5px}.custom-grid select,.custom-grid input{width:100%;min-height:34px;background:#101e39;color:white;border:1px solid #4c8bb7;border-radius:8px;padding:4px}.custom-grid input[type=color]{padding:2px}.custom-panel small,.season-panel small{display:block;color:#93acc8;margin-top:8px;font-size:10px}.coop-label{display:flex;gap:9px;align-items:center;color:#b9f5ff;font-size:12px;font-weight:800;padding:9px;background:#11294c;border-radius:10px}.coop-label input{width:auto!important}.season-panel #season-rank{font-size:16px;font-weight:900;color:#ffe4a3;margin:6px 0}@media(max-width:380px){.custom-grid{grid-template-columns:1fr}}
+.online-coop{border:1px solid #37d4a16b;background:#06282cbf;border-radius:15px;padding:13px;margin:12px 0;text-align:left}.online-coop strong{color:#9dffda;font-size:13px}.online-coop p,.online-coop small{font-size:11px;color:#b2d8d5}.online-buttons{display:flex;gap:6px;flex-wrap:wrap}.online-buttons button,.online-coop>button{background:#12615c;color:#fff;border:1px solid #48e3b7;border-radius:8px;padding:9px;font-weight:800;font-size:11px}.online-buttons input{min-width:95px;max-width:130px;flex:1;background:#0b2037;color:#fff;border:1px solid #48e3b7;border-radius:8px;padding:8px;text-transform:uppercase}.online-coop #online-status{margin:10px 0;font-size:12px;color:#fff}.online-coop #online-leave{margin-bottom:8px}.custom-panel,.season-panel{border:1px solid #5c9bc75c;background:#071a31c9;border-radius:15px;padding:12px;margin:12px 0;text-align:left}.custom-title,.season-panel strong{display:block;font-weight:900;font-size:12px;letter-spacing:1px;color:#b3f6ff;margin-bottom:9px}.custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.custom-grid label{font-size:11px;color:#bcd6f0;display:flex;flex-direction:column;gap:5px}.custom-grid select,.custom-grid input{width:100%;min-height:34px;background:#101e39;color:white;border:1px solid #4c8bb7;border-radius:8px;padding:4px}.custom-grid input[type=color]{padding:2px}.custom-panel small,.season-panel small{display:block;color:#93acc8;margin-top:8px;font-size:10px}.coop-label{display:flex;gap:9px;align-items:center;color:#b9f5ff;font-size:12px;font-weight:800;padding:9px;background:#11294c;border-radius:10px}.coop-label input{width:auto!important}.season-panel #season-rank{font-size:16px;font-weight:900;color:#ffe4a3;margin:6px 0}@media(max-width:380px){.custom-grid{grid-template-columns:1fr}}
 </style>
 <div id="wave-choice" class="wave-choice" hidden><div class="wave-choice-box"><h2>⚡ ВЫБЕРИ УСИЛЕНИЕ</h2><p style="text-align:center">Награда за пройденную волну — выбери одно из трёх</p><div id="wave-choice-options" class="wave-choice-grid"></div></div></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
 'use strict';
 // Copyright (c) 2026 Antonio Galante / Galante Games. All rights reserved.
@@ -205,6 +207,78 @@ function secondPilotDamage(obj,r=0){
  emit(secondPlayer.x,secondPlayer.y,'#ff75bd',22,160,.5);
  updateHud();if(lives<=0)endGame();
  return true;
+}
+// Online co-op prototype: two peers exchange positions and shots over Supabase Broadcast.
+// No shared authority for enemies, score or damage yet. Do not submit coop runs to leaderboard.
+let netChannel=null,netRoom='',netHost=false,netPeer=null,netLastSend=0,netLastShot=0,netConnected=false;
+const netStatus=$('#online-status'),netCode=$('#online-code');
+function netSetStatus(v){netStatus.textContent=v}
+function netDisconnect(){
+ if(netChannel&&window.supabaseClientForGalante){window.supabaseClientForGalante.removeChannel(netChannel).catch(()=>{})}
+ netChannel=null;netRoom='';netPeer=null;netConnected=false;netHost=false;
+ $('#online-leave').hidden=true;netSetStatus('Не подключено');
+}
+function netSend(event,payload){
+ if(netChannel&&netConnected)netChannel.send({type:'broadcast',event,payload}).catch(()=>{});
+}
+function netPeerMessage(payload){
+ if(!payload||payload.id===netClientId)return;
+ if(payload.type==='bye'){netPeer=null;netSetStatus('Друг отключился · комната '+netRoom);return}
+ if(payload.type==='hello'){netPeer={...(netPeer||{}),id:payload.id,nick:String(payload.nick||'Друг').slice(0,20),last:performance.now()};netSetStatus('🟢 Игроки в комнате '+netRoom+' · '+netPeer.nick);netSend('game',{type:'hello-ack',id:netClientId,nick:validNickname()});return}
+ if(payload.type==='hello-ack'){netPeer={...(netPeer||{}),id:payload.id,nick:String(payload.nick||'Друг').slice(0,20),last:performance.now()};netSetStatus('🟢 Игроки в комнате '+netRoom+' · '+netPeer.nick);return}
+ if(payload.type==='state'){
+  netPeer={...(netPeer||{}),id:payload.id,nick:String(payload.nick||'Друг').slice(0,20),x:Number(payload.x)||0,y:Number(payload.y)||0,angle:Number(payload.angle)||0,last:performance.now()};
+ }
+ if(payload.type==='shot'&&mode==='play'&&Array.isArray(payload.bullets)){
+  for(const b of payload.bullets.slice(0,12)){
+   if([b.x,b.y,b.vx,b.vy].every(Number.isFinite)){
+    // Visual-only remote fire; it must not damage local enemies until shared simulation exists.
+    netVisualShots.push({x:b.x,y:b.y,vx:b.vx,vy:b.vy,ttl:1.0});
+   }
+  }
+ }
+}
+const netClientId=Math.random().toString(36).slice(2)+Date.now().toString(36);
+let netVisualShots=[];
+async function netJoin(room,host){
+ netDisconnect();
+ if(!window.supabase||!window.NEON_CONFIG){netSetStatus('Ошибка: библиотека Supabase не загрузилась');return}
+ const cfg=window.NEON_CONFIG;
+ try{
+  const client=window.supabaseClientForGalante ||= window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey,{realtime:{params:{eventsPerSecond:12}}});
+  netRoom=room;netHost=host;netSetStatus('Подключаемся к '+room+'...');
+  netChannel=client.channel('galante-coop-'+room,{config:{broadcast:{self:false}}});
+  netChannel.on('broadcast',{event:'game'},({payload})=>netPeerMessage(payload));
+  netChannel.subscribe(status=>{
+   if(status==='SUBSCRIBED'){
+    netConnected=true;$('#online-leave').hidden=false;
+    netSetStatus('🟡 Комната '+room+' · ожидаем второго игрока');
+    netSend('game',{type:'hello',id:netClientId,nick:validNickname()});
+   }else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
+    netSetStatus('Ошибка подключения Realtime: '+status);netConnected=false;
+   }
+  });
+ }catch(e){netSetStatus('Не удалось подключиться: '+String(e.message||e))}
+}
+$('#online-create').addEventListener('click',()=>{const room='GAL'+Math.random().toString(36).slice(2,7).toUpperCase();netCode.value=room;netJoin(room,true)});
+$('#online-join').addEventListener('click',()=>{const room=netCode.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);if(room.length<5){netSetStatus('Введи код комнаты друга');return}netJoin(room,false)});
+$('#online-leave').addEventListener('click',()=>{netSend('game',{type:'bye',id:netClientId});netDisconnect()});
+function netTick(dt){
+ for(let i=netVisualShots.length-1;i>=0;i--){const b=netVisualShots[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.ttl-=dt;if(b.ttl<=0)netVisualShots.splice(i,1)}
+ if(!netConnected||mode!=='play'||!player)return;
+ if(netPeer&&performance.now()-netPeer.last>7000){netPeer=null;netSetStatus('Друг не отвечает · комната '+netRoom)}
+ const now=performance.now();
+ if(now-netLastSend>110){
+  netLastSend=now;netSend('game',{type:'state',id:netClientId,nick:validNickname(),x:Math.round(player.x),y:Math.round(player.y),angle:player.angle});
+ }
+}
+window.addEventListener('pagehide',()=>{if(netConnected)netSend('game',{type:'bye',id:netClientId})});
+function netDraw(){
+ if(!netConnected||!netPeer||!Number.isFinite(netPeer.x))return;
+ ctx.save();ctx.translate(netPeer.x,netPeer.y);ctx.rotate(netPeer.angle);
+ ctx.shadowColor='#e37aff';ctx.shadowBlur=20;ctx.fillStyle='#a55dff';ctx.strokeStyle='#ffddff';ctx.lineWidth=3;
+ ctx.beginPath();ctx.moveTo(25,0);ctx.lineTo(-18,-16);ctx.lineTo(-9,0);ctx.lineTo(-18,16);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
+ ctx.save();ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffc7ff';ctx.fillText(netPeer.nick||'Друг',netPeer.x,netPeer.y-27);ctx.restore();
 }
 let shopTab='skins', campaignLevel=1,stageWave=1,stageClock=0,bossDefeated=false,clearWait=0,miniBoss=null,miniBossWave=0;
 function mapProgress(id){
@@ -396,7 +470,7 @@ function openPanel(screen){
 }
 function pause(){if(mode!=='play')return;mode='pause';syncBossMusic();openPanel('pause');pauseButton.textContent='▶ ПРОДОЛЖИТЬ'}
 function resume(){if(mode!=='pause')return;mode='play';syncBossMusic();panel.style.display='none';document.body.classList.add('playing');pauseButton.textContent='Ⅱ ПАУЗА';last=performance.now()}
-function endGame(){if(mode!=='play')return;mode='over';stopBossMusic();pointerTarget=null;stopJoy();playSound(160,.4,'sawtooth',.05);emit(player.x,player.y,'#7eefff',48,260,.95);openPanel('over');safeStore.set('galante_season_'+seasonId(),String((Number(safeStore.get('galante_season_'+seasonId(),'0'))||0)+Math.floor(score)));seasonInfo();submitScore()}
+function endGame(){if(mode!=='play')return;mode='over';stopBossMusic();pointerTarget=null;stopJoy();playSound(160,.4,'sawtooth',.05);emit(player.x,player.y,'#7eefff',48,260,.95);openPanel('over');safeStore.set('galante_season_'+seasonId(),String((Number(safeStore.get('galante_season_'+seasonId(),'0'))||0)+Math.floor(score)));seasonInfo();if(!netConnected)submitScore()}
 function togglePause(){if(mode==='play')pause();else if(mode==='pause')resume()}
 startButton.addEventListener('click',()=>{if(mode==='pause')resume();else startGame()});pauseButton.addEventListener('click',togglePause);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='play')pause()});
@@ -504,7 +578,7 @@ function update(dt){
  let mx=vx,my=vy,speed=270*(1+.12*Number(economy.levels.speed||0)+runUpgrades.speed*.12)*(activeBonuses.speed>0?1.65:1);
  if(player.boostLeft>0){mx=player.boostX;my=player.boostY;speed=830;player.boostLeft=Math.max(0,player.boostLeft-dt)}
  player.x+=mx*speed*dt;player.y+=my*speed*dt;
- updateSecondPlayer(dt);
+ updateSecondPlayer(dt);netTick(dt);
  cameraX=player.x-W*.5;cameraY=player.y-H*.52;worldTravel+=Math.hypot(mx,my)*speed*dt;
  player.invulnerable=Math.max(0,player.invulnerable-dt);player.boostCd=Math.max(0,player.boostCd-dt);
  player.thruster+=dt*19;parallax.x+=mx*speed*dt*.13;parallax.y+=my*speed*dt*.13;
@@ -662,6 +736,7 @@ function shootManual(){
  fireVolley(a,true);
 }
 function fireVolley(base,manual=false){
+ const netShotStart=shots.length;
  const weapon=economy.weapon,level=Number(economy.levels.fire||0);
  const count=weapon==='shotgun'?9:weapon==='scatter'?13:weapon==='pulse'?7:weapon==='minigun'||weapon==='missile'||weapon==='twin'?2:weapon==='railgun'||weapon==='nova'?1:3+Math.min(2,level)*2;
  for(let i=0;i<count;i++){
@@ -669,6 +744,7 @@ function fireVolley(base,manual=false){
   const ax=Math.cos(a),ay=Math.sin(a),speed=weapon==='shotgun'?650:weapon==='railgun'?1350:weapon==='nova'?490:800;
   shots.push({x:player.x+ax*23,y:player.y+ay*23,vx:ax*speed,vy:ay*speed,ttl:weapon==='shotgun'?.43:weapon==='nova'?1.8:1.15,damage:((weapon==='missile'?4:weapon==='railgun'?10:weapon==='nova'?12:weapon==='pulse'?2:1)+Number(economy.levels.power||0))*(activeBonuses.damage>0?2:1),r:weapon==='missile'?8:weapon==='nova'?15:weapon==='pulse'?7:weapon==='railgun'?6:4,homing:weapon==='missile'});
  }
+ if(netConnected&&manual){netSend('game',{type:'shot',id:netClientId,bullets:shots.slice(netShotStart).map(b=>({x:b.x,y:b.y,vx:b.vx,vy:b.vy}))})}
  if(shots.length>200)shots.splice(0,shots.length-200);
  muzzleFlash=.19;screenShake=Math.max(screenShake,manual?(weapon==='shotgun'?5:2):1.3);
  emit(player.x+Math.cos(base)*25,player.y+Math.sin(base)*25,'#d6ffff',manual?7:3,80,.18);
@@ -933,16 +1009,13 @@ function draw(){
  for(const g of crystals)drawCrystal(g.x,g.y,g.age,g.phase);
  for(const p of powerups)drawPower(p);
  for(const e of enemies)drawEnemy(e);
- drawShots();drawParticles();
+ if(secondPlayer&&mode==='play'){drawShip(secondPlayer,true);ctx.save();ctx.fillStyle='#ffb4fc';ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText('P2',secondPlayer.x,secondPlayer.y-32);ctx.restore()}drawShots();for(const b of netVisualShots){ctx.save();ctx.fillStyle='#ffadff';ctx.shadowColor='#ff83ff';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(b.x,b.y,4,0,TAU);ctx.fill();ctx.restore()}netDraw();drawParticles();
  if(player){drawShip(player);drawRareEffect(player)}else{
   // Эффектный демонстрационный корабль под полупрозрачным меню.
   const demo={x:W*.5,y:H*.6,angle:-Math.PI/2+Math.sin(time*.6)*.17,dx:0,dy:0,invulnerable:0,boostLeft:0,shield:false};drawShip(demo,true)
  }
  ctx.restore();
  if(impactFlash>0){ctx.save();ctx.fillStyle='rgba(255,105,136,'+(impactFlash*.20)+')';ctx.fillRect(0,0,W,H);ctx.restore()}
- if(secondPlayer&&mode==='play'){
-  ctx.save();drawShip(secondPlayer,true);ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffb4fc';ctx.fillText('P2',secondPlayer.x,secondPlayer.y-32);ctx.restore();
- }
  if(muzzleFlash>0&&player){ctx.save();ctx.strokeStyle='rgba(120,239,255,'+(muzzleFlash*2.3)+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(mode==='play'?W*.5:player.x,mode==='play'?H*.52:player.y,37+muzzleFlash*55,0,TAU);ctx.stroke();ctx.restore()}
 }
 function frame(now){let dt=last?clamp((now-last)/1000,0,.045):.016;last=now;
