@@ -1534,32 +1534,40 @@ function persistentPlayerId(){
 }
 const PLAYER_ID=persistentPlayerId();
 $('#player-id').textContent='🆔 ID игрока: '+PLAYER_ID;
-const OUTBOX_KEY='galante_leaderboard_pending_v81';
+// Account-bound leaderboard: records are tied to Supabase Auth user_id,
+// never to nickname or the local device ID. Guests stay local-only.
 const OUTBOX_MAX=40;
 let leaderboardRetryTimer=null;
-function readScoreOutbox(){
- try{const obj=JSON.parse(safeStore.get(OUTBOX_KEY,'{}'));return obj&&typeof obj==='object'&&!Array.isArray(obj)?obj:{}}catch{return {}}
+async function rankingIdentity(){
+ if(!online||!window.supabase?.createClient)return null;
+ try{
+  const c=window.supabaseClientForGalante||=window.supabase.createClient(apiUrl,anonKey);
+  const {data,error}=await c.auth.getSession();
+  if(error||!data?.session?.user?.id||!data.session.access_token)return null;
+  return {id:data.session.user.id,token:data.session.access_token};
+ }catch{return null}
 }
-function saveScoreOutbox(obj){safeStore.set(OUTBOX_KEY,JSON.stringify(obj))}
-function enqueueLeaderboardScore(nick,value){
- if(!Number.isSafeInteger(value)||value<=0)return;
- const outbox=readScoreOutbox(),key=nick.trim().toLocaleLowerCase();
- if(!key)return;
+function scoreOutboxKey(id){return 'galante_leaderboard_account_outbox_v10_'+id}
+function readScoreOutbox(id){
+ if(!id)return {};
+ try{const obj=JSON.parse(safeStore.get(scoreOutboxKey(id),'{}'));return obj&&typeof obj==='object'&&!Array.isArray(obj)?obj:{}}catch{return {}}
+}
+function saveScoreOutbox(id,obj){if(id)safeStore.set(scoreOutboxKey(id),JSON.stringify(obj))}
+async function enqueueLeaderboardScore(nick,value){
+ if(!Number.isSafeInteger(value)||value<=0)return false;
+ const who=await rankingIdentity();if(!who)return false;
+ const outbox=readScoreOutbox(who.id),key='best';
  const prev=outbox[key];
  if(!prev||value>(Number(prev.score)||0))outbox[key]={nickname:nick,score:value,time:Date.now()};
- // Bound local storage. Keep the highest records, regardless of age.
- const entries=Object.entries(outbox).sort((a,b)=>Number(b[1].score)-Number(a[1].score)).slice(0,OUTBOX_MAX);
- saveScoreOutbox(Object.fromEntries(entries));
+ saveScoreOutbox(who.id,outbox);return true;
 }
-function pendingCount(){return Object.keys(readScoreOutbox()).length}
+function pendingCount(){return 0} // async account-specific count is shown on submission
 function leaderboardCheckpoint(){
  if(mode!=='play'||netConnected||leaderboardRunCoop||score<=0)return;
  const now=Date.now(),points=Math.floor(score);
- // Persist *every* new checkpoint locally, before any network request.
- if(points>leaderboardLastSent){enqueueLeaderboardScore(validNickname(),points)}
- if(online&&points>leaderboardLastSent&&points-leaderboardLastSent>=500&&now-leaderboardLastAttempt>=15000){
+ if(points>leaderboardLastSent&&now-leaderboardLastAttempt>=15000){
   leaderboardLastAttempt=now;
-  flushLeaderboardOutbox(false).catch(()=>{});
+  sendLeaderboardScore(points,false).catch(()=>{});
  }
 }
 function leaderboardScheduleRetry(){
@@ -1568,44 +1576,47 @@ function leaderboardScheduleRetry(){
 }
 async function flushLeaderboardOutbox(showStatus=true){
  if(!online||leaderboardSending)return false;
+ const who=await rankingIdentity();
+ if(!who){if(showStatus)leaderboardStatusText('🔐 Для мирового рейтинга войди в аккаунт пилота. Гостевые очки остаются локальными.');return false}
  leaderboardSending=true;let allSaved=true;
  try{
-  const items=Object.entries(readScoreOutbox());
+  const items=Object.entries(readScoreOutbox(who.id));
   for(const [key,entry] of items){
    const target=Math.floor(Number(entry.score));
    const nick=String(entry.nickname||'').trim().slice(0,20);
-   if(!nick||!Number.isSafeInteger(target)||target<=0){const q=readScoreOutbox();delete q[key];saveScoreOutbox(q);continue}
+   if(!nick||!Number.isSafeInteger(target)||target<=0){const q=readScoreOutbox(who.id);delete q[key];saveScoreOutbox(who.id,q);continue}
    if(showStatus)leaderboardStatusText('⏳ Отправляем '+target.toLocaleString('ru-RU')+' очков ('+nick+')…');
    try{
-    await leaderboardRequest('leaderboard',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nickname:nick,score:target,player_id:PLAYER_ID})});
-    // Only clear if no newer score arrived while the request was in flight.
-    const q=readScoreOutbox();if(q[key]&&Number(q[key].score)<=target){delete q[key];saveScoreOutbox(q)}
-    if(nick.toLocaleLowerCase()===validNickname().toLocaleLowerCase())leaderboardLastSent=Math.max(leaderboardLastSent,target);
-    safeStore.set('galante_last_server_score',JSON.stringify({nickname:nick,score:target,time:Date.now()}));
-    if(showStatus)leaderboardStatusText('✅ Supabase сохранил '+target.toLocaleString('ru-RU')+' очков ('+nick+')');
+    // JWT is verified by Supabase RLS. SQL v10 enforces account_id = auth.uid().
+    await leaderboardRequest('leaderboard',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=minimal',Authorization:'Bearer '+who.token},body:JSON.stringify({nickname:nick,score:target,player_id:PLAYER_ID,account_id:who.id})});
+    const q=readScoreOutbox(who.id);if(q[key]&&Number(q[key].score)<=target){delete q[key];saveScoreOutbox(who.id,q)}
+    leaderboardLastSent=Math.max(leaderboardLastSent,target);
+    if(showStatus)leaderboardStatusText('✅ Supabase сохранил '+target.toLocaleString('ru-RU')+' очков для твоего аккаунта');
    }catch(e){
-    allSaved=false;console.warn('Leaderboard save failed; score retained in outbox',e);
-    leaderboardStatusText('⚠️ Рекорд сохранён на устройстве, но не на сервере. Повторим автоматически. '+String(e.message||e).slice(0,125));
+    allSaved=false;console.warn('Leaderboard save failed; score retained in account outbox',e);
+    leaderboardStatusText('⚠️ Рекорд ожидает отправки. Проверь SQL v10 и подключение: '+String(e.message||e).slice(0,125));
     break;
    }
   }
-  if(pendingCount())leaderboardScheduleRetry();
-  return allSaved&&pendingCount()===0;
+  if(!allSaved)leaderboardScheduleRetry();
+  return allSaved&&Object.keys(readScoreOutbox(who.id)).length===0;
  }finally{leaderboardSending=false}
 }
 async function sendLeaderboardScore(value,showStatus=true){
  if(leaderboardRunCoop||netConnected||!Number.isSafeInteger(value)||value<=0)return false;
- enqueueLeaderboardScore(validNickname(),value);
+ const queued=await enqueueLeaderboardScore(validNickname(),value);
+ if(!queued){if(showStatus)leaderboardStatusText('🔐 Войди в аккаунт пилота, чтобы отправлять очки в мировой рейтинг');return false}
  if(!online)return false;
  return await flushLeaderboardOutbox(showStatus);
 }
 // Recover unsubmitted scores from previous sessions when the browser comes online.
 window.addEventListener('online',()=>{flushLeaderboardOutbox(false).catch(()=>{})});
-window.addEventListener('focus',()=>{if(pendingCount())flushLeaderboardOutbox(false).catch(()=>{})});
+window.addEventListener('galante-auth-updated',()=>{leaderboardLastSent=0;flushLeaderboardOutbox(false).catch(()=>{});loadLeaderboard().catch(()=>{})});
+window.addEventListener('focus',()=>{flushLeaderboardOutbox(false).catch(()=>{})});
 window.addEventListener('pagehide',()=>{
- if(mode==='play'&&!netConnected&&!leaderboardRunCoop&&score>0)enqueueLeaderboardScore(validNickname(),Math.floor(score));
+ if(mode==='play'&&!netConnected&&!leaderboardRunCoop&&score>0)enqueueLeaderboardScore(validNickname(),Math.floor(score)).catch(()=>{});
 });
-setTimeout(()=>{if(pendingCount())flushLeaderboardOutbox(false).catch(()=>{})},1800);
+setTimeout(()=>{flushLeaderboardOutbox(false).catch(()=>{})},1800);
 
 async function leaderboardRequest(path,options={}){
  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
@@ -1618,17 +1629,17 @@ async function leaderboardRequest(path,options={}){
 let lastRanked=[],lastRows=[];
 function formatScore(n){return Number(n||0).toLocaleString('ru-RU')}
 function rankRows(rows){
- // One public nickname = one visible entry, highest confirmed score wins.
- // Preserve the strongest result even when old attempts used another device ID.
- // Rows are not deleted from Supabase.
+ // Authenticated users: UUID is the identity. Identical nicknames stay separate.
+ // Old anonymous rows are kept as legacy; device ID is used when present.
  const best=new Map();
  for(const row of rows){
   const nickname=String(row.nickname||'Пилот').trim()||'Пилот';
-  const key=nickname.normalize('NFKC').toLocaleLowerCase('ru-RU').replace(/\\s+/g,' ');
   const score=Number(row.score)||0;
   if(!Number.isFinite(score)||score<0)continue;
+  const accountId=row.account_id||null;
+  const key=accountId?'account:'+accountId:(row.player_id?'legacy-device:'+row.player_id:'legacy-nick:'+nickname.normalize('NFKC').toLocaleLowerCase('ru-RU'));
   const old=best.get(key);
-  if(!old||score>old.score)best.set(key,{nickname,score,player_id:row.player_id||null});
+  if(!old||score>old.score)best.set(key,{nickname,score,account_id:accountId,player_id:row.player_id||null,legacy:!accountId});
  }
  return [...best.values()].sort((a,b)=>b.score-a.score||a.nickname.localeCompare(b.nickname,'ru'));
 }
@@ -1646,10 +1657,10 @@ $('#rank-history-btn').addEventListener('click',async()=>{
  const box=$('#rank-history');box.hidden=!box.hidden;if(box.hidden)return;
  box.textContent='Загружаем историю…';
  try{
-  const url='leaderboard?select=score,created_at,nickname&player_id=eq.'+encodeURIComponent(PLAYER_ID)+'&order=created_at.desc&limit=30';
+  const who=await rankingIdentity();if(!who){box.textContent='Войди в аккаунт пилота, чтобы посмотреть историю';return}const url='leaderboard?select=score,created_at,nickname&account_id=eq.'+encodeURIComponent(who.id)+'&order=created_at.desc&limit=30';
   const r=await leaderboardRequest(url),data=await r.json();
   box.replaceChildren();
-  if(!data.length){box.textContent='Для этого ID пока нет сохранённых результатов. Старые рекорды без ID здесь не отображаются.';return}
+  if(!data.length){box.textContent='У этого аккаунта пока нет результатов. Старые анонимные рекорды отображаются отдельно.';return}
   data.forEach(v=>{const d=document.createElement('div');d.textContent=(v.created_at?new Date(v.created_at).toLocaleString('ru-RU'):'')+' · '+formatScore(v.score)+' ✦ · '+v.nickname;box.append(d)})
  }catch(e){box.textContent='Ошибка загрузки истории: '+String(e.message||e).slice(0,120)}
 });
@@ -1661,17 +1672,17 @@ async function loadLeaderboard(){
   // Pages avoid the old 1000-row cap. Each record is a separate attempt.
   const rows=[];let offset=0;
   for(let page=0;page<20;page++){
-   const response=await leaderboardRequest('leaderboard?select=nickname,score,player_id&order=score.desc&limit=500&offset='+offset);
+   const response=await leaderboardRequest('leaderboard?select=nickname,score,player_id,account_id&order=score.desc&limit=500&offset='+offset);
    const batch=await response.json();rows.push(...batch);offset+=batch.length;
    if(batch.length<500)break;
   }
   lastRows=rows;lastRanked=rankRows(rows);showLeaders(lastRanked);
-  const pos=lastRanked.findIndex(r=>r.player_id===PLAYER_ID);
+  const who=await rankingIdentity();const pos=who?lastRanked.findIndex(r=>r.account_id===who.id):-1;
   const mine=pos>=0?lastRanked[pos]:null;
-  $('#my-rank').textContent=mine?'👤 Твоё место: №'+(pos+1)+' · '+formatScore(mine.score)+' ✦ · '+mine.nickname:'👤 Для этого ID пока нет мирового рекорда';
+  $('#my-rank').textContent=mine?'👤 Твоё место: №'+(pos+1)+' · '+formatScore(mine.score)+' ✦ · '+mine.nickname:'👤 Для этого аккаунта пока нет мирового рекорда (старые записи не привязаны)';
   renderRankSearch();
-  leaderboardStatusText((pendingCount()?'⚠️ Ожидают отправки: '+pendingCount()+' · ':'')+'🌍 Мировой рейтинг · '+lastRanked.length+' уникальных ников · лучший результат каждого · обновлено сейчас'+(rows.length>=10000?' · показаны первые 10 000 попыток':''));
- }catch(e){console.warn('Leaderboard load:',e);showLeaders(localLeaders().sort((a,b)=>b.score-a.score));$('#my-rank').textContent='⚠️ Личное место пока недоступно';leaderboardStatusText('⚠️ Сервер недоступен или не добавлена колонка player_id. '+String(e.message||e).slice(0,150))}
+  leaderboardStatusText('🌍 Мировой рейтинг · '+lastRanked.length+' профилей · по ID аккаунта · обновлено сейчас'+(rows.length>=10000?' · показаны первые 10 000 попыток':''));
+ }catch(e){console.warn('Leaderboard load:',e);showLeaders(localLeaders().sort((a,b)=>b.score-a.score));$('#my-rank').textContent='⚠️ Личное место пока недоступно';leaderboardStatusText('⚠️ Сервер недоступен или не выполнен SQL v10 (account_id). '+String(e.message||e).slice(0,150))}
  finally{leaderboardBusy=false}
 }
 
@@ -1680,12 +1691,12 @@ async function submitScore(){
  if(netConnected||leaderboardRunCoop){submitted=true;leaderboardStatusText('⚠️ Тестовый кооператив не участвует в мировом рейтинге');return}
  const nickname=validNickname(),s=localLeaders();s.push({nickname,score});s.sort((a,b)=>b.score-a.score);
  safeStore.set('antonio_neon_scores',JSON.stringify(s.slice(0,10)));
- if(!online){enqueueLeaderboardScore(nickname,Math.floor(score));leaderboardStatusText('⚠️ Нет подключения к Supabase: рекорд сохранён на устройстве и ожидает отправки');showLeaders(s);return}
+ if(!online){leaderboardStatusText('⚠️ Нет подключения: локальный рекорд сохранён на устройстве');showLeaders(s);return}
  const success=await sendLeaderboardScore(Math.floor(score),true);
  if(success){submitted=true;await loadLeaderboard()}
  else{showLeaders(s)}
 }
-$('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode==='over')await submitScore();if(pendingCount())await flushLeaderboardOutbox(true);await loadLeaderboard();if(pendingCount())leaderboardStatusText('⚠️ Неотправленных рекордов: '+pendingCount()+' · повторим автоматически')});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!leaderboardBusy)loadLeaderboard()});loadLeaderboard();
+$('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode==='over')await submitScore();await flushLeaderboardOutbox(true);await loadLeaderboard()});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!leaderboardBusy)loadLeaderboard()});loadLeaderboard();
 })();
 
 </script>
@@ -1718,9 +1729,17 @@ $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode===
  const err=e=>String(e?.message||e||'Неизвестная ошибка').slice(0,220);
  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  function client(){if(state.client)return state.client;if(!window.supabase?.createClient)throw Error('Не загрузилась библиотека Supabase');state.client=window.supabaseClientForGalante||=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);return state.client}
- async function profile(){if(!state.user)return;const name=String($('nickname').value||'Пилот').trim().slice(0,20)||'Пилот';const {error}=await client().from('galante_profiles').upsert({user_id:state.user.id,nickname:name},{onConflict:'user_id'});if(error)console.warn('Profile:',error.message)}
+ let profileWriteDisabled=false;
+ async function profile(){
+  if(!state.user||profileWriteDisabled)return;
+  const name=String($('nickname').value||'Пилот').trim().slice(0,20)||'Пилот';
+  try{
+   const {error}=await client().from('galante_profiles').upsert({user_id:state.user.id,nickname:name},{onConflict:'user_id'});
+   if(error){profileWriteDisabled=true;console.info('Galante: профиль временно не синхронизирован. Примените SQL 10.1. Код:',error.code||error.status||'access');}
+  }catch(e){profileWriteDisabled=true;console.info('Galante: синхронизация профиля недоступна; игра продолжит работать.');}
+ }
  async function checkAdmin(){const requested=state.user?.id;$('galante-admin').hidden=true;if(!requested)return;const {data,error}=await client().rpc('galante_is_admin');if(state.user?.id===requested&&!error&&data===true)$('galante-admin').hidden=false}
- async function refresh(){try{const {data:{user},error}=await client().auth.getUser();if(error)throw error;state.user=user||null;$('account-guest').hidden=!!user;$('account-member').hidden=!user;if(user){$('account-member-info').textContent='👨‍🚀 '+(user.email||'Пилот')+' · ID аккаунта: '+user.id;say('✅ Вход выполнен. Прогресс и кристаллы пока сохраняются в этом браузере.');await profile();await checkAdmin();await claim(false)}else{say('Гостевой режим. Для получения подарков войди в аккаунт.');$('galante-admin').hidden=true}}catch(e){say('⚠️ '+err(e)+' · Проверь настройку Supabase SQL')}}
+ async function refresh(){try{const {data:{user},error}=await client().auth.getUser();if(error)throw error;state.user=user||null;$('account-guest').hidden=!!user;$('account-member').hidden=!user;if(user){$('account-member-info').textContent='👨‍🚀 '+(user.email||'Пилот')+' · ID аккаунта: '+user.id;say('✅ Вход выполнен. Прогресс и кристаллы пока сохраняются в этом браузере.');await checkAdmin();await claim(false);profile().catch(()=>{})}else{say('Гостевой режим. Для получения подарков войди в аккаунт.');$('galante-admin').hidden=true}}catch(e){say('⚠️ '+err(e)+' · Проверь настройку Supabase SQL')}}
  async function auth(mode){const email=$('account-email').value.trim(),password=$('account-password').value;if(!email||password.length<6){say('Укажи email и пароль не короче 6 символов');return}say('⏳ Подключаемся…');try{const c=client(),{data,error}=mode==='signup'?await c.auth.signUp({email,password}):await c.auth.signInWithPassword({email,password});if(error)throw error;if(mode==='signup'&&!data.session){say('📨 Проверь почту и подтверди email, затем нажми «ВОЙТИ».');return}await refresh()}catch(e){say('⚠️ '+err(e))}}
  async function claim(show=true){if(!state.user)return;if(state.checking)return;state.checking=true;try{const {data,error}=await client().rpc('galante_claim_gifts');if(error)throw error;const amount=Number(data)||0;if(amount>0){const key='antonio_neon_economy_v3';let obj;try{obj=JSON.parse(localStorage.getItem(key)||'{}')}catch{obj={}}obj.bank=(Number(obj.bank)||0)+amount;localStorage.setItem(key,JSON.stringify(obj));say('🎁 Получено '+amount.toLocaleString('ru-RU')+' кристаллов! Обнови страницу, чтобы увидеть новый баланс.');if(show)alert('🎁 +'+amount+' кристаллов! Обнови страницу.')}else if(show)say('Новых подарков пока нет.')}catch(e){if(show)say('⚠️ Не удалось получить награды: '+err(e))}finally{state.checking=false}}
  async function grant(){const id=$('admin-target').value.trim(),amount=Number($('admin-amount').value),note=$('admin-note').value.trim();if(!UUID.test(id)||!Number.isSafeInteger(amount)||amount<1||amount>100000){$('admin-status').textContent='Укажи правильный UUID и сумму 1–100 000';return}if(!confirm('Выдать '+amount+' кристаллов игроку '+id+'?'))return;$('admin-status').textContent='⏳ Отправка…';try{const {data,error}=await client().rpc('galante_admin_grant',{p_recipient:id,p_amount:amount,p_note:note});if(error)throw error;$('admin-status').textContent='✅ Награда №'+data+' создана. Друг получит её после входа в аккаунт.'}catch(e){$('admin-status').textContent='⚠️ '+err(e)}}
@@ -1731,7 +1750,7 @@ $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode===
  $('nickname').addEventListener('change',()=>{if(state.user)profile().catch(()=>{})});
  function rankBadge(){const text=$('my-rank')?.textContent||'',box=$('galante-rank-badge');const m=text.match(/Твоё место: №(\d+)/);if(!m){box.hidden=true;return}const rank=Number(m[1]);box.hidden=false;box.textContent=rank===1?'👑 ТЫ КРУТЫШ! ТЫ №1 В ГАЛАКТИКЕ!':rank===2?'🥈 КОСМИЧЕСКАЯ ЛЕГЕНДА! ТЫ №2!':rank===3?'🥉 ВЕЛИКОЛЕПНО! ТЫ В ТОП-3!':rank<=10?'🌟 ТЫ В ТОП-10! ТВОЁ МЕСТО №'+rank:'🚀 ТВОЁ МЕСТО В ГАЛАКТИКЕ: №'+rank}
  const rank=$('my-rank');if(rank){new MutationObserver(rankBadge).observe(rank,{childList:true,characterData:true,subtree:true});rankBadge()}
- try{client().auth.onAuthStateChange(()=>{setTimeout(()=>refresh().catch(()=>{}),0)});refresh()}catch(e){say('⚠️ '+err(e))}
+ try{client().auth.onAuthStateChange(()=>{setTimeout(()=>{refresh().catch(()=>{});window.dispatchEvent(new Event('galante-auth-updated'))},0)});refresh()}catch(e){say('⚠️ '+err(e))}
 })();
 </script><script>
 // 9.6: account-only chat; Supabase RLS controls access, never trust client roles.
