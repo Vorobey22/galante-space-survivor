@@ -23,6 +23,9 @@
 .shop-items:has(.ship-preview){max-height:340px}.shop-item:has(.ship-preview){padding:10px 7px;gap:7px;background:linear-gradient(155deg,#152b50,#0b1731);border-color:#5688bf88}.shop-item.ship-selected{border-color:#74f8ed;box-shadow:inset 0 0 20px #45e2ec22}.ship-preview{width:100%;height:102px;object-fit:contain;filter:drop-shadow(0 0 9px #6bd9ff66)}.shop-item:has(.ship-preview) small{min-height:52px;line-height:1.5}.shop-item:has(.ship-preview) strong{font-size:13px}
 .ship-workshop{margin-top:12px;padding:10px;border:1px solid #4071a7;border-radius:12px;background:#0b1931}.workshop-title{font-weight:900;color:#a8eaff;font-size:12px;margin-bottom:8px}.workshop-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-top:1px solid #29496b}.workshop-row span{font-size:11px;line-height:1.5}.workshop-row button{flex-shrink:0;padding:8px 10px;border-radius:8px;background:#4fe0e8;color:#081526;font-weight:900;border:0}.workshop-row button:disabled{opacity:.45}
 .planet-head,.planet-box{border:1px solid #498bc4;border-radius:13px;background:#0b203b;padding:12px;margin:7px 0;color:#d8f2ff}.planet-head strong{font-size:14px;color:#92ffe7}.planet-head p,.planet-box small{font-size:11px;color:#b3cde5}.planet-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.planet-box h3{margin:0 0 9px;font-size:13px;color:#b9f9ff}.planet-line{padding:7px 0;border-bottom:1px solid #ffffff22;font-size:11px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:7px}.planet-line button{padding:7px 9px;background:#176479;border:1px solid #64d8e3;color:white;border-radius:8px;font-weight:800;cursor:pointer}.planet-line button:disabled{opacity:.48;cursor:not-allowed}.planet-status-good{color:#88ffca;font-weight:800}.planet-status-danger{color:#ffb5a2;font-weight:800}@media(max-width:560px){.planet-grid{grid-template-columns:1fr}.menu-nav{flex-wrap:wrap}.menu-nav-btn{flex:1 1 40%}}
+
+.planet-visit{display:block;width:100%;margin:0 0 10px;border:1px solid #82f8ed;border-radius:11px;background:linear-gradient(90deg,#45d7eb,#9bafff);color:#06142b;font-weight:950;letter-spacing:.5px;padding:12px;cursor:pointer}
+#colony-scene[hidden]{display:none!important}#colony-scene{position:fixed;inset:0;z-index:45;background:#030919;color:#e7f8ff;overflow:hidden}#colony-canvas{width:100%;height:100%;display:block;touch-action:none}#colony-ui{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2.5vw,30px)}.colony-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.colony-label{font-weight:950;letter-spacing:2px;font-size:clamp(13px,2vw,23px);text-shadow:0 2px 12px #000}.colony-caption{font-size:12px;color:#a5d6f6;margin-top:6px;max-width:620px;text-shadow:0 2px 8px #000}.colony-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;pointer-events:auto}.colony-actions button,.colony-close{border:1px solid #5bdaf1;border-radius:12px;padding:12px 14px;background:#0d3058dd;color:white;font-weight:850;cursor:pointer;backdrop-filter:blur(8px)}.colony-actions button:hover,.colony-close:hover{background:#18668b}.colony-actions button:disabled{opacity:.4;cursor:not-allowed}.colony-close{pointer-events:auto;background:#491c32dd;border-color:#f09cbd}.colony-stat{font-weight:900;font-size:13px;color:#a9ffe4;background:#061a2ac9;padding:10px;border-radius:9px;max-width:520px}.colony-market{pointer-events:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:650px;margin:0 auto 12px}.colony-market button{background:#133457dd;border:1px solid #5ca6df;color:white;padding:10px;border-radius:10px;cursor:pointer;font-weight:800}.colony-market button:disabled{opacity:.4}@media(max-width:600px){.colony-market{grid-template-columns:1fr}.colony-actions button{font-size:11px;padding:10px}.colony-stat{font-size:11px}}
 </style>
 </head>
 <body>
@@ -55,7 +58,7 @@
       <div class="menu-pane" id="menu-pane-hangar"><div class="hangar" id="hangar"><div class="tabs"><button type="button" data-tab="skins" class="active">🚀 Космолёты</button><button type="button" data-tab="upgrades">⚡ Улучшения</button><button type="button" data-tab="maps">🪐 Карты</button><button type="button" data-tab="weapons">🔫 Оружие</button><button type="button" data-tab="rewards">🎁 Награды</button></div><div id="shop-items" class="shop-items"></div><div id="ship-workshop" class="ship-workshop"></div></div></div>
       <div class="menu-pane" id="menu-pane-missions" hidden><div class="mission-box"><strong>🏅 ДОСТИЖЕНИЯ ПИЛОТА</strong><div id="achievements"></div><small>Достижения хранятся на этом устройстве. Общий зал славы сравнивает очки игроков.</small></div><div class="mission-box"><strong>🎯 ЗАДАНИЯ</strong><div id="missions"></div><div class="daily-section"><strong>📅 ЕЖЕДНЕВНЫЕ ЗАДАНИЯ</strong><div id="daily-missions"></div><small>Обновляются каждый день по местному времени устройства.</small></div><div class="daily-section"><strong>📆 ЕЖЕНЕДЕЛЬНЫЕ ЗАДАНИЯ</strong><div id="weekly-missions"></div><small>Обновляются каждый понедельник по времени устройства. Награда выдаётся один раз.</small></div><div id="loot-status"></div><div id="campaign-progress">🪐 Кампания: 1/20 · Волна 1/5</div></div></div>
       <div class="menu-pane" id="menu-pane-planet" hidden>
-        <div class="planet-head"><strong>🪐 ПЛАНЕТА ГАЛАНТЕ · КОЛОНИЯ</strong><p>Строй базу, добывай ресурсы, создавай турели и отражай налёты пиратов.</p><div id="planet-status"></div></div>
+        <div class="planet-head"><button type="button" id="planet-visit" class="planet-visit">🚀 ВЫСАДИТЬСЯ НА ПЛАНЕТУ · ПОЛНЫЙ ЭКРАН</button><strong>🪐 ПЛАНЕТА ГАЛАНТЕ · КОЛОНИЯ</strong><p>Строй базу, добывай ресурсы, создавай турели и отражай налёты пиратов.</p><div id="planet-status"></div></div>
         <div class="planet-grid">
           <section class="planet-box"><h3>⛏️ Склад ресурсов</h3><div id="planet-resources"></div><small>Металл — за уничтожение врагов, плазма — за кристаллы, микросхемы — с боссов. Ресурсы сохраняются.</small></section>
           <section class="planet-box"><h3>🏗️ Постройка ангара</h3><div id="planet-hangar"></div></section>
@@ -95,9 +98,10 @@
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V9.1</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V9.2</span></footer>
     </section>
   </div>
+  <div id="colony-scene" hidden aria-label="Планета — интерактивная локация"><canvas id="colony-canvas"></canvas><div id="colony-ui"><div class="colony-bar"><div><div id="colony-title" class="colony-label">🪐 ПЛАНЕТА ГАЛАНТЕ</div><div id="colony-subtitle" class="colony-caption"></div></div><button id="colony-close" class="colony-close" type="button">✕ В МЕНЮ</button></div><div><div id="colony-stats" class="colony-stat"></div><div id="colony-market" class="colony-market"></div><div id="colony-actions" class="colony-actions"></div></div></div></div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
   <script>
 // Вставьте URL проекта Supabase и публичный anon/publishable ключ.
@@ -202,7 +206,7 @@ function renderPlanet(){
  $('#planet-status').textContent='🏠 Ангар '+p.hangar+'/5 · 🛡️ Защита: '+planetPower()+' · ⚔️ Отражено налётов: '+p.raidCount;
  const hangar=$('#planet-hangar');hangar.replaceChildren();
  const hcost={metal:80+p.hangar*110,plasma:35+p.hangar*50,chips:p.hangar>=2?p.hangar:0};
- planetLine(hangar,'Уровень '+p.hangar+'/5 · даёт +2 места обороны за уровень',p.hangar>=5?'МАКСИМУМ':'🏗️ Улучшить',()=>{if(p.hangar>=5||!spendPlanet(hcost))return;p.hangar++;saveEconomy();renderPlanet();showToast('🏗️ АНГАР УЛУЧШЕН')},p.hangar>=5||p.metal<hcost.metal||p.plasma<hcost.plasma||p.chips<hcost.chips);
+ planetLine(hangar,'Уровень '+p.hangar+'/5 · даёт +2 места обороны за уровень',p.hangar>=5?'МАКСИМУМ':'🏗️ Улучшить',()=>{if(p.hangar>=5||!spendPlanet(hcost))return;p.hangar++;saveEconomy();renderPlanet();openColonyScene('build');showToast('🏗️ АНГАР УЛУЧШЕН')},p.hangar>=5||p.metal<hcost.metal||p.plasma<hcost.plasma||p.chips<hcost.chips);
  planetLine(hangar,'Цена: ⛓️ '+hcost.metal+' ⚡ '+hcost.plasma+' 💾 '+hcost.chips);
  const craft=$('#planet-craft');craft.replaceChildren();
  const recipes=[
@@ -211,7 +215,7 @@ function renderPlanet(){
   ['shield','🛡️ Генератор щита',{metal:160,plasma:120,chips:3},'Защита всей базы · +65 защиты']
  ];
  for(const [id,name,cost,desc] of recipes){const used=p.turrets+p.lasers+p.shield,capacity=p.hangar*2;
-  planetLine(craft,name+' ('+p[id]+') · '+desc+' · ⛓️'+cost.metal+' ⚡'+cost.plasma+' 💾'+cost.chips,'СКРАФТИТЬ',()=>{if(!p.hangar||p.turrets+p.lasers+p.shield>=p.hangar*2||!spendPlanet(cost))return;p[id]++;weeklyProgress('crafts');saveEconomy();renderPlanet();renderWeekly();showToast('🛠️ СОЗДАНО: '+name)},!p.hangar||used>=capacity||p.metal<cost.metal||p.plasma<cost.plasma||p.chips<cost.chips)}
+  planetLine(craft,name+' ('+p[id]+') · '+desc+' · ⛓️'+cost.metal+' ⚡'+cost.plasma+' 💾'+cost.chips,'СКРАФТИТЬ',()=>{if(!p.hangar||p.turrets+p.lasers+p.shield>=p.hangar*2||!spendPlanet(cost))return;p[id]++;weeklyProgress('crafts');saveEconomy();renderPlanet();renderWeekly();openColonyScene('build');showToast('🛠️ СОЗДАНО: '+name)},!p.hangar||used>=capacity||p.metal<cost.metal||p.plasma<cost.plasma||p.chips<cost.chips)}
  planetLine(craft,'Места обороны: '+(p.turrets+p.lasers+p.shield)+'/'+(p.hangar*2));
  const market=$('#planet-market');market.replaceChildren();
  for(const [name,kind,amount,price] of [['Металлолом','metal',60,100],['Плазменные ячейки','plasma',40,120],['Микросхема','chips',1,240]]){
@@ -220,7 +224,7 @@ function renderPlanet(){
  const defense=$('#planet-defense');defense.replaceChildren();
  const threat=raidThreat();const until=Math.max(0,Math.ceil((p.raidDue-now)/60000));
  planetLine(defense,'Угроза пиратов: '+threat+' · Твоя оборона: '+planetPower());
- planetLine(defense,ready?'⚠️ Вражеский флот на орбите!':'Следующий налёт примерно через '+until+' мин','⚔️ ОТРАЗИТЬ НАЛЁТ',()=>defendPlanet(),!ready||!p.hangar);
+ planetLine(defense,ready?'⚠️ Вражеский флот на орбите!':'Следующий налёт примерно через '+until+' мин','⚔️ ОТРАЗИТЬ НАЛЁТ',()=>openColonyScene('raid'),!ready||!p.hangar);
  planetLine(defense,'После постройки ангара нападения начинаются через 20 минут игрового времени/реального времени с сохранением таймера. Победа зависит от силы обороны.');
 }
 function planetPower(){const p=colony();return p.turrets*18+p.lasers*36+p.shield*65+p.hangar*5}
@@ -234,6 +238,68 @@ function defendPlanet(){
 }
 function initPlanet(){const p=colony();if(!p.raidDue){p.raidDue=Date.now()+20*60*1000;saveEconomy()}}
 initPlanet();
+
+// Fullscreen colony scenes — hand-drawn canvas, no external media dependencies.
+let colonySceneMode='',colonyFrame=0,colonyLast=0,colonyRaf=0,colonyRaid=null,colonyShots=[],colonyParticles=[],colonyTargets=[],colonyPointer={x:0,y:0};
+const colonyEl=document.getElementById('colony-scene'),colonyCanvas=document.getElementById('colony-canvas'),colonyCtx=colonyCanvas.getContext('2d');
+function colonyButton(label,fn,disabled=false){const b=document.createElement('button');b.textContent=label;b.disabled=disabled;b.addEventListener('click',fn);document.getElementById('colony-actions').append(b)}
+function colonySetTitle(title,subtitle){document.getElementById('colony-title').textContent=title;document.getElementById('colony-subtitle').textContent=subtitle}
+function colonyResize(){const d=Math.min(2,window.devicePixelRatio||1);colonyCanvas.width=Math.max(320,Math.floor(innerWidth*d));colonyCanvas.height=Math.max(260,Math.floor(innerHeight*d));colonyCtx.setTransform(d,0,0,d,0,0)}
+function colonyEnter(mode){colonySceneMode=mode;colonyFrame=0;colonyLast=0;colonyEl.hidden=false;colonyResize();colonyUI();cancelAnimationFrame(colonyRaf);colonyRaf=requestAnimationFrame(colonyTick)}
+function openColonyScene(mode='planet'){
+ if(mode==='raid') {const p=colony();if(!p.hangar||Date.now()<p.raidDue){showToast('⚠️ НАЛЁТ ЕЩЁ НЕ НАЧАЛСЯ');return}colonyRaid={hp:100+Math.min(70,p.hangar*8),time:48,kills:0,spawn:0,remaining:6+Math.min(12,p.raidCount*2),total:6+Math.min(12,p.raidCount*2),fire:0};colonyTargets=[];colonyShots=[]}
+ colonyEnter(mode);
+}
+function colonyExit(){colonyEl.hidden=true;cancelAnimationFrame(colonyRaf);colonySceneMode='';renderPlanet()}
+document.getElementById('colony-close').addEventListener('click',colonyExit);
+document.getElementById('planet-visit').addEventListener('click',()=>openColonyScene('travel'));
+window.addEventListener('resize',()=>{if(!colonyEl.hidden)colonyResize()});
+function colonyUI(){const a=document.getElementById('colony-actions'),m=document.getElementById('colony-market'),st=document.getElementById('colony-stats');a.replaceChildren();m.replaceChildren();const p=colony();
+ if(colonySceneMode==='travel'){colonySetTitle('🚀 ПЕРЕЛЁТ К КОЛОНИИ','Пилот приближается к планете. Скоро посадка…');st.textContent='GALANTE GAMES · АВТОПИЛОТ';colonyButton('⏩ ПРОПУСТИТЬ ПОЛЁТ',()=>colonyEnter('planet'))}
+ else if(colonySceneMode==='planet'){colonySetTitle('🪐 ПЛАНЕТА ГАЛАНТЕ','Живая колония: ангар, оборонительные пушки и орбитальный порт');st.textContent=`🏠 Ангар ${p.hangar}/5 · 🛡️ Защита ${planetPower()} · ⛓️ ${p.metal} · ⚡ ${p.plasma} · 💾 ${p.chips}`;
+ colonyButton('🛍️ ЛЕТЕТЬ НА ОРИОН',()=>colonyEnter('orion-flight'));colonyButton('🏗️ СТРОИТЕЛЬСТВО',()=>colonyEnter('workshop'));colonyButton('⚔️ ОБОРОНА',()=>openColonyScene('raid'),!p.hangar||Date.now()<p.raidDue);colonyButton('📋 КРАФТ И СКЛАД',()=>{colonyExit();document.getElementById('menu-pane-planet').scrollTop=0})}
+ else if(colonySceneMode==='orion-flight'){colonySetTitle('🚀 ГИПЕРПРЫЖОК НА ОРИОН','Космолёт покидает колонию и летит на торговую планету');st.textContent='ГИПЕРДВИГАТЕЛЬ · СТАБИЛИЗАЦИЯ';colonyButton('⏩ ПРОПУСТИТЬ',()=>colonyEnter('market'))}
+ else if(colonySceneMode==='market'){colonySetTitle('🛍️ РЫНОК ПЛАНЕТЫ ОРИОН','Торговые корабли прибывают и отправляются. Покупки пополняют твой склад.');st.textContent=`💎 ${Math.floor(economy.bank)} · ⛓️ ${p.metal} · ⚡ ${p.plasma} · 💾 ${p.chips}`;
+ for(const [name,k,n,c] of [['⛓️ МЕТАЛЛ +60','metal',60,100],['⚡ ПЛАЗМА +40','plasma',40,120],['💾 МИКРОСХЕМА +1','chips',1,240]]){const b=document.createElement('button');b.textContent=name+' · '+c+' 💎';b.disabled=economy.bank<c;b.addEventListener('click',()=>{if(economy.bank<c)return;economy.bank-=c;p[k]+=n;saveEconomy();renderPlanet();renderShop();colonyBurst(innerWidth*.5,innerHeight*.65,'#ffe19c');colonyUI()});m.append(b)}
+ colonyButton('🚀 ВЕРНУТЬСЯ НА БАЗУ',()=>colonyEnter('return-flight'))}
+ else if(colonySceneMode==='return-flight'){colonySetTitle('🚀 ВОЗВРАЩЕНИЕ ДОМОЙ','Торговый рейс завершён. Посадка на планету Галантe…');st.textContent='АВТОПИЛОТ · КОЛОНИЯ';colonyButton('⏩ ПРОПУСТИТЬ',()=>colonyEnter('planet'))}
+ else if(colonySceneMode==='workshop'){colonySetTitle('🏗️ ВЕРФЬ И СТРОИТЕЛЬСТВО','Рабочие дроны строят здания и устанавливают оборону');st.textContent=`🏠 Ангар ${p.hangar}/5 · 🔫 Турели ${p.turrets} · ⚡ Лазеры ${p.lasers} · 🛡️ Щиты ${p.shield}`;
+ colonyButton('🔨 ОТКРЫТЬ РЕЦЕПТЫ',()=>{colonyExit();document.getElementById('planet-craft').scrollIntoView({block:'nearest'})});colonyButton('🪐 НА ПЛАНЕТУ',()=>colonyEnter('planet'))}
+ else if(colonySceneMode==='build'){colonySetTitle('🏗️ СТРОИТЕЛЬСТВО ЗАВЕРШЕНО','Дроны устанавливают новое оборудование на базе');st.textContent=`Ангар ${p.hangar}/5 · Турели ${p.turrets} · Лазеры ${p.lasers} · Щиты ${p.shield}`;colonyButton('🪐 ОСМОТРЕТЬ КОЛОНИЮ',()=>colonyEnter('planet'))}
+ else if(colonySceneMode==='raid'){colonySetTitle('🚨 ТРЕВОГА! АТАКА ПИРАТОВ','Наводи прицел мышью или пальцем и нажимай по вражеским кораблям. Турели стреляют автоматически!');st.textContent='';colonyButton('🎯 ОГОНЬ',()=>colonyShoot(innerWidth*.5,innerHeight*.36))}
+ else if(colonySceneMode==='victory'||colonySceneMode==='defeat'){colonySetTitle(colonySceneMode==='victory'?'🏆 КОЛОНИЯ СПАСЕНА':'💥 ОБОРОНА ПРОРВАНА',colonySceneMode==='victory'?'Пираты отступили. Награда отправлена на склад.':'Часть ресурсов похищена. Усиль оборону к следующему налёту.');st.textContent=`🏠 Ангар ${p.hangar} · ⛓️ Металл ${p.metal} · ⚡ Плазма ${p.plasma}`;colonyButton('🪐 ВЕРНУТЬСЯ НА ПЛАНЕТУ',()=>colonyEnter('planet'))}
+}
+function colonyBurst(x,y,color){for(let i=0;i<22;i++){const a=Math.random()*Math.PI*2,v=40+Math.random()*130;colonyParticles.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:1,color})}}
+function colonyShoot(x,y){if(colonySceneMode!=='raid'||!colonyRaid)return;colonyShots.push({x:innerWidth*.5,y:innerHeight*.79,tx:x,ty:y,t:0});let target=null,dist=55;for(const e of colonyTargets){const d=Math.hypot(e.x-x,e.y-y);if(d<dist){dist=d;target=e}}if(target){target.hp-=2;colonyBurst(x,y,'#8af8ff');if(target.hp<=0){colonyTargets.splice(colonyTargets.indexOf(target),1);colonyRaid.kills++;colonyBurst(x,y,'#ff9d64')}}}
+colonyCanvas.addEventListener('pointerdown',e=>{if(colonySceneMode==='raid'){const r=colonyCanvas.getBoundingClientRect();colonyShoot(e.clientX-r.left,e.clientY-r.top)}});
+function colonyFinishRaid(won){const p=colony(),r=colonyRaid;if(!r||colonySceneMode!=='raid')return;if(won){p.raidCount++;p.metal+=40+Math.min(80,p.raidCount*5);p.plasma+=25;p.chips+=p.raidCount%2===0?1:0;economy.bank+=35;weeklyProgress('raids')}else{p.metal=Math.max(0,p.metal-Math.max(15,Math.ceil(raidThreat()/2)))}p.lastRaid=Date.now();p.raidDue=p.lastRaid+20*60*1000;saveEconomy();renderPlanet();renderWeekly();renderShop();colonyEnter(won?'victory':'defeat')}
+function colonyTick(now){if(colonyEl.hidden)return;const dt=Math.min(.05,(now-(colonyLast||now))/1000);colonyLast=now;colonyFrame+=dt;const w=innerWidth,h=innerHeight,c=colonyCtx;
+ const bg=c.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#02091c');bg.addColorStop(.55,'#10264c');bg.addColorStop(1,'#050f23');c.fillStyle=bg;c.fillRect(0,0,w,h);
+ // Parallax star field and moving ships.
+ for(let i=0;i<145;i++){const sx=(i*131.7+w*.13)%w,sy=((i*i*73.3+colonyFrame*(colonySceneMode.includes('flight')||colonySceneMode==='travel'?190:5))%h+h)%h;c.fillStyle=i%7===0?'#9aefff':'#b6c7ef';c.globalAlpha=.3+(i%5)*.12;c.fillRect(sx,sy,i%9===0?2:1,i%9===0?2:1)}c.globalAlpha=1;
+ const flight=['travel','orion-flight','return-flight'].includes(colonySceneMode);let planetY=h*.55,rad=Math.min(w*.34,h*.37);
+ if(flight){const t=Math.min(1,colonyFrame/5.5);rad=Math.min(w,h)*(.10+t*.42);planetY=h*.47;}
+ const g=c.createRadialGradient(w*.5-rad*.2,planetY-rad*.35,rad*.08,w*.5,planetY,rad*1.1);g.addColorStop(0,colonySceneMode==='market'||colonySceneMode==='orion-flight'?'#ffda85':'#6edcf5');g.addColorStop(.5,colonySceneMode==='market'||colonySceneMode==='orion-flight'?'#c26a8d':'#257aa1');g.addColorStop(1,'#0a183a');c.fillStyle=g;c.beginPath();c.arc(w*.5,planetY,rad,0,Math.PI*2);c.fill();c.strokeStyle='#74edff55';c.lineWidth=7;c.stroke();
+ if(!flight){const groundY=h*.78;c.fillStyle='#0a233c';c.fillRect(0,groundY,w,h-groundY);c.strokeStyle='#3ddfe055';c.lineWidth=2;for(let i=0;i<18;i++){const x=i*w/17;c.beginPath();c.moveTo(w*.5,groundY);c.lineTo(x,h);c.stroke()}
+ const buildings=colony().hangar;for(let i=0;i<Math.max(1,buildings);i++){const x=w*(.22+i*.13),y=groundY-35-i%2*14;c.fillStyle='#163b64';c.fillRect(x-27,y,54,groundY-y);c.strokeStyle='#7ff2ff';c.strokeRect(x-27,y,54,groundY-y);c.fillStyle='#83efff';c.fillRect(x-17,y+10,34,5)}
+ const defense=colony();for(let i=0;i<defense.turrets+defense.lasers+defense.shield;i++){const x=w*(.14+(i%9)*.09),y=groundY-8;c.fillStyle=i<defense.turrets?'#86edff':i<defense.turrets+defense.lasers?'#ffb6ef':'#b3ffac';c.fillRect(x-12,y-12,24,12);c.fillRect(x-3,y-26,6,16);c.beginPath();c.arc(x,y-24,5,0,7);c.fill()}
+ for(let i=0;i<3;i++){const x=((colonyFrame*38*(i%2?1:-1)+i*w*.35+w*3)% (w+180))-90,y=h*(.27+i*.10);drawColonyShip(c,x,y,13+i*2,'#b9d9ff')}
+ }
+ if(flight){const y=h*.7+Math.sin(colonyFrame*7)*6;drawColonyShip(c,w*.5,y,Math.min(45,w*.07),'#8df5ff');if(colonyFrame>5.5)colonyEnter(colonySceneMode==='orion-flight'?'market':colonySceneMode==='return-flight'?'planet':'planet')}
+ if(colonySceneMode==='build'||colonySceneMode==='workshop'){for(let i=0;i<5;i++){const x=w*(.27+i*.115)+Math.sin(colonyFrame*2+i)*12,y=h*(.55+Math.cos(colonyFrame*2+i)*.05);drawColonyShip(c,x,y,9,'#fbe9a2')}if(colonySceneMode==='build'&&colonyFrame>4)colonyEnter('planet')}
+ if(colonySceneMode==='raid'&&colonyRaid){const r=colonyRaid;r.time-=dt;r.spawn-=dt;r.fire-=dt;
+ if(r.remaining>0&&r.spawn<=0){r.remaining--;r.spawn=1.6;colonyTargets.push({x:25+Math.random()*(w-50),y:-30,hp:2+Math.min(3,Math.floor(colony().raidCount/2)),speed:25+Math.random()*28})}
+ for(let i=colonyTargets.length-1;i>=0;i--){const e=colonyTargets[i];e.y+=e.speed*dt;drawColonyShip(c,e.x,e.y,17,'#ff668c');if(e.y>h*.77){colonyTargets.splice(i,1);r.hp-=18;colonyBurst(e.x,h*.77,'#ff754a')}}
+ if(r.fire<=0&&colonyTargets.length&&planetPower()>0){r.fire=Math.max(.18,.9-planetPower()*.003);const e=colonyTargets[Math.floor(Math.random()*colonyTargets.length)];colonyShots.push({x:w*.5,y:h*.79,tx:e.x,ty:e.y,t:0});e.hp-=Math.max(1,Math.floor(planetPower()/100));if(e.hp<=0){colonyTargets.splice(colonyTargets.indexOf(e),1);r.kills++;colonyBurst(e.x,e.y,'#6df7ff')}}
+ c.fillStyle='#0a1e38c9';c.fillRect(w*.22,74,w*.56,22);c.fillStyle='#f7758e';c.fillRect(w*.22,74,w*.56*Math.max(0,r.hp)/170,22);c.strokeStyle='#a8eaff';c.strokeRect(w*.22,74,w*.56,22);c.fillStyle='white';c.font='bold 13px system-ui';c.textAlign='center';c.fillText('БАЗА: '+Math.max(0,Math.ceil(r.hp))+' HP  ·  ВРАГОВ: '+(r.remaining+colonyTargets.length)+'  ·  '+Math.ceil(Math.max(0,r.time))+' СЕК',w*.5,90);
+ document.getElementById('colony-stats').textContent='🎯 Уничтожено: '+r.kills+' · Защита базы: '+Math.max(0,Math.ceil(r.hp))+' HP · '+Math.ceil(Math.max(0,r.time))+' сек';
+ if(r.hp<=0||r.time<=0)colonyFinishRaid(false);else if(r.remaining===0&&colonyTargets.length===0)colonyFinishRaid(true);
+ }
+ for(let i=colonyShots.length-1;i>=0;i--){const b=colonyShots[i];b.t+=dt*5;c.strokeStyle='#9afaff';c.lineWidth=3;c.beginPath();c.moveTo(b.x,b.y);c.lineTo(b.x+(b.tx-b.x)*Math.min(1,b.t),b.y+(b.ty-b.y)*Math.min(1,b.t));c.stroke();if(b.t>=1)colonyShots.splice(i,1)}
+ for(let i=colonyParticles.length-1;i>=0;i--){const b=colonyParticles[i];b.t-=dt*1.6;b.x+=b.vx*dt;b.y+=b.vy*dt;c.globalAlpha=Math.max(0,b.t);c.fillStyle=b.color;c.fillRect(b.x,b.y,4,4);if(b.t<=0)colonyParticles.splice(i,1)}c.globalAlpha=1;
+ colonyRaf=requestAnimationFrame(colonyTick);
+}
+function drawColonyShip(c,x,y,r,color){c.save();c.translate(x,y);c.fillStyle=color;c.shadowBlur=14;c.shadowColor=color;c.beginPath();c.moveTo(0,-r);c.lineTo(r*.8,r*.7);c.lineTo(0,r*.35);c.lineTo(-r*.8,r*.7);c.closePath();c.fill();c.fillStyle='#173354';c.beginPath();c.arc(0,0,r*.28,0,7);c.fill();c.restore()}
 function saveEconomy(){safeStore.set('antonio_neon_economy_v3',JSON.stringify(economy))}
 function owned(id){return economy.owned.includes(id)}
 function skin(){return skins.find(x=>x.id===economy.skin)||skins[0]}
