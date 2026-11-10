@@ -65,7 +65,7 @@
  <div class="setup" id="setup">
         <label class="field-label" for="nickname">ПОЗЫВНОЙ ПИЛОТА</label>
         <input id="nickname" type="text" maxlength="20" placeholder="Введите ник" autocomplete="nickname" aria-label="Имя игрока">
-        <section class="online-coop"><strong>🌐 ОНЛАЙН-КОМНАТА · ТЕСТ</strong><p>Один создаёт комнату, другой вводит код. Работает на ПК и телефоне.</p><div class="online-buttons"><button id="online-create" type="button">СОЗДАТЬ КОМНАТУ</button><input id="online-code" maxlength="8" placeholder="КОД КОМНАТЫ" autocomplete="off"><button id="online-join" type="button">ВОЙТИ</button></div><div id="online-status">Не подключено</div><div id="online-players">👤 Ты · ⏳ Ожидаем друга</div><button id="online-start" type="button" hidden>🚀 НАЧАТЬ СОВМЕСТНЫЙ ПОЛЁТ</button><button id="online-leave" type="button" hidden>ВЫЙТИ ИЗ КОМНАТЫ</button><small>Тестовая версия: синхронизируются корабли и выстрелы. Враги, здоровье и счёт пока локальные — это ещё не полноценная общая битва.</small></section>
+        <section class="online-coop"><strong>🌐 ОНЛАЙН-КОМНАТА · ТЕСТ</strong><p>Один создаёт комнату, другой вводит код. Работает на ПК и телефоне.</p><div class="online-buttons"><button id="online-create" type="button">СОЗДАТЬ КОМНАТУ</button><input id="online-code" maxlength="8" placeholder="КОД КОМНАТЫ" autocomplete="off"><button id="online-join" type="button">ВОЙТИ</button></div><div id="online-status">Не подключено</div><div id="online-players">👤 Ты · ⏳ Ожидаем друга</div><button id="online-start" type="button" hidden>🚀 НАЧАТЬ СОВМЕСТНЫЙ ПОЛЁТ</button><button id="online-leave" type="button" hidden>ВЫЙТИ ИЗ КОМНАТЫ</button><small>Тестовая версия: два полноценных космолёта держатся рядом, синхронизируются движения и выстрелы. Враги, здоровье и счёт пока локальные — это ещё не полноценная общая битва.</small></section>
  <label class="coop-label"><input id="coop-enabled" type="checkbox"> 👥 Локальный кооператив: 2 игрока на одном ПК</label>
  <label class="field-label" for="difficulty">СЛОЖНОСТЬ МИССИИ</label>
         <select id="difficulty"><option value="0.78">Лёгкая орбита</option><option value="1" selected>Стандартный полёт</option><option value="1.28">Экстремальный космос</option></select>
@@ -73,7 +73,7 @@
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V7.8</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V8.0</span></footer>
     </section>
   </div>
   <div class="about-overlay" id="about-overlay" hidden><section class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-heading"><button type="button" id="about-close" class="about-close" aria-label="Закрыть">✕</button><div class="about-emblem">✦</div><div class="eyebrow">GALANTE GAMES · 2026</div><h2 id="about-heading">GALANTE<br><span>SPACE SURVIVOR</span></h2><p>Космический аркадный экшен с кораблями, боссами, оружием, улучшениями и бесконечными секторами.</p><div class="about-author">СОЗДАТЕЛЬ<br><strong>ANTONIO GALANTE</strong></div><p class="about-legal">© 2026 Antonio Galante / Galante Games. Все права на оригинальный игровой код и графику защищены. Копирование и переиздание без разрешения запрещены. Сторонняя музыка принадлежит её правообладателям.</p><button type="button" class="start-button" id="about-ok">ВЕРНУТЬСЯ В ИГРУ →</button></section></div>
@@ -281,12 +281,29 @@ function netTick(dt){
  }
 }
 function netDraw(){
- if(!netConnected||!netPeer||!Number.isFinite(netPeer.x))return;
- ctx.save();ctx.translate(netPeer.x,netPeer.y);ctx.rotate(netPeer.angle);
- ctx.shadowColor='#e37aff';ctx.shadowBlur=20;ctx.fillStyle='#a55dff';ctx.strokeStyle='#ffddff';ctx.lineWidth=3;
- ctx.beginPath();ctx.moveTo(25,0);ctx.lineTo(-18,-16);ctx.lineTo(-9,0);ctx.lineTo(-18,16);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
- ctx.save();ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffc7ff';ctx.fillText(netPeer.nick||'Друг',netPeer.x,netPeer.y-27);ctx.restore();
+ if(!netConnected||!netPeer||!Number.isFinite(netPeer.x)||!Number.isFinite(netPeer.y))return;
+ // The remote ship uses the same detailed spaceship renderer, not a triangle.
+ const remote={x:netPeer.x,y:netPeer.y,angle:netPeer.angle||0,invulnerable:0,dx:0,dy:0,boostLeft:0,shield:false};
+ ctx.save();ctx.globalAlpha=.96;
+ drawShip(remote,true);
+ ctx.restore();
+ ctx.save();ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffe0ff';
+ ctx.shadowColor='#b34dff';ctx.shadowBlur=9;
+ ctx.fillText('👥 '+(netPeer.nick||'Друг'),netPeer.x,netPeer.y-39);ctx.restore();
 }
+function netKeepTogether(){
+ if(!netConnected||!netPeer||!Number.isFinite(netPeer.x)||!Number.isFinite(netPeer.y)||mode!=='play'||!player)return;
+ // Shared view: limit separation to a fraction of the smaller screen.
+ // On mobile the pair must remain in the same visible combat area.
+ const maxGap=Math.max(115,Math.min(W,H)*.36);
+ const dx=player.x-netPeer.x,dy=player.y-netPeer.y,d=Math.hypot(dx,dy);
+ if(d>maxGap){
+  player.x=netPeer.x+dx/d*maxGap;
+  player.y=netPeer.y+dy/d*maxGap;
+  cameraX=player.x-W*.5;cameraY=player.y-H*.52;
+ }
+}
+
 let shopTab='skins', campaignLevel=1,stageWave=1,stageClock=0,bossDefeated=false,clearWait=0,miniBoss=null,miniBossWave=0;
 function mapProgress(id){
  const unlocked=Math.max(1,Math.min(20,Number(economy.campaignUnlocked[id]||1)));
@@ -410,7 +427,7 @@ function updateHud(){
  lifeEl.textContent='♥ '.repeat(lives).trim()||'♡';waveEl.textContent='УРОВЕНЬ '+campaignLevel+'/20 · ВОЛНА '+stageWave+'/5';
  statusGame.textContent=player?.shield?'◉ ЭНЕРГОЩИТ АКТИВЕН':'';if($('#campaign-progress'))$('#campaign-progress').textContent='🪐 '+chosenMap().name+' · Уровень '+campaignLevel+'/20 · Волна '+stageWave+'/5';$('#boss-hp').hidden=!boss;$('#boss-hp').textContent=boss?'☠ БОСС '+Math.ceil(100*boss.hp/boss.maxHp)+'%':'';
 }
-function addPoints(value){score+=value;if(score>best){best=score;safeStore.set('antonio_neon_best',best)}updateHud()}
+function addPoints(value){score+=value;leaderboardCheckpoint();if(score>best){best=score;safeStore.set('antonio_neon_best',best)}updateHud()}
 function spawnCrystal(first=false){
  for(let t=0;t<20;t++){
  const x=player.x+rand(-W*.55,W*.55),y=player.y+rand(-H*.55,H*.55);
@@ -449,11 +466,11 @@ function updateCosmicEvent(dt){eventClock+=dt;if(!cosmicEvent){if(eventClock>=ev
 
 function startGame(){
  difficulty=Number($('#difficulty').value)||1;validNickname();coopEnabled=$('#coop-enabled').checked;runUpgrades={rapid:0,power:0,speed:0};choicePending=false;$('#wave-choice').hidden=true;cosmicEvent=null;eventClock=0;eventNext=rand(25,42);secretBossDefeated=0;
- player={x:0,y:0,r:18,angle:-Math.PI/2,shield:false,invulnerable:1.25,boostCd:0,boostLeft:0,dx:0,dy:0,boostX:0,boostY:-1,thruster:0};secondPlayer=coopEnabled?{x:75,y:25,r:18,angle:-Math.PI/2,invulnerable:2,thruster:0}:null;secondFireCd=0;
+ if(netConnected&&netPeer){netPeer.x=55;netPeer.y=25;netPeer.angle=-Math.PI/2;}player={x:0,y:0,r:18,angle:-Math.PI/2,shield:false,invulnerable:1.25,boostCd:0,boostLeft:0,dx:0,dy:0,boostX:0,boostY:-1,thruster:0};secondPlayer=coopEnabled?{x:75,y:25,r:18,angle:-Math.PI/2,invulnerable:2,thruster:0}:null;secondFireCd=0;
  stopBossMusic();mode='play';panel.style.display='none';document.body.classList.add('playing');
  inputKeys.clear();if(document.activeElement instanceof HTMLElement)document.activeElement.blur();
  elapsed=0;campaignLevel=mapProgress(economy.map).unlocked;stageWave=1;stageClock=0;bossDefeated=false;clearWait=0;score=0;lives=3+Number(economy.levels.armor||0);wave=1;totalKills=0;bankEarned=0;boss=null;miniBoss=null;miniBossWave=0;bossWave=0;bossKills=0;abilityCd=0;abilityPulse=0;screenShake=0;impactFlash=0;manualFireTimer=0;mouseFiring=false;touchFiring=false;bomber=null;bomberTimer=9;airMines=[];bonusDrops=[];bonusTimer=rand(7,12);activeBonuses={speed:0,rapid:0,damage:0};lootDrops=[];rockets=[];bossShots=[];spawner=2;crystalTimer=1.5;powerTimer=24;fireTimer=.12;
- enemies=[];crystals=[];shots=[];enemyShots=[];particles=[];floaters=[];powerups=[];submitted=false;pointerTarget=null;
+ enemies=[];crystals=[];shots=[];enemyShots=[];particles=[];floaters=[];powerups=[];submitted=false;leaderboardLastSent=0;leaderboardLastAttempt=0;leaderboardQueued=0;leaderboardRunCoop=netConnected||coopEnabled;pointerTarget=null;
  joy.x=joy.y=0;stopJoy();parallax.x=parallax.y=0;cameraX=-W*.5;cameraY=-H*.52;worldTravel=0;
  for(let i=0;i<Math.min(7,Math.max(4,Math.floor(W*H/75000)));i++)spawnCrystal(true);
  updateHud();showToast('✦ ТРОЙНОЙ ЛАЗЕР АКТИВЕН');playSound(650,.17,'triangle');last=performance.now();
@@ -1043,8 +1060,43 @@ function localLeaders(){try{const x=JSON.parse(safeStore.get('antonio_neon_score
 function showLeaders(items){leadersEl.replaceChildren();if(!items.length){const li=document.createElement('li');li.textContent='Пока нет рекордов. Будь первым!';leadersEl.append(li);return}
  items.slice(0,10).forEach((item,i)=>{const li=document.createElement('li');li.className='rank-'+(i+1);li.append(document.createTextNode(String(item.nickname||'Пилот')+' '));const points=document.createElement('span');points.className='leader-score';points.textContent=(Number(item.score)||0).toLocaleString('ru-RU')+' ✦';li.append(points);leadersEl.append(li)})}
 function leaderboardStatusText(s){leaderboardStatus.textContent=s}
-// Leaderboard 7.8: explicit server status, best score per nickname, retry after transient failures.
+// Leaderboard 8.0: explicit server status, best score per nickname, retry after transient failures.
 let leaderboardBusy=false;
+let leaderboardRunCoop=false,leaderboardLastSent=0,leaderboardLastAttempt=0,leaderboardSending=false;
+let leaderboardQueued=0;
+function leaderboardCheckpoint(){
+ if(mode!=='play'||netConnected||leaderboardRunCoop||!online||score<=0)return;
+ const now=Date.now();
+ // Periodic score checkpoints during a solo flight. No 10k ceiling.
+ if(score>leaderboardLastSent&&score-leaderboardLastSent>=500&&now-leaderboardLastAttempt>=15000){
+  leaderboardLastAttempt=now;
+  sendLeaderboardScore(score,false).catch(()=>{});
+ }
+}
+async function sendLeaderboardScore(value,showStatus=true){
+ if(!online||leaderboardRunCoop||netConnected||!Number.isSafeInteger(value)||value<=0)return false;
+ leaderboardQueued=Math.max(leaderboardQueued,value);
+ if(leaderboardSending)return false;
+ leaderboardSending=true;
+ try{
+  while(leaderboardQueued>leaderboardLastSent){
+   const target=leaderboardQueued,nickname=validNickname();
+   if(showStatus)leaderboardStatusText('⏳ Сохраняем '+target.toLocaleString('ru-RU')+' очков…');
+   try{
+    await leaderboardRequest('leaderboard',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nickname,score:target})});
+    leaderboardLastSent=target;
+    safeStore.set('galante_last_server_score',JSON.stringify({nickname,score:target,time:Date.now()}));
+    if(showStatus)leaderboardStatusText('✅ Сервер подтвердил '+target.toLocaleString('ru-RU')+' очков');
+   }catch(e){
+    console.warn('Leaderboard save failed',e);
+    if(showStatus)leaderboardStatusText('❌ Сервер не принял рекорд: '+String(e.message||e).slice(0,160)+' · нажми «Обновить»');
+    return false;
+   }
+  }
+  return true;
+ }finally{leaderboardSending=false}
+}
+
 async function leaderboardRequest(path,options={}){
  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
  try{
@@ -1066,27 +1118,19 @@ async function loadLeaderboard(){
   const ranked=[...best.values()].sort((a,b)=>b.score-a.score);
   showLeaders(ranked);
   const myNick=validNickname().toLocaleLowerCase(),position=ranked.findIndex(x=>x.nickname.toLocaleLowerCase()===myNick);
-  leaderboardStatusText('🌍 Мировой рейтинг · обновлено сейчас'+(position>=0?' · '+ranked[position].nickname+': место №'+(position+1)+' ('+ranked[position].score.toLocaleString('ru-RU')+' ✦)':' · твоего ника пока нет в рейтинге'));
+  leaderboardStatusText('🌍 Мировой рейтинг (одиночная игра) · обновлено сейчас'+(position>=0?' · '+ranked[position].nickname+': место №'+(position+1)+' ('+ranked[position].score.toLocaleString('ru-RU')+' ✦)':' · твоего ника пока нет в рейтинге'));
  }catch(e){console.warn('Leaderboard load:',e);showLeaders(localLeaders().sort((a,b)=>b.score-a.score));leaderboardStatusText('⚠️ Сервер недоступен. Показаны ЛОКАЛЬНЫЕ очки. '+String(e.message||e).slice(0,150))}
  finally{leaderboardBusy=false}
 }
 async function submitScore(){
  if(submitted||score<=0)return;
- // Co-op is not server-authoritative: do not mix unverified multiplayer scores into the global board.
- if(netConnected){submitted=true;leaderboardStatusText('⚠️ Счёт тестового онлайн-кооператива не отправляется в мировой рейтинг');return}
- const nickname=validNickname(),s=localLeaders();s.push({nickname,score});s.sort((a,b)=>b.score-a.score);safeStore.set('antonio_neon_scores',JSON.stringify(s.slice(0,10)));
+ if(netConnected||leaderboardRunCoop){submitted=true;leaderboardStatusText('⚠️ Тестовый кооператив не участвует в мировом рейтинге');return}
+ const nickname=validNickname(),s=localLeaders();s.push({nickname,score});s.sort((a,b)=>b.score-a.score);
+ safeStore.set('antonio_neon_scores',JSON.stringify(s.slice(0,10)));
  if(!online){leaderboardStatusText('⚠️ Supabase не подключён: результат только на этом устройстве');showLeaders(s);return}
- leaderboardStatusText('⏳ Отправляем '+score+' очков на сервер…');
- try{
-  await leaderboardRequest('leaderboard',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nickname,score})});
-  submitted=true;
-  leaderboardStatusText('✅ Результат отправлен на сервер');
-  await loadLeaderboard();
- }catch(e){
-  // Keep submitted=false so player can retry on refresh or after reopening the records.
-  console.warn('Leaderboard submit:',e);showLeaders(s);
-  leaderboardStatusText('❌ Результат НЕ подтверждён сервером · '+String(e.message||e).slice(0,140)+' · нажми «Обновить», чтобы повторить');
- }
+ const success=await sendLeaderboardScore(Math.floor(score),true);
+ if(success){submitted=true;await loadLeaderboard()}
+ else{showLeaders(s)}
 }
 $('#refresh').addEventListener('click',async()=>{if(!submitted&&score>0&&mode==='over')await submitScore();else await loadLeaderboard()});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!leaderboardBusy)loadLeaderboard()});loadLeaderboard();
 })();
