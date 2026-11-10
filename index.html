@@ -98,7 +98,7 @@
       <button id="start" class="start-button" type="button">НАЧАТЬ ПОЛЁТ <span>➜</span></button>
       <div class="controls" id="controls">🎮 ПК: WASD / стрелки · ЛКМ удерживать — огонь · F — выстрел · пробел · P2: IJKL + H (один ПК) · Телефон: джойстик и ОГОНЬ</div>
 
-      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V9.2</span></footer>
+      <footer>СОЗДАТЕЛЬ <strong>АНТОНИО ГАЛАНТЕ</strong> <span>© 2026 Galante Games · Antonio Galante · Все права защищены · V9.3</span></footer>
     </section>
   </div>
   <div id="colony-scene" hidden aria-label="Планета — интерактивная локация"><canvas id="colony-canvas"></canvas><div id="colony-ui"><div class="colony-bar"><div><div id="colony-title" class="colony-label">🪐 ПЛАНЕТА ГАЛАНТЕ</div><div id="colony-subtitle" class="colony-caption"></div></div><button id="colony-close" class="colony-close" type="button">✕ В МЕНЮ</button></div><div><div id="colony-stats" class="colony-stat"></div><div id="colony-market" class="colony-market"></div><div id="colony-actions" class="colony-actions"></div></div></div></div>
@@ -280,16 +280,20 @@ function colonyTick(now){if(colonyEl.hidden)return;const dt=Math.min(.05,(now-(c
  const flight=['travel','orion-flight','return-flight'].includes(colonySceneMode);let planetY=h*.55,rad=Math.min(w*.34,h*.37);
  if(flight){const t=Math.min(1,colonyFrame/5.5);rad=Math.min(w,h)*(.10+t*.42);planetY=h*.47;}
  const g=c.createRadialGradient(w*.5-rad*.2,planetY-rad*.35,rad*.08,w*.5,planetY,rad*1.1);g.addColorStop(0,colonySceneMode==='market'||colonySceneMode==='orion-flight'?'#ffda85':'#6edcf5');g.addColorStop(.5,colonySceneMode==='market'||colonySceneMode==='orion-flight'?'#c26a8d':'#257aa1');g.addColorStop(1,'#0a183a');c.fillStyle=g;c.beginPath();c.arc(w*.5,planetY,rad,0,Math.PI*2);c.fill();c.strokeStyle='#74edff55';c.lineWidth=7;c.stroke();
+ c.save();c.beginPath();c.arc(w*.5,planetY,rad-4,0,7);c.clip();for(let i=0;i<18;i++){const a=i*2.399,rr=rad*(.15+.72*((i*37%19)/19)),px=w*.5+Math.cos(a)*rr,py=planetY+Math.sin(a)*rr;c.fillStyle=i%2?'#7ce7ef19':'#0b365a44';c.beginPath();c.ellipse(px,py,rad*(.08+i%4*.025),rad*(.025+i%3*.02),a,0,7);c.fill()}c.restore();
  if(!flight){const groundY=h*.78;c.fillStyle='#0a233c';c.fillRect(0,groundY,w,h-groundY);c.strokeStyle='#3ddfe055';c.lineWidth=2;for(let i=0;i<18;i++){const x=i*w/17;c.beginPath();c.moveTo(w*.5,groundY);c.lineTo(x,h);c.stroke()}
- const buildings=colony().hangar;for(let i=0;i<Math.max(1,buildings);i++){const x=w*(.22+i*.13),y=groundY-35-i%2*14;c.fillStyle='#163b64';c.fillRect(x-27,y,54,groundY-y);c.strokeStyle='#7ff2ff';c.strokeRect(x-27,y,54,groundY-y);c.fillStyle='#83efff';c.fillRect(x-17,y+10,34,5)}
- const defense=colony();for(let i=0;i<defense.turrets+defense.lasers+defense.shield;i++){const x=w*(.14+(i%9)*.09),y=groundY-8;c.fillStyle=i<defense.turrets?'#86edff':i<defense.turrets+defense.lasers?'#ffb6ef':'#b3ffac';c.fillRect(x-12,y-12,24,12);c.fillRect(x-3,y-26,6,16);c.beginPath();c.arc(x,y-24,5,0,7);c.fill()}
- for(let i=0;i<3;i++){const x=((colonyFrame*38*(i%2?1:-1)+i*w*.35+w*3)% (w+180))-90,y=h*(.27+i*.10);drawColonyShip(c,x,y,13+i*2,'#b9d9ff')}
+ const p=colony(),orion=colonySceneMode==='market';colonyTerrain(c,w,h,groundY,orion);
+ const hangarScale=Math.min(1.2,Math.max(.6,w/1300));colonyHangarArt(c,w*.5,groundY-10,hangarScale,p.hangar);
+ if(orion){for(let i=0;i<4;i++){const x=w*(.14+i*.23);c.fillStyle='#152a49';c.fillRect(x-35,groundY-100,70,100);c.strokeStyle='#ffd58d';c.lineWidth=3;c.strokeRect(x-35,groundY-100,70,100);c.fillStyle='#f9cf83';c.fillRect(x-26,groundY-82,52,10);c.font='bold 12px system-ui';c.textAlign='center';c.fillStyle='#ffe9b5';c.fillText(['ОРИОН','ТОРГОВЛЯ','ЗАПЧАСТИ','ПЛАЗМА'][i],x,groundY-113)}}
+ const count=p.turrets+p.lasers+p.shield;for(let i=0;i<count;i++){const x=w*(.09+(i%9)*.102);colonyTurretArt(c,x,groundY-4,i<p.turrets?0:i<p.turrets+p.lasers?1:2,colonyFrame)}
+ for(let i=0;i<4;i++){const x=((colonyFrame*(i%2?37:-31)+i*w*.28+w*3)%(w+180))-90,y=h*(.22+i*.095);colonyHull(c,x,y,15+i%3*3,false,i)}
+ if(colonySceneMode==='workshop'||colonySceneMode==='build'){for(let i=0;i<4;i++){const x=w*(.28+i*.14)+Math.sin(colonyFrame*2+i)*10,y=groundY-120+Math.cos(colonyFrame*3+i)*15;c.strokeStyle='#ffe9a077';c.beginPath();c.moveTo(x,y);c.lineTo(x,groundY-5);c.stroke();colonyHull(c,x,y,12,false,i)}}
  }
  if(flight){const y=h*.7+Math.sin(colonyFrame*7)*6;drawColonyShip(c,w*.5,y,Math.min(45,w*.07),'#8df5ff');if(colonyFrame>5.5)colonyEnter(colonySceneMode==='orion-flight'?'market':colonySceneMode==='return-flight'?'planet':'planet')}
  if(colonySceneMode==='build'||colonySceneMode==='workshop'){for(let i=0;i<5;i++){const x=w*(.27+i*.115)+Math.sin(colonyFrame*2+i)*12,y=h*(.55+Math.cos(colonyFrame*2+i)*.05);drawColonyShip(c,x,y,9,'#fbe9a2')}if(colonySceneMode==='build'&&colonyFrame>4)colonyEnter('planet')}
  if(colonySceneMode==='raid'&&colonyRaid){const r=colonyRaid;r.time-=dt;r.spawn-=dt;r.fire-=dt;
  if(r.remaining>0&&r.spawn<=0){r.remaining--;r.spawn=1.6;colonyTargets.push({x:25+Math.random()*(w-50),y:-30,hp:2+Math.min(3,Math.floor(colony().raidCount/2)),speed:25+Math.random()*28})}
- for(let i=colonyTargets.length-1;i>=0;i--){const e=colonyTargets[i];e.y+=e.speed*dt;drawColonyShip(c,e.x,e.y,17,'#ff668c');if(e.y>h*.77){colonyTargets.splice(i,1);r.hp-=18;colonyBurst(e.x,h*.77,'#ff754a')}}
+ for(let i=colonyTargets.length-1;i>=0;i--){const e=colonyTargets[i];e.y+=e.speed*dt;colonyHull(c,e.x,e.y,19,true);if(e.y>h*.77){colonyTargets.splice(i,1);r.hp-=18;colonyBurst(e.x,h*.77,'#ff754a')}}
  if(r.fire<=0&&colonyTargets.length&&planetPower()>0){r.fire=Math.max(.18,.9-planetPower()*.003);const e=colonyTargets[Math.floor(Math.random()*colonyTargets.length)];colonyShots.push({x:w*.5,y:h*.79,tx:e.x,ty:e.y,t:0});e.hp-=Math.max(1,Math.floor(planetPower()/100));if(e.hp<=0){colonyTargets.splice(colonyTargets.indexOf(e),1);r.kills++;colonyBurst(e.x,e.y,'#6df7ff')}}
  c.fillStyle='#0a1e38c9';c.fillRect(w*.22,74,w*.56,22);c.fillStyle='#f7758e';c.fillRect(w*.22,74,w*.56*Math.max(0,r.hp)/170,22);c.strokeStyle='#a8eaff';c.strokeRect(w*.22,74,w*.56,22);c.fillStyle='white';c.font='bold 13px system-ui';c.textAlign='center';c.fillText('БАЗА: '+Math.max(0,Math.ceil(r.hp))+' HP  ·  ВРАГОВ: '+(r.remaining+colonyTargets.length)+'  ·  '+Math.ceil(Math.max(0,r.time))+' СЕК',w*.5,90);
  document.getElementById('colony-stats').textContent='🎯 Уничтожено: '+r.kills+' · Защита базы: '+Math.max(0,Math.ceil(r.hp))+' HP · '+Math.ceil(Math.max(0,r.time))+' сек';
@@ -299,7 +303,28 @@ function colonyTick(now){if(colonyEl.hidden)return;const dt=Math.min(.05,(now-(c
  for(let i=colonyParticles.length-1;i>=0;i--){const b=colonyParticles[i];b.t-=dt*1.6;b.x+=b.vx*dt;b.y+=b.vy*dt;c.globalAlpha=Math.max(0,b.t);c.fillStyle=b.color;c.fillRect(b.x,b.y,4,4);if(b.t<=0)colonyParticles.splice(i,1)}c.globalAlpha=1;
  colonyRaf=requestAnimationFrame(colonyTick);
 }
-function drawColonyShip(c,x,y,r,color){c.save();c.translate(x,y);c.fillStyle=color;c.shadowBlur=14;c.shadowColor=color;c.beginPath();c.moveTo(0,-r);c.lineTo(r*.8,r*.7);c.lineTo(0,r*.35);c.lineTo(-r*.8,r*.7);c.closePath();c.fill();c.fillStyle='#173354';c.beginPath();c.arc(0,0,r*.28,0,7);c.fill();c.restore()}
+function colonyHull(c,x,y,r,hostile=false,variant=0){
+ c.save();c.translate(x,y);const k=r/28;c.scale(k,k);c.shadowBlur=18;c.shadowColor=hostile?'#ff416c':'#5ce9ff';
+ const metal=c.createLinearGradient(-28,-20,28,24);metal.addColorStop(0,hostile?'#7b233b':'#20365c');metal.addColorStop(.5,hostile?'#ff7d8a':'#e2efff');metal.addColorStop(1,hostile?'#3c172c':'#315987');
+ c.fillStyle=metal;c.strokeStyle=hostile?'#ffb5a9':'#87e9ff';c.lineWidth=1.8;
+ c.beginPath();c.moveTo(0,-29);c.bezierCurveTo(11,-25,13,-7,15,-1);c.lineTo(30,9);c.lineTo(25,19);c.lineTo(12,15);c.lineTo(9,26);c.lineTo(-9,26);c.lineTo(-12,15);c.lineTo(-25,19);c.lineTo(-30,9);c.lineTo(-15,-1);c.bezierCurveTo(-13,-7,-11,-25,0,-29);c.closePath();c.fill();c.stroke();
+ c.fillStyle=hostile?'#ffcf83':'#59dfff';c.beginPath();c.ellipse(0,-7,6,11,0,0,7);c.fill();c.strokeStyle='#102342';c.stroke();
+ c.fillStyle=hostile?'#ff5265':'#74d8ff';for(const sign of [-1,1]){c.beginPath();c.moveTo(sign*12,9);c.lineTo(sign*25,12);c.lineTo(sign*16,14);c.fill();c.fillRect(sign*7-3,23,6,5)}
+ c.shadowColor=hostile?'#ff9a42':'#49d9ff';c.fillStyle=hostile?'#ffb34e':'#a4f6ff';for(const xx of [-6,6]){c.beginPath();c.ellipse(xx,28+Math.sin(colonyFrame*18+xx)*2,3,8,0,0,7);c.fill()}c.restore()
+}
+function drawColonyShip(c,x,y,r,color){colonyHull(c,x,y,r,color==='#ff668c')}
+function colonyHangarArt(c,x,y,scale,level){c.save();c.translate(x,y);c.scale(scale,scale);c.shadowBlur=18;c.shadowColor='#4ee7ff';c.fillStyle='#102b49';c.strokeStyle='#75e5ff';c.lineWidth=2;
+ c.beginPath();c.moveTo(-83,0);c.lineTo(-79,-49);c.lineTo(-59,-69);c.lineTo(59,-69);c.lineTo(79,-49);c.lineTo(83,0);c.closePath();c.fill();c.stroke();
+ c.fillStyle='#09182e';c.fillRect(-53,-49,106,49);c.strokeStyle='#9dfaff';c.strokeRect(-53,-49,106,49);
+ for(let i=0;i<7;i++){c.strokeStyle='#305d83';c.beginPath();c.moveTo(-51+i*17,-47);c.lineTo(-51+i*17,-2);c.stroke()}
+ c.fillStyle='#72ecff';c.fillRect(-65,-57,130,5);c.fillStyle='#e4f9ff';c.font='bold 12px system-ui';c.textAlign='center';c.fillText(level?'GALANTE HANGAR · LV '+level:'БУДУЩИЙ АНГАР',0,-78);
+ c.fillStyle='#83b9df';c.fillRect(-97,-7,194,9);for(const xx of [-66,66]){c.fillStyle='#5bf5f1';c.fillRect(xx-4,-43,8,7)}c.restore()}
+function colonyTurretArt(c,x,y,kind,t){c.save();c.translate(x,y);c.fillStyle='#152c4a';c.strokeStyle='#7cdcff';c.lineWidth=2;c.fillRect(-22,-12,44,12);c.strokeRect(-22,-12,44,12);c.translate(0,-12);c.rotate(Math.sin(t*1.2+x)*.35);c.fillStyle=kind===2?'#75ffd0':kind===1?'#ffb2f5':'#8ddaff';c.beginPath();c.arc(0,-9,13,Math.PI,0);c.lineTo(13,0);c.lineTo(-13,0);c.fill();c.stroke();for(const dx of [-6,6]){c.fillRect(dx-3,-34,6,28);c.strokeRect(dx-3,-34,6,28)}c.restore()}
+function colonyTerrain(c,w,h,groundY,orion){c.fillStyle=orion?'#4d284b':'#0a2a40';c.beginPath();c.moveTo(0,groundY);for(let i=0;i<=24;i++){const x=i*w/24;c.lineTo(x,groundY-16-Math.sin(i*2.3)*13-Math.cos(i*.7)*21)}c.lineTo(w,h);c.lineTo(0,h);c.fill();
+ const soil=c.createLinearGradient(0,groundY,0,h);soil.addColorStop(0,orion?'#65405a':'#173b53');soil.addColorStop(1,'#06162c');c.fillStyle=soil;c.fillRect(0,groundY,w,h-groundY);
+ c.strokeStyle='#4ce0f13b';c.lineWidth=1;for(let i=0;i<15;i++){c.beginPath();c.moveTo(w*.5,groundY);c.lineTo(i*w/14,h);c.stroke()}
+ for(let i=0;i<16;i++){const x=(i*199.1)%w,y=groundY+19+(i*47)%(Math.max(20,h-groundY-30));c.strokeStyle='#88bcd055';c.beginPath();c.ellipse(x,y,9+i%4*5,4+i%3*3,0,0,7);c.stroke()}
+}
 function saveEconomy(){safeStore.set('antonio_neon_economy_v3',JSON.stringify(economy))}
 function owned(id){return economy.owned.includes(id)}
 function skin(){return skins.find(x=>x.id===economy.skin)||skins[0]}
