@@ -277,16 +277,16 @@ function colonyTick(now){if(colonyEl.hidden)return;const dt=Math.min(.05,(now-(c
  const bg=c.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#02091c');bg.addColorStop(.55,'#10264c');bg.addColorStop(1,'#050f23');c.fillStyle=bg;c.fillRect(0,0,w,h);
  // Parallax star field and moving ships.
  for(let i=0;i<145;i++){const sx=(i*131.7+w*.13)%w,sy=((i*i*73.3+colonyFrame*(colonySceneMode.includes('flight')||colonySceneMode==='travel'?190:5))%h+h)%h;c.fillStyle=i%7===0?'#9aefff':'#b6c7ef';c.globalAlpha=.3+(i%5)*.12;c.fillRect(sx,sy,i%9===0?2:1,i%9===0?2:1)}c.globalAlpha=1;
- const flight=['travel','orion-flight','return-flight'].includes(colonySceneMode);let planetY=h*.55,rad=Math.min(w*.34,h*.37);
+ const flight=['travel','orion-flight','return-flight'].includes(colonySceneMode);let planetY=h*.32,rad=Math.min(w*.17,h*.23);
  if(flight){const t=Math.min(1,colonyFrame/5.5);rad=Math.min(w,h)*(.10+t*.42);planetY=h*.47;}
  const g=c.createRadialGradient(w*.5-rad*.2,planetY-rad*.35,rad*.08,w*.5,planetY,rad*1.1);g.addColorStop(0,colonySceneMode==='market'||colonySceneMode==='orion-flight'?'#ffda85':'#6edcf5');g.addColorStop(.5,colonySceneMode==='market'||colonySceneMode==='orion-flight'?'#c26a8d':'#257aa1');g.addColorStop(1,'#0a183a');c.fillStyle=g;c.beginPath();c.arc(w*.5,planetY,rad,0,Math.PI*2);c.fill();c.strokeStyle='#74edff55';c.lineWidth=7;c.stroke();
  c.save();c.beginPath();c.arc(w*.5,planetY,rad-4,0,7);c.clip();for(let i=0;i<18;i++){const a=i*2.399,rr=rad*(.15+.72*((i*37%19)/19)),px=w*.5+Math.cos(a)*rr,py=planetY+Math.sin(a)*rr;c.fillStyle=i%2?'#7ce7ef19':'#0b365a44';c.beginPath();c.ellipse(px,py,rad*(.08+i%4*.025),rad*(.025+i%3*.02),a,0,7);c.fill()}c.restore();
- if(!flight){const groundY=h*.78;c.fillStyle='#0a233c';c.fillRect(0,groundY,w,h-groundY);c.strokeStyle='#3ddfe055';c.lineWidth=2;for(let i=0;i<18;i++){const x=i*w/17;c.beginPath();c.moveTo(w*.5,groundY);c.lineTo(x,h);c.stroke()}
- const p=colony(),orion=colonySceneMode==='market';colonyTerrain(c,w,h,groundY,orion);
- const hangarScale=Math.min(1.2,Math.max(.6,w/1300));colonyHangarArt(c,w*.5,groundY-10,hangarScale,p.hangar);
- if(orion){for(let i=0;i<4;i++){const x=w*(.14+i*.23);c.fillStyle='#152a49';c.fillRect(x-35,groundY-100,70,100);c.strokeStyle='#ffd58d';c.lineWidth=3;c.strokeRect(x-35,groundY-100,70,100);c.fillStyle='#f9cf83';c.fillRect(x-26,groundY-82,52,10);c.font='bold 12px system-ui';c.textAlign='center';c.fillStyle='#ffe9b5';c.fillText(['ОРИОН','ТОРГОВЛЯ','ЗАПЧАСТИ','ПЛАЗМА'][i],x,groundY-113)}}
+ if(!flight){const groundY=h*.77;c.fillStyle='#0a233c';c.fillRect(0,groundY,w,h-groundY);c.strokeStyle='#3ddfe055';c.lineWidth=2;for(let i=0;i<18;i++){const x=i*w/17;c.beginPath();c.moveTo(w*.5,groundY);c.lineTo(x,h);c.stroke()}
+ const p=colony(),orion=colonySceneMode==='market';colonyTerrain(c,w,h,groundY,orion);colonyEnvironment94(c,w,h,groundY,orion,colonyFrame);
+ const hangarScale=Math.min(2.8,Math.max(1.15,w/650));colonyHangarArt(c,w*.5,groundY-10,hangarScale,p.hangar);
+ if(orion){colonyMarket94(c,w,h,groundY,colonyFrame)}
  const count=p.turrets+p.lasers+p.shield;for(let i=0;i<count;i++){const x=w*(.09+(i%9)*.102);colonyTurretArt(c,x,groundY-4,i<p.turrets?0:i<p.turrets+p.lasers?1:2,colonyFrame)}
- for(let i=0;i<4;i++){const x=((colonyFrame*(i%2?37:-31)+i*w*.28+w*3)%(w+180))-90,y=h*(.22+i*.095);colonyHull(c,x,y,15+i%3*3,false,i)}
+ for(let i=0;i<3;i++){const x=((colonyFrame*(i%2?27:-23)+i*w*.38+w*3)%(w+180))-90,y=h*(.18+i*.105);colonyHull(c,x,y,20+i%3*5,false,i)}
  if(colonySceneMode==='workshop'||colonySceneMode==='build'){for(let i=0;i<4;i++){const x=w*(.28+i*.14)+Math.sin(colonyFrame*2+i)*10,y=groundY-120+Math.cos(colonyFrame*3+i)*15;c.strokeStyle='#ffe9a077';c.beginPath();c.moveTo(x,y);c.lineTo(x,groundY-5);c.stroke();colonyHull(c,x,y,12,false,i)}}
  }
  if(flight){const y=h*.7+Math.sin(colonyFrame*7)*6;drawColonyShip(c,w*.5,y,Math.min(45,w*.07),'#8df5ff');if(colonyFrame>5.5)colonyEnter(colonySceneMode==='orion-flight'?'market':colonySceneMode==='return-flight'?'planet':'planet')}
@@ -302,6 +302,34 @@ function colonyTick(now){if(colonyEl.hidden)return;const dt=Math.min(.05,(now-(c
  for(let i=colonyShots.length-1;i>=0;i--){const b=colonyShots[i];b.t+=dt*5;c.strokeStyle='#9afaff';c.lineWidth=3;c.beginPath();c.moveTo(b.x,b.y);c.lineTo(b.x+(b.tx-b.x)*Math.min(1,b.t),b.y+(b.ty-b.y)*Math.min(1,b.t));c.stroke();if(b.t>=1)colonyShots.splice(i,1)}
  for(let i=colonyParticles.length-1;i>=0;i--){const b=colonyParticles[i];b.t-=dt*1.6;b.x+=b.vx*dt;b.y+=b.vy*dt;c.globalAlpha=Math.max(0,b.t);c.fillStyle=b.color;c.fillRect(b.x,b.y,4,4);if(b.t<=0)colonyParticles.splice(i,1)}c.globalAlpha=1;
  colonyRaf=requestAnimationFrame(colonyTick);
+}
+// Version 9.4: layered illustrated environments, all drawn locally (no network assets).
+function colonyEnvironment94(c,w,h,gy,orion,t){
+ c.save();const S=Math.max(.65,Math.min(1.7,w/1200));
+ // Haze, distant mountain ranges and a tiny atmospheric moon.
+ const fog=c.createLinearGradient(0,gy-290,0,gy+15);fog.addColorStop(0,'#10243b00');fog.addColorStop(.8,orion?'#c87b7750':'#287f9c55');fog.addColorStop(1,'#71e6e622');c.fillStyle=fog;c.fillRect(0,gy-300,w,315);
+ for(let layer=0;layer<3;layer++){c.fillStyle=(orion?['#42263f','#30233c','#1b263a']:['#132c48','#12354c','#0b2439'])[layer];c.beginPath();c.moveTo(0,gy);for(let i=0;i<=36;i++){let x=i*w/36,y=gy-65-layer*17-Math.abs(Math.sin(i*1.71+layer*2.3))* (55+layer*22)-Math.sin(i*.36+layer)*30;c.lineTo(x,y)}c.lineTo(w,gy);c.fill()}
+ // City skyline and landing towers, designed with depth and luminous windows.
+ for(let i=0;i<17;i++){const x=(i+.25)*w/17,depth=(i%4),height=(55+((i*37)%105))*S;const width=(30+(i%3)*14)*S;const base=gy-23;c.fillStyle=orion?'#202940':'#0c3047';c.fillRect(x-width/2,base-height,width,height);c.fillStyle=orion?'#ffbd75':'#60dbe8';c.globalAlpha=.13;c.fillRect(x-width/2-3,base-height-3,width+6,height+6);c.globalAlpha=1;c.fillStyle=orion?'#f9b87e':'#77eaf6';for(let j=0;j<Math.floor(height/16);j++)for(let k=0;k<3;k++)if((j+k+i)%4!==0)c.fillRect(x-width/2+5+k*(width-10)/3,base-height+9+j*15,3,5);c.strokeStyle=orion?'#ffca9d88':'#71e9ff88';c.lineWidth=2;c.beginPath();c.moveTo(x,base-height);c.lineTo(x,base-height-16-(i%3)*8);c.stroke();c.fillStyle=orion?'#ffc67a':'#6ffcff';c.beginPath();c.arc(x,base-height-16-(i%3)*8,2.5,0,7);c.fill()}
+ // Hangar approach with illuminated runway, side paths and landing lights.
+ c.fillStyle='#081827';c.beginPath();c.moveTo(w*.45,gy-8);c.lineTo(w*.55,gy-8);c.lineTo(w*.81,h);c.lineTo(w*.19,h);c.fill();c.strokeStyle=orion?'#ffbc7a':'#65dcfa';c.lineWidth=2;for(let i=0;i<8;i++){const u=(i+.5)/8,y=gy+Math.pow(u,1.6)*(h-gy),span=15+u*w*.27;c.globalAlpha=.3+u*.6;c.beginPath();c.moveTo(w*.5-span,y);c.lineTo(w*.5-span+14*u,y);c.moveTo(w*.5+span,y);c.lineTo(w*.5+span-14*u,y);c.stroke()}c.globalAlpha=1;
+ for(let i=0;i<9;i++){let x=(i+.5)*w/9;let y=gy-12;c.fillStyle=orion?'#ffb768':'#5ee9f5';c.shadowBlur=12;c.shadowColor=c.fillStyle;c.fillRect(x-3,y-2,6,4)}c.shadowBlur=0;
+ // Storage containers and service vehicles along the edges.
+ for(let i=0;i<7;i++){let x=i<4?w*(.03+i*.075):w*(.73+(i-4)*.09),y=gy-12;const cw=28*S,ch=(17+(i%3)*8)*S;c.fillStyle=orion?'#5c3c4b':'#1c5368';c.fillRect(x,y-ch,cw,ch);c.strokeStyle=orion?'#ffb47888':'#5ae3ff88';c.strokeRect(x,y-ch,cw,ch);for(let j=1;j<5;j++){c.beginPath();c.moveTo(x+j*cw/5,y-ch);c.lineTo(x+j*cw/5,y);c.stroke()}}
+ // Tiny animated loading rovers, not triangles.
+ for(let i=0;i<3;i++){const x=((t*(i%2?17:-13)+w*(.14+i*.37)+w*2)%w),y=gy-11-i%2*7;c.fillStyle='#1b4056';c.fillRect(x-16,y-11,32,10);c.fillStyle=orion?'#f9ae73':'#6de5f5';c.fillRect(x-9,y-15,13,5);c.fillStyle='#071321';for(let a of [-11,11]){c.beginPath();c.arc(x+a,y,5,0,7);c.fill();c.strokeStyle='#77b9c7';c.stroke()}}
+ c.restore();
+}
+function colonyMarket94(c,w,h,gy,t){
+ c.save();const s=Math.max(.65,Math.min(1.65,w/1150));
+ // Asymmetric trading pavilions, awnings, stalls and holographic signage.
+ const stalls=[{x:.13,w:125,h:115,label:'КОСМОПОРТ',color:'#5ef0f0'},{x:.29,w:100,h:92,label:'МЕТАЛЛ',color:'#f9ba6d'},{x:.72,w:120,h:110,label:'ЗАПЧАСТИ',color:'#bda3ff'},{x:.88,w:115,h:145,label:'ПЛАЗМА',color:'#ff83c5'}];
+ for(const b of stalls){const x=w*b.x,bw=b.w*s,bh=b.h*s,y=gy-14;c.shadowBlur=16;c.shadowColor=b.color+'88';c.fillStyle='#17283b';c.beginPath();c.moveTo(x-bw*.5,y);c.lineTo(x-bw*.5,y-bh*.75);c.lineTo(x-bw*.38,y-bh);c.lineTo(x+bw*.39,y-bh);c.lineTo(x+bw*.5,y-bh*.75);c.lineTo(x+bw*.5,y);c.closePath();c.fill();c.strokeStyle=b.color;c.lineWidth=2;c.stroke();c.shadowBlur=0;c.fillStyle='#0c1626';c.fillRect(x-bw*.35,y-bh*.56,bw*.7,bh*.55);for(let j=0;j<5;j++){c.fillStyle=j%2?'#2e4760':'#23394f';c.fillRect(x-bw*.35+j*bw*.14,y-bh*.56,bw*.13,bh*.55)}c.fillStyle=b.color;c.fillRect(x-bw*.52,y-bh*.75,bw*1.04,5);c.fillStyle='#e7faff';c.font='bold '+Math.round(11*s)+'px system-ui';c.textAlign='center';c.fillText(b.label,x,y-bh*.81);c.fillStyle='#f3bb78';c.fillRect(x-bw*.42,y-10,bw*.84,4)}
+ // Elevated bridge with transparent canopy.
+ c.strokeStyle='#f9c79088';c.lineWidth=3;c.beginPath();c.moveTo(w*.38,gy-78*s);c.quadraticCurveTo(w*.5,gy-140*s,w*.63,gy-78*s);c.stroke();for(let i=0;i<7;i++){let x=w*(.39+i*.038),y=gy-84*s-Math.sin(i/6*Math.PI)*28*s;c.fillStyle='#e6a7f4';c.fillRect(x,y,4,4)}
+ // Suspended cargo craft with engine trails.
+ for(let i=0;i<2;i++){let x=((t*(i?23:-17)+w*(.23+i*.5)+w*2)%w),y=gy-(230+i*60)*s;c.save();c.translate(x,y);c.fillStyle='#354b67';c.beginPath();c.moveTo(-42,0);c.lineTo(-24,-15);c.lineTo(26,-15);c.lineTo(45,0);c.lineTo(20,10);c.lineTo(-28,10);c.closePath();c.fill();c.fillStyle='#a9edff';c.fillRect(-15,-14,31,7);c.shadowColor='#ffbd78';c.shadowBlur=15;c.fillStyle='#ffbc7c';c.fillRect(-30,5,9,5);c.fillRect(20,5,9,5);c.restore()}
+ c.restore();
 }
 function colonyHull(c,x,y,r,hostile=false,variant=0){
  c.save();c.translate(x,y);const k=r/28;c.scale(k,k);c.shadowBlur=18;c.shadowColor=hostile?'#ff416c':'#5ce9ff';
